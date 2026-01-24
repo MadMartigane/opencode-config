@@ -1,0 +1,252 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "brave-search": {
+      "type": "local",
+      "command": [
+        "bun",
+        "x",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "enabled": true,
+      "environment": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}",
+      },
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "bun",
+        "x",
+        "@modelcontextprotocol/server-sequential-thinking",
+      ],
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "@playwright/mcp@latest"
+      ],
+      "enabled": true,
+    },
+  },
+  "command": {
+    "plan-validate": {
+      "template": "Je valide le plan, passe à l'implémentation.",
+      "description": "Valider le plan et passer à l'implémentation",
+    },
+    "bug-find": {
+      "template": "$ARGUMENTS\n\nTrouve l'origine du bug et propose un plan précis de correction.",
+      "description": "Décrire un bug et demander une correction",
+    },
+  },
+  "agent": {
+    "plan": {
+      "disable": true,
+    },
+    "build": {
+      "disable": true,
+    },
+    "Code": {
+      "mode": "primary",
+      "model": "{file:./models/code_model.txt}",
+      "prompt": "{file:./prompts/code.md}",
+      "temperature": 0.7,
+      "tools": {
+        "bash": true, // Exécute des commandes bash dans un shell persistant
+        "read": true, // Lit le contenu d'un fichier (absolu)
+        "glob": true, // Recherche de fichiers par motifs glob (ex. */.ts)
+        "grep": true, // Recherche de motifs regex dans les fichiers
+        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
+        "edit": true, // Remplace du texte exact dans un fichier existant
+        "write": true, // Écrit/écrase un fichier (préférer edit)
+        "task": true, // Lance un agent spécialisé pour tâches complexes
+        "webfetch": true, // Récupère et analyse du contenu web (URL)
+        "todowrite": true, // Gère une liste de tâches todo structurée
+        "todoread": true, // Lit la liste de tâches todo actuelle
+        "brave-search_brave_web_search": true, // Recherche web générale (Brave)
+        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
+    },
+    "Rocket": {
+      "mode": "primary",
+      "model": "{file:./models/rocket_model.txt}",
+      "prompt": "{file:./prompts/rocket.md}",
+      "temperature": 0.7,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "task": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "brave-search_brave_web_search": true,
+        "brave-search_brave_local_search": false,
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
+    },
+    "Rocket-Review": {
+      "mode": "primary",
+      "model": "{file:./models/rocket_model.txt}",
+      "prompt": "{file:./prompts/rocket-review.md}",
+      "temperature": 0.1,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "task": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "brave-search_brave_web_search": true,
+        "brave-search_brave_local_search": false,
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
+    },
+    "Chatbot": {
+      "mode": "primary",
+      "model": "{file:./models/chatbot_model.txt}",
+      "prompt": "{file:./prompts/chatbot.md}",
+      "temperature": 1,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "task": true,
+        "webfetch": true,
+        "todowrite": true,
+        "todoread": true,
+        "brave-search_brave_web_search": true,
+        "brave-search_brave_local_search": false,
+        "sequential-thinking_sequentialthinking": true,
+        // Playwright MCP - Browser automation
+        "playwright_browser_navigate": true,
+        "playwright_browser_snapshot": true,
+        "playwright_browser_click": true,
+        "playwright_browser_type": true,
+        "playwright_browser_fill_form": true,
+        "playwright_browser_select_option": true,
+        "playwright_browser_hover": true,
+        "playwright_browser_drag": true,
+        "playwright_browser_press_key": true,
+        "playwright_browser_take_screenshot": true,
+        "playwright_browser_wait_for": true,
+        "playwright_browser_tabs": true,
+        "playwright_browser_navigate_back": true,
+        "playwright_browser_evaluate": true,
+        "playwright_browser_console_messages": true,
+        "playwright_browser_network_requests": true,
+        "playwright_browser_close": true,
+        "playwright_browser_file_upload": true,
+        "playwright_browser_handle_dialog": true,
+        "playwright_browser_resize": true,
+        "playwright_browser_install": true,
+      },
+    },
+    "Code-Audit": {
+      "mode": "subagent",
+      "model": "{file:./models/code_audit_model.txt}",
+      "prompt": "{file:./prompts/code-audit.md}",
+      "tools": {
+        "bash": true, // Exécute des commandes bash dans un shell persistant
+        "read": true, // Lit le contenu d'un fichier (absolu)
+        "glob": true, // Recherche de motifs regex dans les fichiers
+        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
+        "edit": true, // Remplace du texte exact dans un fichier existant
+        "write": false, // Écrit/écrase un fichier (préférer edit)
+        "task": false, // Lance un agent spécialisé pour tâches complexes
+        "webfetch": true, // Récupère et analyse du contenu web (URL)
+        "todowrite": false, // Gère une liste de tâches todo structurée
+        "todoread": false, // Lit la liste de tâches todo actuelle
+        "brave-search_brave_web_search": false, // Recherche web générale (Brave)
+        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
+    },
+    "Code-Only": {
+      "mode": "subagent",
+      "prompt": "{file:./prompts/code-only.md}",
+      "model": "{file:./models/code_only_model.txt}",
+      "temperature": 0.1,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "edit": true,
+        "write": true,
+        "task": true,
+        "webfetch": false,
+        "todowrite": false,
+        "todoread": false,
+        "brave-search_brave_web_search": false,
+        "brave-search_brave_local_search": false,
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
+    },
+    "Code-Validator": {
+      "mode": "subagent",
+      "prompt": "{file:./prompts/code-validator.md}",
+      "model": "{file:./models/code_only_model.txt}",
+      "temperature": 0.1,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "glob": true,
+        "grep": true,
+        "write": true,
+        "task": false,
+        "todowrite": false,
+        "todoread": false,
+        "brave-search_brave_web_search": false,
+        "brave-search_brave_local_search": false,
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
+    },
+    "Git-Expert": {
+      "mode": "subagent",
+      "model": "{file:./models/git_expert_model.txt}",
+      "prompt": "{file:./prompts/git-expert.md}",
+      "temperature": 0.1,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "skill": true,
+        "task": false,
+        "write": false,
+        "todowrite": false,
+        "todoread": false,
+        "playwright_browser_*": false,
+        "brave-search_brave_web_search": false,
+        "brave-search_brave_local_search": false,
+        "sequential-thinking_sequentialthinking": false,
+      },
+    },
+  },
+}

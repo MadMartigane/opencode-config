@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=OpenCode (with env)
+Comment=AI coding assistant with environment variables loaded
+Exec=/home/mad/.config/opencode/opencode-launcher.sh
+Icon=opencode
+Terminal=true
+Type=Application
+Categories=Development;Utility;
