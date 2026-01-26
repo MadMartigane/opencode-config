@@ -44,15 +44,53 @@
   "agent": {
     "plan": {
       "disable": true,
+      "model": "{file:./models/code_model.txt}",
+      "temperature": 0.3,
+      "tools": {
+        "bash": true, // Exécute des commandes bash dans un shell persistant
+        "read": true, // Lit le contenu d'un fichier (absolu)
+        "glob": true, // Recherche de fichiers par motifs glob (ex. */.ts)
+        "grep": true, // Recherche de motifs regex dans les fichiers
+        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
+        "edit": true, // Remplace du texte exact dans un fichier existant
+        "write": true, // Écrit/écrase un fichier (préférer edit)
+        "task": true, // Lance un agent spécialisé pour tâches complexes
+        "webfetch": true, // Récupère et analyse du contenu web (URL)
+        "todowrite": true, // Gère une liste de tâches todo structurée
+        "todoread": true, // Lit la liste de tâches todo actuelle
+        "brave-search_brave_web_search": true, // Recherche web générale (Brave)
+        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
     },
     "build": {
       "disable": true,
+      "model": "{file:./models/code_model.txt}",
+      "temperature": 0.3,
+      "tools": {
+        "bash": true, // Exécute des commandes bash dans un shell persistant
+        "read": true, // Lit le contenu d'un fichier (absolu)
+        "glob": true, // Recherche de fichiers par motifs glob (ex. */.ts)
+        "grep": true, // Recherche de motifs regex dans les fichiers
+        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
+        "edit": true, // Remplace du texte exact dans un fichier existant
+        "write": true, // Écrit/écrase un fichier (préférer edit)
+        "task": true, // Lance un agent spécialisé pour tâches complexes
+        "webfetch": true, // Récupère et analyse du contenu web (URL)
+        "todowrite": true, // Gère une liste de tâches todo structurée
+        "todoread": true, // Lit la liste de tâches todo actuelle
+        "brave-search_brave_web_search": false, // Recherche web générale (Brave)
+        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
+        "sequential-thinking_sequentialthinking": true,
+        "playwright_browser_*": false,
+      },
     },
     "Code": {
       "mode": "primary",
       "model": "{file:./models/code_model.txt}",
       "prompt": "{file:./prompts/code.md}",
-      "temperature": 0.7,
+      "temperature": 0.3,
       "tools": {
         "bash": true, // Exécute des commandes bash dans un shell persistant
         "read": true, // Lit le contenu d'un fichier (absolu)
@@ -75,7 +113,7 @@
       "mode": "primary",
       "model": "{file:./models/rocket_model.txt}",
       "prompt": "{file:./prompts/rocket.md}",
-      "temperature": 0.7,
+      "temperature": 0.3,
       "tools": {
         "bash": true,
         "read": true,
@@ -184,6 +222,7 @@
     },
     "Code-Only": {
       "mode": "subagent",
+      "description": "Primary subagent for code implementation. Specialized in precise file modifications and creation based on technical specs. Use this agent for all physical coding tasks to maintain context efficiency.",
       "prompt": "{file:./prompts/code-only.md}",
       "model": "{file:./models/code_only_model.txt}",
       "temperature": 0.1,
@@ -207,6 +246,7 @@
     },
     "Code-Validator": {
       "mode": "subagent",
+      "description": "Quality Assurance specialist. Use this agent to verify code integrity, run validation commands (lint, tests, build), and ensure changes match the requested specifications before completion.",
       "prompt": "{file:./prompts/code-validator.md}",
       "model": "{file:./models/code_only_model.txt}",
       "temperature": 0.1,
@@ -228,6 +268,7 @@
     },
     "Git-Expert": {
       "mode": "subagent",
+      "description": "Specialized Git manager. Use this agent for all repository operations: generating conventional commits, rebasing, and cleaning history. This is the only authorized agent for Git-related tasks.",
       "model": "{file:./models/git_expert_model.txt}",
       "prompt": "{file:./prompts/git-expert.md}",
       "temperature": 0.1,
