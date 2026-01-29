@@ -34,11 +34,23 @@
   "command": {
     "plan-validate": {
       "template": "Je valide le plan, passe à l'implémentation.",
-      "description": "Valider le plan et passer à l'implémentation",
+      "description": "Plan OK, go implementation !",
+    },
+    "plan-update": {
+      "template": "Mets à jour le plan et soumets le moi à nouveau, il faut que je le valide avant toute implémentation.",
+      "description": "Update the plan, wait validation.",
+    },
+    "plan-build": {
+      "template": "Élabore un plan détaillé et soumets le moi, je vois le valider avant toute implémentation.",
+      "description": "Build the plan, wait validation.",
+    },
+    "commit-push": {
+      "template": "Commit et push les changements, ne vérifie rien, confie la tâche directement à **Git-Expert**.",
+      "description": "Commit and push changes.",
     },
     "bug-find": {
-      "template": "$ARGUMENTS\n\nTrouve l'origine du bug et propose un plan précis de correction.",
-      "description": "Décrire un bug et demander une correction",
+      "template": "$ARGUMENTS\n\nTrouve l'origine du bug et propose un plan précis de correction. Je dois valider le plan avant toute implémentation.",
+      "description": "Find bug, build plan, wait validation.",
     },
   },
   "agent": {

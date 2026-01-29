@@ -34,6 +34,7 @@ You receive a structured prompt directly containing:
 2. **IMPLEMENT**:
    - Use the `edit` tool to modify existing files.
    - Use the `write` tool to create new files (only if explicitly requested).
+   - **Coding Style**: Mandatory use of "Early Return" and "Guard Clauses". Avoid nested `if/else` ladders. Handle edge cases/errors first to keep the "Happy Path" at the lowest indentation level. Extract complex logic into pure helper functions.
    - Strictly follow the coding standards and patterns defined in the prompt.
 3. **VERIFY**:
    - **Self-Correction**: specific syntax checks (brackets, imports, types).
