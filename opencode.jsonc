@@ -215,6 +215,7 @@
       "mode": "subagent",
       "model": "{file:./models/code_audit_model.txt}",
       "prompt": "{file:./prompts/code-audit.md}",
+      "temperature": 0.1,
       "tools": {
         "bash": true, // Exécute des commandes bash dans un shell persistant
         "read": true, // Lit le contenu d'un fichier (absolu)
@@ -269,13 +270,32 @@
         "glob": true,
         "grep": true,
         "write": true,
-        "task": false,
+        "task": true,
         "todowrite": false,
         "todoread": false,
         "brave-search_brave_web_search": false,
         "brave-search_brave_local_search": false,
         "sequential-thinking_sequentialthinking": true,
         "playwright_browser_*": false,
+      },
+    },
+    "Test-Expert": {
+      "mode": "subagent",
+      "description": "Specialized in running tests and providing concise summaries. Use this agent to avoid context pollution from verbose test logs.",
+      "prompt": "{file:./prompts/test-expert.md}",
+      "model": "{file:./models/code_only_model.txt}",
+      "temperature": 0.1,
+      "tools": {
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "task": false,
+        "write": false,
+        "todowrite": false,
+        "todoread": false,
+        "sequential-thinking_sequentialthinking": true,
       },
     },
     "Git-Expert": {

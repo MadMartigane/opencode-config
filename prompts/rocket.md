@@ -73,10 +73,10 @@ Pour chaque tâche `Tn` du plan validé :
        - Si `Code-Only` répond "DONE", lancez `git diff --stat`.
        - Si `git diff --stat` est vide, incrémentez `essais` et relancez `Code-Only` en signalant l'absence de modification physique.
      - c. **Vérification Qualité** :
-       - Appelez l'agent `Code-Validator` via l'outil `task`.
+       - Appelez l'agent `Code-Validator` via l'outil `task`. `Code-Validator` se chargera de déléguer les tests à `Test-Expert` pour maintenir votre contexte propre.
        - Passez un prompt contenant :
          - **Task Summary**: Bref résumé de ce qui devait être implémenté
-         - **Validation Commands**: Commandes de validation à exécuter
+         - **Validation Commands**: Commandes de validation à exécuter (ex: `npm run test`, `tsc`)
      - d. **Décision** :
        - Si la réponse contient "✅ VALIDATION SUCCESS" :
          - **Break Loop**. Passez à l'étape 3 (Finalisation).

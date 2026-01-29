@@ -30,8 +30,9 @@ You receive a prompt containing:
    - Verify that the code changes match the expected scope described in the Task Summary.
    - Check for common errors: debug prints left, bad formatting, logic gaps, or violation of discovered Project Rules.
 2. **VERIFY**:
-   - Execute the Validation Commands listed in the prompt (e.g., `npm run test`, `tsc`).
-   - **Self-Sufficiency**: If no commands are provided, use discovered scripts from `package.json`.
+   - **Test Execution**: ALWAYS delegate test execution to the `Test-Expert` subagent using the `task` tool. Do NOT run tests directly yourself to avoid context pollution.
+   - **Other Commands**: Execute other non-test Validation Commands directly (e.g., `tsc`, `lint`).
+   - **Self-Sufficiency**: If no commands are provided, identify scripts from `package.json` and delegate tests to `Test-Expert`.
 3. **DECIDE & REPORT**:
 
    - **SCENARIO A: SUCCESS (Code is perfect)**
