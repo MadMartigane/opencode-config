@@ -45,8 +45,8 @@
       "description": "Build the plan, wait validation.",
     },
     "commit-push": {
-      "template": "Commit et push les changements, ne vérifie rien, confie la tâche directement à **Git-Expert**.",
-      "description": "Commit and push changes.",
+      "template": "Ticket : $ARGUMENTS\n\nCommit et push les changements. Utilise **Git-Expert** pour générer un message conforme. Si un ticket est fourni (ou trouvé dans la branche), inclus-le en footer (ex: ref: ODRER-1234).",
+      "description": "Commit and push changes with ticket reference."
     },
     "bug-find": {
       "template": "$ARGUMENTS\n\nTrouve l'origine du bug et propose un plan précis de correction. Je dois valider le plan avant toute implémentation.",

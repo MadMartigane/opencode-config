@@ -1,20 +1,61 @@
 # Skill: Git Commit Messages
 
-Enforces Conventional Commits format for professional Git messages.
+Enforces the **Conventional Commits** specification to ensure a consistent, readable, and machine-parseable Git history.
 
 ## Standards
-Format: `<type>(<scope>): <description>`
 
-**Rules for `<description>`:**
-- Entire description in lowercase: no uppercase letters anywhere (starts lowercase).
-- No period at end.
-- Imperative present (e.g., `add` not `added`).
+### 1. Message Format
+Commit messages must follow this structure:
+```
+<type>(<scope>): <subject>
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
+[optional body]
 
-Example: `feat(auth): add jwt validation logic`
+[optional footer(s)]
+```
 
-## Generation Protocol
-- Analyze `git diff` autonomously.
-- Correct user messages to lowercase/imperative (e.g., "Add Feature" → "add feature").
-- Strict enforcement: Never commit violating formats.
+### 2. Type (Lowercase)
+The type must be one of the following:
+- `build`: Changes affecting the build system or external dependencies (e.g., npm, gulp, docker)
+- `chore`: Maintenance tasks, library updates, or infra changes that don't modify src/test
+- `ci`: Changes to CI configuration and scripts (e.g., GitHub Actions, CI/CD)
+- `docs`: Documentation only changes
+- `feat`: A new feature
+- `fix`: A bug fix
+- `perf`: A code change that improves performance
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `revert`: Reverts a previous commit (include the SHA in the footer)
+- `style`: Changes that do not affect the meaning of the code (formatting, linting, etc.)
+- `test`: Adding or correcting tests
+
+### 3. Subject (Header)
+- **Case**: Must NOT be Sentence-case, Start-Case, PascalCase, or UPPERCASE. Always use **lowercase** or the specific case required by code identifiers.
+- **Max Length**: The entire header must not exceed **100 characters**.
+- **Punctuation**: Do not end the subject with a period (`.`).
+- **Tense**: Use the **imperative present** (e.g., "add", not "added").
+
+### 4. Body
+- **Format**: Starts one blank line after the subject.
+- **Max Line Length**: 100 characters.
+- **Content**: Explain the "why" and "how" of the change if it's not obvious from the subject.
+
+### 5. Footers
+- **Format**: Starts one blank line after the body (or subject).
+- **Max Line Length**: 100 characters.
+- **Breaking Changes**: Must start with `BREAKING CHANGE: ` followed by a space and a description of the impact. Alternatively, add a `!` after the type/scope (e.g., `feat(api)!: ...`).
+- **Ticket Reference**: Include task/ticket identifiers in the footer using the `ref: <TICKET_ID>` format (e.g., `ref: ODRER-1234`).
+- **Referencing**: Use trailers for issues (e.g., `Refs: #123`) or authors (e.g., `Signed-off-by: Name <email>`).
+
+## Step-by-Step Procedure
+
+1. **Analysis**: Run `git status` and `git diff` to understand the changes. Identify if multiple features or fixes are mixed; if so, recommend splitting the commit.
+2. **Type/Scope Determination**:
+    - Identify the primary intent (e.g., `feat`, `fix`).
+    - Define a scope if it helps clarify the context (e.g., `auth`, `parser`, `ui`).
+3. **Drafting**: Create a concise subject line. Ensure it starts with lowercase and uses the imperative tense.
+4. **Validation**:
+    - Check the 100-character limit for the header and each line of the body/footer.
+    - Verify the absence of a trailing period.
+    - Check for breaking changes and format them correctly.
+5. **Final Review**: Ensure the message matches the repository's existing style while strictly adhering to these standards.
+6. **Execution**: Perform the `git commit` with the validated message.
