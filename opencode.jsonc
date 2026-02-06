@@ -25,9 +25,24 @@
     },
     "playwright": {
       "type": "local",
-      "command": ["npx", "@playwright/mcp@latest"],
-      "enabled": true,
+      "command": ["bun", "x", "@playwright/mcp@latest"],
+      "enabled": false,
     },
+  },
+  "provider": {
+    "ovh-ai-internal": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Internal OVH AI playwright_browser_handle_dialogpoint",
+      "options": {
+        "baseURL": "https://oai.endpoints.preprod.ai.cloud.ovh.net/v1/",
+        "apiKey": "michael.baudchon@corp.ovh.com"
+      },
+      "models": {
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8": {
+          "name": "Qwen3-Coder-480B-A35B-Instruct-FP8 (internal)"
+        },
+      }
+    }
   },
   "command": {
     "plan-validate": {
