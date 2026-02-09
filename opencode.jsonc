@@ -80,6 +80,7 @@
         "edit": true, // Remplace du texte exact dans un fichier existant
         "write": true, // Écrit/écrase un fichier (préférer edit)
         "task": true, // Lance un agent spécialisé pour tâches complexes
+        "skills*": false,                    // bloque tous les skills par défaut
         "webfetch": true, // Récupère et analyse du contenu web (URL)
         "todowrite": true, // Gère une liste de tâches todo structurée
         "todoread": true, // Lit la liste de tâches todo actuelle
@@ -102,6 +103,7 @@
         "edit": true, // Remplace du texte exact dans un fichier existant
         "write": true, // Écrit/écrase un fichier (préférer edit)
         "task": true, // Lance un agent spécialisé pour tâches complexes
+        "skills*": false,                    // bloque tous les skills par défaut
         "webfetch": true, // Récupère et analyse du contenu web (URL)
         "todowrite": true, // Gère une liste de tâches todo structurée
         "todoread": true, // Lit la liste de tâches todo actuelle
@@ -125,6 +127,8 @@
         "edit": true, // Remplace du texte exact dans un fichier existant
         "write": true, // Écrit/écrase un fichier (préférer edit)
         "task": true, // Lance un agent spécialisé pour tâches complexes
+        "skills*": false,                    // bloque tous les skills par défaut
+        "skills_clean-code": true,            // active seulement celui-ci
         "webfetch": true, // Récupère et analyse du contenu web (URL)
         "todowrite": true, // Gère une liste de tâches todo structurée
         "todoread": true, // Lit la liste de tâches todo actuelle
@@ -148,6 +152,7 @@
         "edit": true,
         "write": true,
         "task": true,
+        "skills*": false,                    // bloque tous les skills par défaut
         "webfetch": true,
         "todowrite": true,
         "todoread": true,
@@ -171,6 +176,7 @@
         "edit": true,
         "write": true,
         "task": true,
+        "skills*": false,                    // bloque tous les skills par défaut
         "webfetch": true,
         "todowrite": true,
         "todoread": true,
@@ -194,6 +200,7 @@
         "edit": true,
         "write": true,
         "task": true,
+        "skills*": false,                    // bloque tous les skills par défaut
         "webfetch": true,
         "todowrite": true,
         "todoread": true,
@@ -237,6 +244,7 @@
         "edit": true, // Remplace du texte exact dans un fichier existant
         "write": false, // Écrit/écrase un fichier (préférer edit)
         "task": false, // Lance un agent spécialisé pour tâches complexes
+        "skills*": false,                    // bloque tous les skills par défaut
         "webfetch": true, // Récupère et analyse du contenu web (URL)
         "todowrite": false, // Gère une liste de tâches todo structurée
         "todoread": false, // Lit la liste de tâches todo actuelle
@@ -261,6 +269,8 @@
         "edit": true,
         "write": true,
         "task": true,
+        "skills*": false,                    // bloque tous les skills par défaut
+        "skills_clean-code": true,            // active seulement celui-ci
         "webfetch": false,
         "todowrite": false,
         "todoread": false,
@@ -274,7 +284,7 @@
       "mode": "subagent",
       "description": "Quality Assurance specialist. Use this agent to verify code integrity, run validation commands (lint, tests, build), and ensure changes match the requested specifications before completion.",
       "prompt": "{file:./prompts/code-validator.md}",
-      "model": "{file:./models/code_only_model.txt}",
+      "model": "{file:./models/code_validator_model.txt}",
       "temperature": 0.1,
       "tools": {
         "bash": true,
@@ -305,6 +315,7 @@
         "grep": true,
         "list": true,
         "task": false,
+        "skills*": false,                    // bloque tous les skills par défaut
         "write": false,
         "todowrite": false,
         "todoread": false,
@@ -325,6 +336,9 @@
         "list": true,
         "skill": true,
         "task": false,
+        "skills*": false,                    // bloque tous les skills par défaut
+        "skills_git-branch-cleaner": true,
+        "skills_git-commit-messages": true,
         "write": false,
         "todowrite": false,
         "todoread": false,
