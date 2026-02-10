@@ -91,7 +91,7 @@
       },
     },
     "build": {
-      "disable": true,
+      "disable": false,
       "model": "{file:./models/code_model.txt}",
       "temperature": 0.3,
       "tools": {
@@ -114,6 +114,7 @@
       },
     },
     "Code": {
+      "disable": true,
       "mode": "primary",
       "model": "{file:./models/code_model.txt}",
       "prompt": "{file:./prompts/code.md}",
