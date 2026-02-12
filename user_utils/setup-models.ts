@@ -4,14 +4,47 @@ import { join, dirname } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
-async function select(message: string, choices: string[]): Promise<string> {
+function getAvailableModels(): Set<string> {
+  try {
+    const output = execSync("opencode models", { encoding: "utf-8" });
+    return new Set(
+      output
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0),
+    );
+  } catch (error) {
+    console.warn("⚠️ Could not fetch available models, assuming all are unavailable");
+    return new Set<string>();
+  }
+}
+
+function isModelAvailable(modelName: string, availableModels: Set<string>): boolean {
+  return availableModels.has(modelName);
+}
+
+function getProfileAvailabilityStatus(
+  profile: { primaryModel: string; subagentModel: string },
+  availableModels: Set<string>,
+): { isAvailable: boolean; status: string } {
+  const primaryAvailable = isModelAvailable(profile.primaryModel, availableModels);
+  const subagentAvailable = isModelAvailable(profile.subagentModel, availableModels);
+  
+  const isAvailable = primaryAvailable && subagentAvailable;
+  const status = isAvailable ? "✅ available" : "⚠️ unavailable";
+  
+  return { isAvailable, status };
+}
+
+async function select(message: string, choices: string[], displayItems?: string[]): Promise<string> {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
   });
 
   console.log(`\n${message}`);
-  choices.forEach((choice, index) => {
+  const itemsToDisplay = displayItems || choices;
+  itemsToDisplay.forEach((choice, index) => {
     console.log(`${index + 1}. ${choice}`);
   });
 
@@ -30,20 +63,26 @@ async function select(message: string, choices: string[]): Promise<string> {
 
 // Profils prédéfinis avec leurs modèles associés
 const MODEL_PROFILES = {
-  "github-fast": {
+  "github-flash": {
     description:
       "GitHub fast models: gemini-3-flash-preview for primary agents, grok-code-fast-1 for subagents",
     primaryModel: "github-copilot/gemini-3-flash-preview",
     subagentModel: "github-copilot/grok-code-fast-1",
   },
+  "github-Grok": {
+    description:
+      "GitHub fastest model: grok-code-fast-1",
+    primaryModel: "github-copilot/grok-code-fast-1",
+    subagentModel: "github-copilot/grok-code-fast-1",
+  },
   "github-claude": {
     description:
-      "GitHub Claude models: claude-opus-4.6 for primary agents, claude-sonnet-4.5 for subagents",
+      "GitHub Claude models: Opus 4.6 for primary agents, Haiku 4.5 for subagents",
     primaryModel: "github-copilot/claude-opus-4.6",
-    subagentModel: "github-copilot/claude-sonnet-4.5",
+    subagentModel: "github-copilot/claude-haiku-4.5",
   },
   "ovh-qwen": {
-    description: "OVH Qwen model for all agents and subagents",
+    description: "OVH Qwen3-Coder model for all agents and subagents",
     primaryModel: "ovh-ai-internal/Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
     subagentModel: "ovh-ai-internal/Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
   },
@@ -53,11 +92,23 @@ const MODEL_PROFILES = {
     primaryModel: "github-copilot/gpt-5.2-codex",
     subagentModel: "github-copilot/gpt-5.1-codex-mini",
   },
-  opencode: {
+  "OpenCode-Kimi-K2": {
     description:
-      "OpenCode models: kimi-k2.5 for primary agents, glm-4.7 for subagents",
+      "OpenCode models: kimi-k2.5 for primary agents, minimax-m2.1 for subagents",
     primaryModel: "opencode/kimi-k2.5",
-    subagentModel: "opencode/glm-4.7",
+    subagentModel: "opencode/minimax-m2.1",
+  },
+  "OpenCode-GLM-4.7": {
+    description:
+      "OpenCode models: GLM 4.7 for primary agents, minimax-m2.1 for subagents",
+    primaryModel: "opencode/glm-4.7",
+    subagentModel: "opencode/minimax-m2.1",
+  },
+  "OpenCode-Free": {
+    description:
+      "OpenCode models: Current Free for primary agents, big-pickle for subagents",
+    primaryModel: "opencode/minimax-m2.5-free",
+    subagentModel: "opencode/big-pickle",
   },
 };
 
@@ -92,21 +143,21 @@ async function setupModels() {
     return;
   }
 
-  // 2. Afficher les profils disponibles et demander à l'utilisateur de choisir
+  // 2. Récupérer les modèles disponibles et préparer l'affichage des profils
+  const availableModels = getAvailableModels();
+  console.log(`\n🔍 Found ${availableModels.size} available models`);
+  
   const profileChoices = Object.keys(MODEL_PROFILES);
-  const profileDescriptions = profileChoices.map(
-    (profile) =>
-      `${profile}: ${MODEL_PROFILES[profile as keyof typeof MODEL_PROFILES].description}`,
-  );
-
-  console.log("\n📋 Available profiles:");
-  profileDescriptions.forEach((desc, index) => {
-    console.log(`${index + 1}. ${desc}`);
+  const profileDescriptions = profileChoices.map((profileKey) => {
+    const profile = MODEL_PROFILES[profileKey as keyof typeof MODEL_PROFILES];
+    const { status } = getProfileAvailabilityStatus(profile, availableModels);
+    return `${profileKey}: ${profile.description} [${status}]`;
   });
 
   const selectedProfileKey = await select(
-    "Select a profile for your models:",
+    "📋 Available profiles:",
     profileChoices,
+    profileDescriptions
   );
 
   const selectedProfile =
@@ -194,7 +245,12 @@ async function applyProfileDirectly(profileName: string) {
   // Appliquer le profil sélectionné
   const selectedProfile =
     MODEL_PROFILES[profileName as keyof typeof MODEL_PROFILES];
-  console.log(`\n🔧 Applying profile: ${profileName} (non-interactive mode)`);
+  
+  // Check and display availability status
+  const availableModels = getAvailableModels();
+  console.log(`\n🔍 Found ${availableModels.size} available models`);
+  const { status } = getProfileAvailabilityStatus(selectedProfile, availableModels);
+  console.log(`🔧 Applying profile: ${profileName} (non-interactive mode) [${status}]`);
 
   for (const fileName of modelFiles) {
     // Déterminer si c'est un fichier pour un sous-agent
