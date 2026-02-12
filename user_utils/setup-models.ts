@@ -14,29 +14,83 @@ function getAvailableModels(): Set<string> {
         .filter((line) => line.length > 0),
     );
   } catch (error) {
-    console.warn("⚠️ Could not fetch available models, assuming all are unavailable");
+    console.warn(
+      "⚠️ Could not fetch available models, assuming all are unavailable",
+    );
     return new Set<string>();
   }
 }
 
-function isModelAvailable(modelName: string, availableModels: Set<string>): boolean {
+function isModelAvailable(
+  modelName: string,
+  availableModels: Set<string>,
+): boolean {
   return availableModels.has(modelName);
 }
 
 function getProfileAvailabilityStatus(
+  profileKey: string,
   profile: { primaryModel: string; subagentModel: string },
   availableModels: Set<string>,
 ): { isAvailable: boolean; status: string } {
-  const primaryAvailable = isModelAvailable(profile.primaryModel, availableModels);
-  const subagentAvailable = isModelAvailable(profile.subagentModel, availableModels);
-  
-  const isAvailable = primaryAvailable && subagentAvailable;
-  const status = isAvailable ? "✅ available" : "⚠️ unavailable";
-  
-  return { isAvailable, status };
+  if (profileKey === "OpenCode-Free") {
+    const primaryAvailable = isModelAvailable(
+      profile.primaryModel,
+      availableModels,
+    );
+    const subagentAvailable = isModelAvailable(
+      profile.subagentModel,
+      availableModels,
+    );
+    if (primaryAvailable && subagentAvailable) {
+      return { isAvailable: true, status: "✅ available" };
+    } else {
+      const fallback = getLatestFreeModel(availableModels);
+      if (fallback !== null) {
+        return { isAvailable: true, status: "✅ available (fallback)" };
+      } else {
+        return {
+          isAvailable: false,
+          status: "⚠️ unavailable (no free models)",
+        };
+      }
+    }
+  } else {
+    const primaryAvailable = isModelAvailable(
+      profile.primaryModel,
+      availableModels,
+    );
+    const subagentAvailable = isModelAvailable(
+      profile.subagentModel,
+      availableModels,
+    );
+
+    const isAvailable = primaryAvailable && subagentAvailable;
+    const status = isAvailable ? "✅ available" : "⚠️ unavailable";
+
+    return { isAvailable, status };
+  }
 }
 
-async function select(message: string, choices: string[], displayItems?: string[]): Promise<string> {
+function getLatestFreeModel(availableModels: Set<string>): string | null {
+  const filtered = Array.from(availableModels).filter(
+    (model) => model.startsWith("opencode/") && model.endsWith("-free"),
+  );
+
+  if (filtered.length === 0) {
+    return null;
+  }
+
+  filtered.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+  return filtered[filtered.length - 1];
+}
+
+async function select(
+  choices: string[],
+  message?: string,
+  displayItems?: string[],
+): Promise<string> {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -70,8 +124,7 @@ const MODEL_PROFILES = {
     subagentModel: "github-copilot/grok-code-fast-1",
   },
   "github-Grok": {
-    description:
-      "GitHub fastest model: grok-code-fast-1",
+    description: "GitHub fastest model: grok-code-fast-1",
     primaryModel: "github-copilot/grok-code-fast-1",
     subagentModel: "github-copilot/grok-code-fast-1",
   },
@@ -105,10 +158,9 @@ const MODEL_PROFILES = {
     subagentModel: "opencode/minimax-m2.1",
   },
   "OpenCode-Free": {
-    description:
-      "OpenCode models: Current Free for primary agents, big-pickle for subagents",
-    primaryModel: "opencode/minimax-m2.5-free",
-    subagentModel: "opencode/big-pickle",
+    description: "OpenCode models: Current best Free model",
+    primaryModel: "opencode/minimax-free",
+    subagentModel: "opencode/minimax-free",
   },
 };
 
@@ -146,22 +198,44 @@ async function setupModels() {
   // 2. Récupérer les modèles disponibles et préparer l'affichage des profils
   const availableModels = getAvailableModels();
   console.log(`\n🔍 Found ${availableModels.size} available models`);
-  
+
   const profileChoices = Object.keys(MODEL_PROFILES);
   const profileDescriptions = profileChoices.map((profileKey) => {
     const profile = MODEL_PROFILES[profileKey as keyof typeof MODEL_PROFILES];
-    const { status } = getProfileAvailabilityStatus(profile, availableModels);
+    const { status } = getProfileAvailabilityStatus(
+      profileKey,
+      profile,
+      availableModels,
+    );
     return `${profileKey}: ${profile.description} [${status}]`;
   });
 
   const selectedProfileKey = await select(
-    "📋 Available profiles:",
     profileChoices,
-    profileDescriptions
+    "📋 Available profiles:",
+    profileDescriptions,
   );
 
   const selectedProfile =
     MODEL_PROFILES[selectedProfileKey as keyof typeof MODEL_PROFILES];
+
+  if (selectedProfileKey === "OpenCode-Free") {
+    const primaryAvailable = isModelAvailable(
+      selectedProfile.primaryModel,
+      availableModels,
+    );
+    const subagentAvailable = isModelAvailable(
+      selectedProfile.subagentModel,
+      availableModels,
+    );
+    if (!primaryAvailable || !subagentAvailable) {
+      const fallback = getLatestFreeModel(availableModels);
+      if (fallback !== null) {
+        selectedProfile.primaryModel = fallback;
+        selectedProfile.subagentModel = fallback;
+      }
+    }
+  }
 
   // 3. Appliquer les modèles selon le profil sélectionné
   console.log(`\n🔧 Applying profile: ${selectedProfileKey}`);
@@ -242,15 +316,39 @@ async function applyProfileDirectly(profileName: string) {
     return;
   }
 
+  const availableModels = getAvailableModels();
+
   // Appliquer le profil sélectionné
   const selectedProfile =
     MODEL_PROFILES[profileName as keyof typeof MODEL_PROFILES];
-  
+  if (profileName === "OpenCode-Free") {
+    const primaryAvailable = isModelAvailable(
+      selectedProfile.primaryModel,
+      availableModels,
+    );
+    const subagentAvailable = isModelAvailable(
+      selectedProfile.subagentModel,
+      availableModels,
+    );
+    if (!primaryAvailable || !subagentAvailable) {
+      const fallback = getLatestFreeModel(availableModels);
+      if (fallback !== null) {
+        selectedProfile.primaryModel = fallback;
+        selectedProfile.subagentModel = fallback;
+      }
+    }
+  }
+
   // Check and display availability status
-  const availableModels = getAvailableModels();
   console.log(`\n🔍 Found ${availableModels.size} available models`);
-  const { status } = getProfileAvailabilityStatus(selectedProfile, availableModels);
-  console.log(`🔧 Applying profile: ${profileName} (non-interactive mode) [${status}]`);
+  const { status } = getProfileAvailabilityStatus(
+    profileName,
+    selectedProfile,
+    availableModels,
+  );
+  console.log(
+    `🔧 Applying profile: ${profileName} (non-interactive mode) [${status}]`,
+  );
 
   for (const fileName of modelFiles) {
     // Déterminer si c'est un fichier pour un sous-agent
