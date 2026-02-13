@@ -71,287 +71,286 @@
     },
   },
   "agent": {
-    "plan": {
-      "disable": true,
-      "model": "{file:./models/code_model.txt}",
-      "temperature": 0.3,
-      "tools": {
-        "bash": true, // Exécute des commandes bash dans un shell persistant
-        "read": true, // Lit le contenu d'un fichier (absolu)
-        "glob": true, // Recherche de fichiers par motifs glob (ex. */.ts)
-        "grep": true, // Recherche de motifs regex dans les fichiers
-        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
-        "edit": true, // Remplace du texte exact dans un fichier existant
-        "write": true, // Écrit/écrase un fichier (préférer edit)
-        "task": true, // Lance un agent spécialisé pour tâches complexes
-        "skills*": false, // bloque tous les skills par défaut
-        "webfetch": true, // Récupère et analyse du contenu web (URL)
-        "todowrite": true, // Gère une liste de tâches todo structurée
-        "todoread": true, // Lit la liste de tâches todo actuelle
-        "brave-search_brave_web_search": true, // Recherche web générale (Brave)
-        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "build": {
-      "disable": false,
-      "model": "{file:./models/code_model.txt}",
-      "temperature": 0.3,
-      "tools": {
-        "bash": true, // Exécute des commandes bash dans un shell persistant
-        "read": true, // Lit le contenu d'un fichier (absolu)
-        "glob": true, // Recherche de fichiers par motifs glob (ex. */.ts)
-        "grep": true, // Recherche de motifs regex dans les fichiers
-        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
-        "edit": true, // Remplace du texte exact dans un fichier existant
-        "write": true, // Écrit/écrase un fichier (préférer edit)
-        "task": true, // Lance un agent spécialisé pour tâches complexes
-        "skills*": false, // bloque tous les skills par défaut
-        "webfetch": true, // Récupère et analyse du contenu web (URL)
-        "todowrite": true, // Gère une liste de tâches todo structurée
-        "todoread": true, // Lit la liste de tâches todo actuelle
-        "brave-search_brave_web_search": false, // Recherche web générale (Brave)
-        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Code": {
-      "disable": true,
-      "mode": "primary",
-      "model": "{file:./models/code_model.txt}",
-      "prompt": "{file:./prompts/code.md}",
-      "temperature": 0.3,
-      "tools": {
-        "bash": true, // Exécute des commandes bash dans un shell persistant
-        "read": true, // Lit le contenu d'un fichier (absolu)
-        "glob": true, // Recherche de fichiers par motifs glob (ex. */.ts)
-        "grep": true, // Recherche de motifs regex dans les fichiers
-        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
-        "edit": true, // Remplace du texte exact dans un fichier existant
-        "write": true, // Écrit/écrase un fichier (préférer edit)
-        "task": true, // Lance un agent spécialisé pour tâches complexes
-        "skills*": false, // bloque tous les skills par défaut
-        "skills_clean-code": true, // active seulement celui-ci
-        "webfetch": true, // Récupère et analyse du contenu web (URL)
-        "todowrite": true, // Gère une liste de tâches todo structurée
-        "todoread": true, // Lit la liste de tâches todo actuelle
-        "brave-search_brave_web_search": true, // Recherche web générale (Brave)
-        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Rocket": {
-      "mode": "primary",
-      "model": "{file:./models/rocket_model.txt}",
-      "prompt": "{file:./prompts/rocket.md}",
-      "temperature": 0.3,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "list": true,
-        "edit": true,
-        "write": true,
-        "task": true,
-        "skills*": false, // bloque tous les skills par défaut
-        "webfetch": true,
-        "todowrite": true,
-        "todoread": true,
-        "brave-search_brave_web_search": true,
-        "brave-search_brave_local_search": false,
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Rocket-Review": {
-      "mode": "primary",
-      "model": "{file:./models/rocket_model.txt}",
-      "prompt": "{file:./prompts/rocket-review.md}",
-      "temperature": 0.1,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "list": true,
-        "edit": true,
-        "write": true,
-        "task": true,
-        "skills*": false, // bloque tous les skills par défaut
-        "webfetch": true,
-        "todowrite": true,
-        "todoread": true,
-        "brave-search_brave_web_search": true,
-        "brave-search_brave_local_search": false,
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Chatbot": {
-      "mode": "primary",
-      "model": "{file:./models/chatbot_model.txt}",
-      "prompt": "{file:./prompts/chatbot.md}",
-      "temperature": 1,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "list": true,
-        "edit": true,
-        "write": true,
-        "task": true,
-        "skills*": false, // bloque tous les skills par défaut
-        "webfetch": true,
-        "todowrite": true,
-        "todoread": true,
-        "brave-search_brave_web_search": true,
-        "brave-search_brave_local_search": false,
-        "sequential-thinking_sequentialthinking": true,
-        // Playwright MCP - Browser automation
-        "playwright_browser_navigate": true,
-        "playwright_browser_snapshot": true,
-        "playwright_browser_click": true,
-        "playwright_browser_type": true,
-        "playwright_browser_fill_form": true,
-        "playwright_browser_select_option": true,
-        "playwright_browser_hover": true,
-        "playwright_browser_drag": true,
-        "playwright_browser_press_key": true,
-        "playwright_browser_take_screenshot": true,
-        "playwright_browser_wait_for": true,
-        "playwright_browser_tabs": true,
-        "playwright_browser_navigate_back": true,
-        "playwright_browser_evaluate": true,
-        "playwright_browser_console_messages": true,
-        "playwright_browser_network_requests": true,
-        "playwright_browser_close": true,
-        "playwright_browser_file_upload": true,
-        "playwright_browser_handle_dialog": true,
-        "playwright_browser_resize": true,
-        "playwright_browser_install": true,
-      },
-    },
-    "Code-Audit": {
-      "mode": "subagent",
-      "model": "{file:./models/code_audit_model.txt}",
-      "prompt": "{file:./prompts/code-audit.md}",
-      "temperature": 0.1,
-      "tools": {
-        "bash": true, // Exécute des commandes bash dans un shell persistant
-        "read": true, // Lit le contenu d'un fichier (absolu)
-        "glob": true, // Recherche de motifs regex dans les fichiers
-        "list": true, // Liste les fichiers/dossiers dans un chemin absolu
-        "edit": true, // Remplace du texte exact dans un fichier existant
-        "write": false, // Écrit/écrase un fichier (préférer edit)
-        "task": false, // Lance un agent spécialisé pour tâches complexes
-        "skills*": false, // bloque tous les skills par défaut
-        "webfetch": true, // Récupère et analyse du contenu web (URL)
-        "todowrite": false, // Gère une liste de tâches todo structurée
-        "todoread": false, // Lit la liste de tâches todo actuelle
-        "brave-search_brave_web_search": false, // Recherche web générale (Brave)
-        "brave-search_brave_local_search": false, // Recherche de lieux (business, etc.)
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Code-Only": {
-      "mode": "subagent",
-      "description": "Primary subagent for code implementation. Specialized in precise file modifications and creation based on technical specs. Use this agent for all physical coding tasks to maintain context efficiency.",
-      "prompt": "{file:./prompts/code-only.md}",
-      "model": "{file:./models/code_only_model.txt}",
-      "temperature": 0.1,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "list": true,
-        "edit": true,
-        "write": true,
-        "task": true,
-        "skills*": false, // bloque tous les skills par défaut
-        "skills_clean-code": true, // active seulement celui-ci
-        "webfetch": false,
-        "todowrite": false,
-        "todoread": false,
-        "brave-search_brave_web_search": false,
-        "brave-search_brave_local_search": false,
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Code-Cleaner": {
-      "mode": "subagent",
-      "description": "Quality Assurance and Code Refinement specialist. Use this agent to verify code integrity, apply clean-code improvements, run validation commands (lint, tests, build), and ensure changes match the requested specifications before completion.",
-      "prompt": "{file:./prompts/code-cleaner.md}",
-      "model": "{file:./models/code_validator_model.txt}",
-      "temperature": 0.1,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "edit": true,
-        "glob": true,
-        "grep": true,
-        "write": true,
-        "task": true,
-        "todowrite": false,
-        "todoread": false,
-        "brave-search_brave_web_search": false,
-        "brave-search_brave_local_search": false,
-        "sequential-thinking_sequentialthinking": true,
-        "playwright_browser_*": false,
-      },
-    },
-    "Test-Expert": {
-      "mode": "subagent",
-      "description": "Specialized in running tests and providing concise summaries. Use this agent to avoid context pollution from verbose test logs.",
-      "prompt": "{file:./prompts/test-expert.md}",
-      "model": "{file:./models/code_only_model.txt}",
-      "temperature": 0.1,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "list": true,
-        "task": false,
-        "skills*": false, // bloque tous les skills par défaut
-        "write": false,
-        "todowrite": false,
-        "todoread": false,
-        "sequential-thinking_sequentialthinking": true,
-      },
-    },
-    "Git-Expert": {
-      "mode": "subagent",
-      "description": "Specialized Git manager. Use this agent for all repository operations: generating conventional commits, rebasing, and cleaning history. This is the only authorized agent for Git-related tasks.",
-      "model": "{file:./models/git_expert_model.txt}",
-      "prompt": "{file:./prompts/git-expert.md}",
-      "temperature": 0.1,
-      "tools": {
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "list": true,
-        "skill": true,
-        "task": false,
-        "skills*": false, // bloque tous les skills par défaut
-        "skills_git-branch-cleaner": true,
-        "skills_git-commit-messages": true,
-        "write": false,
-        "todowrite": false,
-        "todoread": false,
-        "playwright_browser_*": false,
-        "brave-search_brave_web_search": false,
-        "brave-search_brave_local_search": false,
-        "sequential-thinking_sequentialthinking": false,
-      },
-    },
+  "plan": {
+    "disable": true,
+    "model": "{file:./models/plan_model.txt}",
+    "temperature": 0.3,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": true,
+      "todoread": true,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
   },
+  "build": {
+    "disable": false,
+    "model": "{file:./models/build_model.txt}",
+    "temperature": 0.3,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": true,
+      "todoread": true,
+      "brave-search_brave_web_search": false,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Code": {
+    "disable": true,
+    "mode": "primary",
+    "model": "{file:./models/code_model.txt}",
+    "prompt": "{file:./prompts/code.md}",
+    "temperature": 0.3,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "skills_clean-code": true,
+      "webfetch": true,
+      "todowrite": true,
+      "todoread": true,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Rocket": {
+    "mode": "primary",
+    "model": "{file:./models/rocket_model.txt}",
+    "prompt": "{file:./prompts/rocket.md}",
+    "temperature": 0.3,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": true,
+      "todoread": true,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Rocket-Review": {
+    "mode": "primary",
+    "model": "{file:./models/rocket_review_model.txt}",
+    "prompt": "{file:./prompts/rocket-review.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": true,
+      "todoread": true,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Chatbot": {
+    "mode": "primary",
+    "model": "{file:./models/chatbot_model.txt}",
+    "prompt": "{file:./prompts/chatbot.md}",
+    "temperature": 1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": true,
+      "todoread": true,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_navigate": true,
+      "playwright_browser_snapshot": true,
+      "playwright_browser_click": true,
+      "playwright_browser_type": true,
+      "playwright_browser_fill_form": true,
+      "playwright_browser_select_option": true,
+      "playwright_browser_hover": true,
+      "playwright_browser_drag": true,
+      "playwright_browser_press_key": true,
+      "playwright_browser_take_screenshot": true,
+      "playwright_browser_wait_for": true,
+      "playwright_browser_tabs": true,
+      "playwright_browser_navigate_back": true,
+      "playwright_browser_evaluate": true,
+      "playwright_browser_console_messages": true,
+      "playwright_browser_network_requests": true,
+      "playwright_browser_close": true,
+      "playwright_browser_file_upload": true,
+      "playwright_browser_handle_dialog": true,
+      "playwright_browser_resize": true,
+      "playwright_browser_install": true
+    }
+  },
+  "Code-Audit": {
+    "mode": "subagent",
+    "model": "{file:./models/code_audit_model.txt}",
+    "prompt": "{file:./prompts/code-audit.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "list": true,
+      "edit": true,
+      "write": false,
+      "task": false,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": false,
+      "todoread": false,
+      "brave-search_brave_web_search": false,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Code-Only": {
+    "mode": "subagent",
+    "description": "Primary subagent for code implementation. Specialized in precise file modifications and creation based on technical specs. Use this agent for all physical coding tasks to maintain context efficiency.",
+    "prompt": "{file:./prompts/code-only.md}",
+    "model": "{file:./models/code_only_model.txt}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": true,
+      "write": true,
+      "task": true,
+      "skills*": false,
+      "skills_clean-code": true,
+      "webfetch": false,
+      "todowrite": false,
+      "todoread": false,
+      "brave-search_brave_web_search": false,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Code-Cleaner": {
+    "mode": "subagent",
+    "description": "Quality Assurance and Code Refinement specialist. Use this agent to verify code integrity, apply clean-code improvements, run validation commands (lint, tests, build), and ensure changes match the requested specifications before completion.",
+    "prompt": "{file:./prompts/code-cleaner.md}",
+    "model": "{file:./models/code_validator_model.txt}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "edit": true,
+      "glob": true,
+      "grep": true,
+      "write": true,
+      "task": true,
+      "todowrite": false,
+      "todoread": false,
+      "brave-search_brave_web_search": false,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
+  },
+  "Test-Expert": {
+    "mode": "subagent",
+    "description": "Specialized in running tests and providing concise summaries. Use this agent to avoid context pollution from verbose test logs.",
+    "prompt": "{file:./prompts/test-expert.md}",
+    "model": "{file:./models/test_expert_model.txt}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "task": false,
+      "skills*": false,
+      "write": false,
+      "todowrite": false,
+      "todoread": false,
+      "sequential-thinking_sequentialthinking": true
+    }
+  },
+  "Git-Expert": {
+    "mode": "subagent",
+    "description": "Specialized Git manager. Use this agent for all repository operations: generating conventional commits, rebasing, and cleaning history. This is the only authorized agent for Git-related tasks.",
+    "model": "{file:./models/git_expert_model.txt}",
+    "prompt": "{file:./prompts/git-expert.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "skill": true,
+      "task": false,
+      "skills*": false,
+      "skills_git-branch-cleaner": true,
+      "skills_git-commit-messages": true,
+      "write": false,
+      "todowrite": false,
+      "todoread": false,
+      "playwright_browser_*": false,
+      "brave-search_brave_web_search": false,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": false
+    }
+  }
+},
 }
