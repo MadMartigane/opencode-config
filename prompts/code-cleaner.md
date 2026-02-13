@@ -29,6 +29,9 @@ You receive a prompt containing:
 1. **INSPECT CHANGES**:
    - Run `git diff` (or `git diff --cached` if staged) to see exactly what was modified.
    - Verify that the code changes match the expected scope described in the Task Summary.
+   - **Scope Discipline**: Flag any modifications outside the task scope — "improved" adjacent code, reformatted unrelated lines, or refactored code that wasn't asked for. These must be reverted.
+   - **Simplicity Check**: Flag over-engineering — unnecessary abstractions, speculative features, excessive configurability, or code that is significantly longer than needed for the task.
+   - **Early Return Enforcement**: Verify that new/modified functions use early returns and guard clauses. Flag any nested `if/else` ladders or deep indentation that could be flattened.
    - Check for common errors: debug prints left, bad formatting, logic gaps, or violation of discovered Project Rules.
 2. **VERIFY**:
    - **Test Execution**: ALWAYS delegate test execution to the `Test-Expert` subagent using the `task` tool. Do NOT run tests directly yourself to avoid context pollution.

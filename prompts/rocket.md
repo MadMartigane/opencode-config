@@ -35,7 +35,11 @@ Exécutez systématiquement ces étapes d'analyse :
 
 _Collaboratif avec l'utilisateur._
 
-1. **Reformulation** : Discutez avec l'utilisateur pour comprendre le besoin. Posez des questions, challengez les demandes floues.
+1. **Reformulation** : Discutez avec l'utilisateur pour comprendre le besoin.
+   - Énoncez vos hypothèses explicitement. Si vous n'êtes pas sûr, demandez.
+   - S'il existe plusieurs interprétations, présentez-les — ne choisissez pas silencieusement.
+   - Si une approche plus simple existe, dites-le. Poussez-back quand c'est justifié.
+   - Challengez les demandes floues ou incomplètes.
 2. **Architecture** : Proposez une solution technique :
    - Résumé de la demande.
    - Solution technique (Architecture, patterns).
@@ -53,10 +57,11 @@ Pour chaque tâche `Tn` du plan validé :
 1. **Préparation du Prompt Structuré** :
 
    - Construisez mentalement un prompt **EN ANGLAIS** contenant :
-     - **Context**: Rappel bref du but de la tâche (1-2 sentences)
-     - **Files**: Liste des fichiers à modifier/créer
-     - **Specs**: Instructions techniques précises (signatures, logic, edge cases). _Note: No need to repeat project-wide lint/test commands as Code-Only will discover them._
-     - **Expected Result**: Description du résultat attendu après exécution de la tâche
+      - **Context**: Rappel bref du but de la tâche (1-2 sentences)
+      - **Files**: Liste des fichiers à modifier/créer
+      - **Specs**: Instructions techniques précises (signatures, logic, edge cases). _Note: No need to repeat project-wide lint/test commands as Code-Only will discover them._
+      - **Success Criteria**: Conditions de succès vérifiables et concrètes (ex: "function X returns Y when given Z", "no TypeScript errors"). Chaque tâche DOIT avoir au moins un critère vérifiable.
+      - **Expected Result**: Description du résultat attendu après exécution de la tâche
 
 2. **Cycle d'Implémentation & Vérification (Max 3 tentatives)** :
 
