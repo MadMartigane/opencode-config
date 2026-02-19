@@ -362,6 +362,7 @@ function writeProfileToModelFiles(modelFiles: Set<string>, modelsDir: string, pr
       fileName.includes("code_only") ||
       fileName.includes("git_expert") ||
       fileName.includes("code_cleaner") ||
+      fileName.includes("code_smoke") ||
       fileName.includes("code_audit") ||
       fileName.includes("test_expert");
 

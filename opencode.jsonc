@@ -284,9 +284,33 @@
       "playwright_browser_*": false
     }
   },
+  "Code-Smoke": {
+    "mode": "subagent",
+    "description": "Lightweight per-task smoke check agent. Runs fast scoped validation (lint, tsc, unit tests on changed files) after each Code-Only task. No refinement, no skill loading, no full test suites. Use this agent for rapid blocking-error detection in the Rocket per-task loop.",
+    "prompt": "{file:./prompts/code-smoke.md}",
+    "model": "{file:./models/code_smoke_model.txt}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": false,
+      "write": false,
+      "task": false,
+      "skills*": false,
+      "todowrite": false,
+      "todoread": false,
+      "brave-search_brave_web_search": false,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": false,
+      "playwright_browser_*": false
+    }
+  },
   "Code-Cleaner": {
     "mode": "subagent",
-    "description": "Quality Assurance and Code Refinement specialist. Use this agent to verify code integrity, apply clean-code improvements, run validation commands (lint, tests, build), and ensure changes match the requested specifications before completion.",
+    "description": "Full QA and Code Refinement specialist. Called once after all tasks are completed in the Rocket workflow. Runs complete test suites via Test-Expert, applies clean-code refinements, and ensures global consistency across all changes.",
     "prompt": "{file:./prompts/code-cleaner.md}",
     "model": "{file:./models/code_validator_model.txt}",
     "temperature": 0.1,
