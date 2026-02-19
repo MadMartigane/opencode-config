@@ -351,6 +351,36 @@
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": false
     }
+  },
+  "Router-review": {
+    "mode": "subagent",
+    "description": "Lightweight triage agent for the Rocket-Review workflow. Analyzes Git diffs and selects relevant audit focuses.",
+    "model": "{file:./models/router_review_model.txt}",
+    "prompt": "{file:./prompts/router-review.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "list": true,
+      "task": false,
+      "sequential-thinking_sequentialthinking": true
+    }
+  },
+  "Critic-review": {
+    "mode": "subagent",
+    "description": "Senior auditor and technical critic for the Rocket-Review workflow. Consolidates and challenges multiple audit reports.",
+    "model": "{file:./models/critic_review_model.txt}",
+    "prompt": "{file:./prompts/critic-review.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "list": true,
+      "task": false,
+      "sequential-thinking_sequentialthinking": true
+    }
   }
 },
 }
