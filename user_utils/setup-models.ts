@@ -1,9 +1,20 @@
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import { parse } from 'jsonc-parser';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const CONFIG_ROOT_DIR = dirname(__dirname);
+const CONFIG_PATH = join(CONFIG_ROOT_DIR, "opencode.jsonc");
+const MODELS_DIR = join(CONFIG_ROOT_DIR, "models");
+
+function getModelFileName(agent: any): string | null {
+  const match = agent.model?.match(/\{file:\.\/models\/(.+?)\}/);
+  return match ? match[1] : null;
+}
 
 const VALID_PROFILES = [
   "github-flash",
@@ -66,11 +77,6 @@ const MODEL_PROFILES = {
 
 function displayCurrentConfigurations(agentsList: Record<string, any>) {
 
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  const configRootDir = dirname(__dirname);
-  const modelsDir = join(configRootDir, "models");
-
   console.log("\n📋 Current Model Configurations:");
   console.log("=".repeat(70));
   console.log("Agent Name".padEnd(20) + "Type".padEnd(15) + "Current Model");
@@ -81,11 +87,10 @@ function displayCurrentConfigurations(agentsList: Record<string, any>) {
     const emoji = type === "primary" ? "🟢" : "🔵";
 
     // Get current model
-    const modelMatch = agent.model?.match(/\{file:\.\/models\/(.+?)\}/);
+    const fileName = getModelFileName(agent);
     let currentModel = "N/A";
-    if (modelMatch) {
-      const fileName = modelMatch[1];
-      const filePath = join(modelsDir, fileName);
+    if (fileName) {
+      const filePath = join(MODELS_DIR, fileName);
       if (existsSync(filePath)) {
         currentModel = readFileSync(filePath, "utf-8").trim();
       }
@@ -175,8 +180,8 @@ function parseAgentsFromConfig(configContent: string): Record<string, any> {
   return config.agent;
 }
 
-function parseAgentsFromConfigFile(configPath: string): Record<string, any> {
-  const configContent = readFileSync(configPath, "utf-8");
+function parseAgentsFromConfigFile(): Record<string, any> {
+  const configContent = readFileSync(CONFIG_PATH, "utf-8");
   return parseAgentsFromConfig(configContent);
 }
 
@@ -192,24 +197,23 @@ function findClosingBrace(str: string, start: number): number {
   return -1;
 }
 
-function individualizeSharedModelFiles(agentsList: Record<string, any>, modelsDir: string) {
+function individualizeSharedModelFiles(agentsList: Record<string, any>) {
   const fileToAgents: Record<string, string[]> = {};
   for (const [agentName, agent] of Object.entries(agentsList)) {
-    const modelMatch = agent.model?.match(/\{file:\.\/models\/(.+?)\}/);
-    if (modelMatch) {
-      const fileName = modelMatch[1];
+    const fileName = getModelFileName(agent);
+    if (fileName) {
       if (!fileToAgents[fileName]) fileToAgents[fileName] = [];
       fileToAgents[fileName].push(agentName);
     }
   }
   for (const [fileName, agents] of Object.entries(fileToAgents)) {
     if (agents.length > 1) {
-      const originalPath = join(modelsDir, fileName);
+      const originalPath = join(MODELS_DIR, fileName);
       if (existsSync(originalPath)) {
         const content = readFileSync(originalPath, "utf-8");
         for (const agentName of agents) {
           const newFileName = `${agentName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_model.txt`;
-          const newPath = join(modelsDir, newFileName);
+          const newPath = join(MODELS_DIR, newFileName);
           writeFileSync(newPath, content);
           agentsList[agentName].model = `{file:./models/${newFileName}}`;
         }
@@ -220,8 +224,8 @@ function individualizeSharedModelFiles(agentsList: Record<string, any>, modelsDi
   }
 }
 
-function updateConfigWithIndividualFiles(agentsList: Record<string, any>, configPath: string) {
-  let configContent = readFileSync(configPath, "utf-8");
+function updateConfigWithIndividualFiles(agentsList: Record<string, any>) {
+  let configContent = readFileSync(CONFIG_PATH, "utf-8");
   const agentStart = configContent.indexOf('"agent": {');
   if (agentStart === -1) {
     console.error("❌ Could not find \"agent\": { in config");
@@ -237,7 +241,7 @@ function updateConfigWithIndividualFiles(agentsList: Record<string, any>, config
   const after = configContent.substring(agentEnd + 1);
   const newAgent = JSON.stringify(agentsList, null, 2);
   const updated = before + '"agent": ' + newAgent + after;
-  writeFileSync(configPath, updated);
+  writeFileSync(CONFIG_PATH, updated);
 }
 
 async function promptUserSelection(
@@ -270,9 +274,9 @@ async function promptUserSelection(
 }
 
 async function promptAgentType(): Promise<string> {
-  const choices = ["primary", "subagent", "exit"];
-  const displayItems = ["primary agent", "subagent", "exit"];
-  const message = "Do you want to configure a primary agent, a subagent, or exit?";
+  const choices = ["primary", "subagent", "global", "restore", "exit"];
+  const displayItems = ["primary agent", "subagent", "global override", "restore from backup", "exit"];
+  const message = "Do you want to configure a primary agent, a subagent, global override, restore from backup, or exit?";
   const selection = await promptUserSelection(choices, message, displayItems);
   if (selection === "exit") {
     console.log("Goodbye! Have a great day!");
@@ -308,42 +312,35 @@ async function promptModelSelection(): Promise<string | null> {
 }
 
 function initializeConfigAndModels(): Record<string, any> {
-  const configRootDir = dirname(dirname(__filename));
-  const configPath = join(configRootDir, "opencode.jsonc");
-  const modelsDir = join(configRootDir, "models");
-
-  if (!existsSync(modelsDir)) {
-    mkdirSync(modelsDir, { recursive: true });
+  if (!existsSync(MODELS_DIR)) {
+    mkdirSync(MODELS_DIR, { recursive: true });
   }
 
-  const agentsList = parseAgentsFromConfigFile(configPath);
-  individualizeSharedModelFiles(agentsList, modelsDir);
-  updateConfigWithIndividualFiles(agentsList, configPath);
+  const agentsList = parseAgentsFromConfigFile();
+  individualizeSharedModelFiles(agentsList);
+  updateConfigWithIndividualFiles(agentsList);
 
   return agentsList;
 }
 
-function prepareModelSetup(): { modelFiles: Set<string>, availableModels: Set<string>, modelsDir: string } | null {
-  const configRootDir = dirname(dirname(__filename));
-  const configPath = join(configRootDir, "opencode.jsonc");
-  const modelsDir = join(configRootDir, "models");
-
-  if (!existsSync(configPath)) {
-    console.error(`❌ opencode.jsonc non trouvé à: ${configPath}`);
+function prepareModelSetup(): { modelFiles: Set<string>, availableModels: Set<string> } | null {
+  if (!existsSync(CONFIG_PATH)) {
+    console.error(`❌ opencode.jsonc non trouvé à: ${CONFIG_PATH}`);
     return null;
   }
 
   initializeConfigAndModels();
 
-  const updatedConfigContent = readFileSync(configPath, "utf-8");
-  const modelFileRegex = /"{file:\.\/models\/(.+?)}"/g;
-  const modelFiles = new Set<string>();
-  let match: RegExpExecArray | null;
+  const agentsList = parseAgentsFromConfigFile();
 
-  while (true) {
-    match = modelFileRegex.exec(updatedConfigContent);
-    if (match === null) break;
-    modelFiles.add(match[1]);
+  const modelFiles = new Set<string>();
+
+  for (const [agentName, agent] of Object.entries(agentsList)) {
+
+    const fileName = getModelFileName(agent);
+
+    if (fileName) modelFiles.add(fileName);
+
   }
 
   if (modelFiles.size === 0) {
@@ -353,24 +350,27 @@ function prepareModelSetup(): { modelFiles: Set<string>, availableModels: Set<st
 
   const availableModels = getAvailableModels();
 
-  return { modelFiles, availableModels, modelsDir };
+  return { modelFiles, availableModels };
 }
 
-function writeProfileToModelFiles(modelFiles: Set<string>, modelsDir: string, profile: { primaryModel: string; subagentModel: string }) {
+function writeProfileToModelFiles(modelFiles: Set<string>, profile: { primaryModel: string; subagentModel: string }, agentsList: Record<string, any>) {
+  const fileToAgent: Record<string, any> = {};
+  for (const [agentName, agent] of Object.entries(agentsList)) {
+    const fileName = getModelFileName(agent);
+    if (fileName) {
+      fileToAgent[fileName] = agent;
+    }
+  }
+
   for (const fileName of modelFiles) {
-    const isSubagent =
-      fileName.includes("code_only") ||
-      fileName.includes("git_expert") ||
-      fileName.includes("code_cleaner") ||
-      fileName.includes("code_smoke") ||
-      fileName.includes("code_audit") ||
-      fileName.includes("test_expert");
+    const agent = fileToAgent[fileName];
+    const isSubagent = agent && agent.mode === 'subagent';
 
     const modelName = isSubagent
       ? profile.subagentModel
       : profile.primaryModel;
 
-    const filePath = join(modelsDir, fileName);
+    const filePath = join(MODELS_DIR, fileName);
     writeFileSync(filePath, modelName);
     console.log(`✅ Saved: ${modelName} -> ${filePath}`);
   }
@@ -379,13 +379,29 @@ function writeProfileToModelFiles(modelFiles: Set<string>, modelsDir: string, pr
 }
 
 async function interactiveSetupModels() {
-  const configRootDir = dirname(dirname(__filename));
-  const modelsDir = join(configRootDir, "models");
-
   const agentsList = initializeConfigAndModels();
   displayCurrentConfigurations(agentsList);
 
   const agentType = await promptAgentType();
+
+  if (agentType === "global") {
+    backupCurrentModelsIfHeterogeneous(agentsList);
+    const model = await promptModelSelection();
+    if (model === null) {
+      console.log("No model selected.");
+      return;
+    }
+    applyGlobalOverride(model, agentsList);
+    console.log(`✅ Global override applied: ${model} to all agents`);
+    console.log("\n✨ Configuration completed!");
+    return;
+  }
+
+  if (agentType === "restore") {
+    restoreFromBackup(agentsList, MODELS_DIR);
+    return;
+  }
+
   const specificAgent = await promptSpecificAgent(agentType, agentsList);
   const model = await promptModelSelection();
   if (model === null) {
@@ -393,14 +409,13 @@ async function interactiveSetupModels() {
     return;
   }
 
-  const modelMatch = agentsList[specificAgent].model?.match(/\{file:\.\/models\/(.+?)\}/);
-  if (!modelMatch) {
+  const fileName = getModelFileName(agentsList[specificAgent]);
+  if (!fileName) {
     console.error(`❌ No model file found for ${specificAgent}`);
     return;
   }
 
-  const fileName = modelMatch[1];
-  const filePath = join(modelsDir, fileName);
+  const filePath = join(MODELS_DIR, fileName);
   writeFileSync(filePath, model);
   console.log(`✅ Saved: ${model} -> ${filePath}`);
   console.log("\n✨ Configuration completed!");
@@ -418,10 +433,6 @@ function applyFreeProfileFallback(profile: { primaryModel: string; subagentModel
   }
 }
 
-
-// Obtenir __dirname et __filename en mode ES Module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Vérifier si un profil est passé en argument de ligne de commande
 const args = process.argv.slice(2);
@@ -445,7 +456,9 @@ if (args.length > 0) {
 async function applyProfile(profileName: string) {
   const prep = prepareModelSetup();
   if (!prep) return;
-  const { modelFiles, availableModels, modelsDir } = prep;
+  const { modelFiles, availableModels } = prep;
+
+  const agentsList = parseAgentsFromConfigFile();
 
   const selectedProfile =
     MODEL_PROFILES[profileName as keyof typeof MODEL_PROFILES];
@@ -463,5 +476,80 @@ async function applyProfile(profileName: string) {
     `🔧 Applying profile: ${profileName} (non-interactive mode) [${status}]`,
   );
 
-  writeProfileToModelFiles(modelFiles, modelsDir, selectedProfile);
+  writeProfileToModelFiles(modelFiles, selectedProfile, agentsList);
+}
+
+function isConfigurationHeterogeneous(agentsList: Record<string, any>): boolean {
+  const models = new Set<string>();
+
+  for (const [agentName, agent] of Object.entries(agentsList)) {
+    const fileName = getModelFileName(agent);
+    if (!fileName) {
+      return true;
+    }
+    const filePath = join(MODELS_DIR, fileName);
+    if (!existsSync(filePath)) {
+      return true;
+    }
+    const content = readFileSync(filePath, "utf-8").trim();
+    models.add(content);
+  }
+
+  return models.size > 1;
+}
+
+function backupCurrentModelsIfHeterogeneous(agentsList: Record<string, any>): void {
+  if (!isConfigurationHeterogeneous(agentsList)) {
+    console.log("Backup skipped: Configuration is homogeneous.");
+    return;
+  }
+
+  const backupDir = join(MODELS_DIR, 'backup');
+  mkdirSync(backupDir, { recursive: true });
+
+  for (const [agentName, agent] of Object.entries(agentsList)) {
+    const fileName = getModelFileName(agent);
+    if (fileName) {
+      const srcPath = join(MODELS_DIR, fileName);
+      const destPath = join(backupDir, fileName);
+      if (existsSync(srcPath)) {
+        const content = readFileSync(srcPath, 'utf-8');
+        writeFileSync(destPath, content);
+      }
+    }
+  }
+
+  console.log("Backup created: All model files copied to models/backup/");
+}
+
+function applyGlobalOverride(modelName: string, agentsList: Record<string, any>): void {
+  for (const [agentName, agent] of Object.entries(agentsList)) {
+    const fileName = getModelFileName(agent);
+    if (fileName) {
+      const filePath = join(MODELS_DIR, fileName);
+      writeFileSync(filePath, modelName);
+      console.log(`Updated ${filePath} with ${modelName}`);
+    }
+  }
+}
+
+function restoreFromBackup(agentsList: Record<string, any>, modelsDir: string): void {
+  const backupDir = join(modelsDir, 'backup');
+  if (!existsSync(backupDir)) {
+    console.log("No backup found");
+    return;
+  }
+  try {
+    const files = readdirSync(backupDir).filter(file => file.endsWith('.txt'));
+    for (const file of files) {
+      const srcPath = join(backupDir, file);
+      const destPath = join(modelsDir, file);
+      const content = readFileSync(srcPath, 'utf-8');
+      writeFileSync(destPath, content);
+      console.log(`Restored: ${file}`);
+    }
+    console.log("Restore completed successfully");
+  } catch (error) {
+    console.error("Error during restore:", error);
+  }
 }
