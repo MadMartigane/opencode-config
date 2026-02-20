@@ -1,3 +1,9 @@
+---
+name: git-branch-cleaner
+description: Procedures for cleaning Git branch history via rebasing and squashing commits.
+version: 1.0.0
+---
+
 # Skill: Git Branch Cleaner
 
 This skill provides procedures for cleaning Git branch history via rebasing and squashing commits.

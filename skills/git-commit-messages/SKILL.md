@@ -1,3 +1,9 @@
+---
+name: git-commit-messages
+description: Conventional Commits specification for consistent and automated Git history.
+version: 1.0.0
+---
+
 # Skill: Git Commit Messages
 
 Enforces the **Conventional Commits** specification to ensure a consistent, readable, and machine-parseable Git history.

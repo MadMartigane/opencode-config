@@ -1,3 +1,9 @@
+---
+name: clean-code
+description: Clean code principles for producing readable and maintainable code.
+version: 1.0.0
+---
+
 # Clean Code Skill for Coding Sub-Agent
 
 ## Overarching Mindset
