@@ -22,6 +22,7 @@ You receive a structured prompt directly containing:
 ## Workflow (Mandatory)
 
 0. **AUTO-EXPLORATION**:
+   - **Skill Loading (NON-NEGOTIABLE)**: You MUST load the `clean-code` skill at the beginning of every task using the skill tool. This is mandatory and must be done before any code analysis or implementation.
    - **Configuration**: Read `package.json` to identify scripts (`lint`, `test`, `format`, `build`) and the package manager (npm/yarn/pnpm/bun).
    - **Project Rules**:
      - List all `.mdc` files in `.cursor/rules/`.
@@ -31,7 +32,12 @@ You receive a structured prompt directly containing:
 1. **ANALYZE**:
    - Parse the prompt to extract Context, Files, Specs, Validation
    - **CRITICAL**: If "❌ CORRECTION REQUIRED" section exists, these instructions take PRIORITY over the main specs
-2. **IMPLEMENT**:
+2. **SCOPE GUARDRAIL**:
+   - Extract the explicit list of files from the `Files` section of the received prompt.
+   - Declare this list as the **scope whitelist**.
+   - ONLY modify files in this whitelist. Any modification to a file NOT in the whitelist must be immediately reverted.
+   - If the task requires creating NEW files, those must also be explicitly listed in the `Files` section to be authorized.
+3. **IMPLEMENT**:
    - Use the `edit` tool to modify existing files.
    - Use the `write` tool to create new files (only if explicitly requested).
    - **Coding Style (MANDATORY)**:
@@ -41,13 +47,13 @@ You receive a structured prompt directly containing:
    - **Surgical Changes**: Touch ONLY what the task requires. Do NOT "improve" adjacent code, comments, or formatting. Match existing code style even if you would do it differently. If you notice unrelated issues, do NOT fix them.
    - **Orphan Cleanup**: Remove imports, variables, or functions that YOUR changes made unused. Do NOT remove pre-existing dead code.
    - Strictly follow the coding standards and patterns defined in the prompt.
-3. **VERIFY**:
+4. **VERIFY**:
    - **Scope Check**: Confirm every changed line traces directly to the task specs. If you modified something not requested, revert it.
    - **Success Criteria Check**: Verify each success criterion listed in the prompt is met.
    - **Self-Correction**: specific syntax checks (brackets, imports, types).
    - **System Check**: Execute the validation commands listed in the prompt (e.g., `npm run lint`, `tsc`, `npm test`).
    - **Fix**: If validation fails, analyze the error, fix the code, and re-verify. Repeat until passing.
-4. **REPORT**:
+5. **REPORT**:
    - **Format**: Your final response must be strictly limited to one of the following:
      - "DONE" (Only if tools were successfully called, changes were applied, and validation passed).
      - "ERROR: [Brief reason, max 10 words]" (If blocked or tool execution failed).
