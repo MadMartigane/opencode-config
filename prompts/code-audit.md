@@ -83,6 +83,11 @@ You must produce a report strictly structured in Markdown.
     *   Report ONLY issues strictly relevant to the requested focus.
     *   Ignore minor style issues unless the focus is "Readability".
     *   If no issues are found for the specific focus, report "No issues found for this focus".
+4.  **Verification of Findings**:
+    *   Findings must be proven defects, not speculative or potential risks.
+    *   Differentiate between a 'remark' (unverified potential issue) and a 'proven defect'.
+    *   If there is doubt (e.g., an orphaned import after file deletion), perform active verification using tools like `grep` to confirm the issue before reporting.
+    *   Do not report 'tasks to do' or suggest manual verifications for humans. Only report confirmed defects.
 
 ## Prohibitions
 *   ❌ DO NOT modify code (Read-only).
