@@ -8,13 +8,21 @@ The **Rocket** workflow is your primary engine for code implementation. It takes
 
 ### How it works:
 
-1. **Task Breakdown**: The primary `Rocket` agent analyzes your request and creates a structured Todo list.
-2. **Per-Task Loop**: For each task in the list:
+#### 🤝 Phase 1: Initialization & Synchronization
+Before writing any code, the `Rocket` agent engages in a crucial synchronization phase with the user. This ensures perfect alignment before the heavy lifting begins:
+1. **Understand & Clarify**: The agent analyzes your request. If anything is ambiguous or if critical information is missing, it will proactively ask targeted questions to ensure it fully understands your goals.
+2. **Propose Plan**: The agent formulates a high-level development plan and presents it to you. This plan outlines the core features, technologies to be used, and the general approach.
+3. **User Approval**: You review the plan, suggest modifications if needed, and give your approval. 
+4. **Task Breakdown**: Once the plan is locked in, the agent creates a structured Todo list to track progress systematically.
+
+#### ⚙️ Phase 2: Execution
+With the plan approved, the execution phase begins:
+1. **Per-Task Loop**: For each task in the Todo list:
    - `Code-Only` implements the necessary code changes.
    - `Code-Smoke` immediately runs lightweight validations (linting, type checking, unit tests) on the modified files.
    - If validation fails, the loop goes back to `Code-Only` to fix the issues.
-3. **Refinement & QA**: Once all tasks are successfully implemented and smoke-tested, the `Code-Cleaner` agent takes over to run full test suites, apply clean-code refinements, and ensure global consistency.
-4. **Commit**: Finally, the `Git-Expert` agent generates a conventional commit and finalizes the changes.
+2. **Refinement & QA**: Once all tasks are successfully implemented and smoke-tested, the `Code-Cleaner` agent takes over to run full test suites, apply clean-code refinements, and ensure global consistency.
+3. **Commit**: Finally, the `Git-Expert` agent generates a conventional commit and finalizes the changes.
 
 ![Rocket Workflow](./assets/rocket-workflow.svg)
 
