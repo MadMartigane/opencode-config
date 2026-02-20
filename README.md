@@ -2,6 +2,24 @@
 
 Welcome to the OpenCode workflows documentation! This guide explains the two primary workflows available in our system: **Rocket** and **Rocket-Review**. These workflows are designed to automate and streamline your software engineering tasks using specialized AI agents.
 
+## 🤖 Agents & Subagents
+
+Our workflows are powered by a suite of specialized AI agents, each designed for a specific role:
+
+### Primary Agents (User-Facing)
+- **Rocket**: The general-purpose agent for executing multi-step coding tasks and feature implementation.
+- **Rocket-Review**: The specialized agent for code auditing and pull request reviews.
+
+### Subagents (Internal Specialists)
+- **Code-Only**: The primary coder. Specialized in precise file modifications and creation based on technical specs.
+- **Code-Smoke**: The fast validator. Runs lightweight scoped validation (lint, tsc, unit tests) after each Code-Only task.
+- **Code-Cleaner**: The QA specialist. Runs full test suites, applies clean-code refinements, and ensures global consistency.
+- **Git-Expert**: The Git manager. Handles repository operations, generating conventional commits, and history management.
+- **Router-review**: The triage agent for reviews. Analyzes Git diffs and selects relevant audit focuses.
+- **Code-Audit**: The specialized auditor. Focuses on specific aspects like Security, Performance, or Style.
+- **Critic-review**: The senior auditor. Consolidates multiple audit reports, challenges findings, and filters false positives.
+- **Test-Expert**: The testing specialist. Runs tests and provides concise summaries to avoid context pollution.
+
 ## 🚀 Rocket Workflow
 
 The **Rocket** workflow is your primary engine for code implementation. It takes a user request, breaks it down into manageable tasks, and executes them systematically while ensuring code quality and stability at every step.
