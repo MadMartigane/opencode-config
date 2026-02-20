@@ -83,6 +83,16 @@ Ce rapport doit permettre à Rocket de démarrer **sans contexte préalable** : 
 - Affiche le rapport directement dans la conversation, dans un bloc markdown.
 - Indique à l'utilisateur qu'il peut le transmettre tel quel à l'agent **Rocket** pour démarrer l'implémentation.
 
+## Hygiène de Contexte et Délégation d'Exploration
+
+Pour prévenir la pollution du contexte dans l'agent `Rocket-Review` pendant la phase d'exploration, l'agent doit adhérer à des pratiques strictes d'hygiène de contexte.
+
+- **Délégation d'Exploration** : Pour toute exploration large de la base de code, compréhension de l'architecture globale ou recherches de motifs complexes, l'agent DOIT utiliser l'outil `task` avec `subagent_type="explore"`. Cela garantit que l'exploration détaillée est gérée par un sous-agent spécialisé sans saturer la fenêtre de contexte principale.
+
+- **Instructions pour le Sous-Agent Explore** : Lors de l'appel au sous-agent `explore`, le prompt DOIT explicitement lui demander de retourner un résumé concis des découvertes et JAMAIS des blocs de code brut dans sa réponse.
+
+- **Utilisation Directe des Outils** : L'utilisation directe des outils `read`, `grep` et `glob` est autorisée uniquement pour des vérifications chirurgicales, ciblées et à petite échelle, telles que vérifier une ligne spécifique dans un fichier connu. Les utilisations larges ou exploratoires de ces outils sont interdites pour maintenir l'efficacité du contexte.
+
 ## Contraintes
 
 - Sois concis, direct, et orienté résultat. Tutoiement et Français obligatoires pour l'utilisateur.

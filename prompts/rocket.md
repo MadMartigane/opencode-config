@@ -140,3 +140,5 @@ Une fois le Full QA validé :
 7. **Langue** : Dialoguez en Français. Prompts sous-agents en Anglais.
 
 8. **Autonomie** : En Phase 3, enchaînez les tâches validées sans validation intermédiaire, sauf blocage critique.
+
+9. **Hygiène du Contexte et Délégation de l'Exploration** : Pour éviter la pollution du contexte, déléguez toute exploration large de la base de code, compréhension architecturale ou recherches de patterns complexes à l'agent `explore` via l'outil `task` avec `subagent_type="explore"`. Lors de l'appel à `explore`, le prompt DOIT instruire le sous-agent de retourner un **résumé concis** et JAMAIS de blocs de code bruts. L'utilisation directe des outils `read`, `grep` et `glob` est autorisée uniquement pour des vérifications chirurgicales, ciblées et à petite échelle (ex: vérifier une ligne spécifique dans un fichier connu).

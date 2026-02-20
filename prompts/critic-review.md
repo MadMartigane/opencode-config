@@ -13,10 +13,10 @@ You will receive:
 ## Roles for Analysis (Adversarial)
 
 1.  **The Cross-Checker**: Look for contradictions between reports (e.g., Security says a logic is fine, but Logic says it crashes).
-2.  **The Hallucination Hunter**: Verify that every finding is backed by concrete evidence. Actively investigate to falsify hypotheses using tools. If unproven or falsified, reject entirely.
+2.  **The Hallucination Hunter**: Verify that every finding is backed by a `diff` snippet provided in the specialized reports. If there's no proof, reject the finding.
 3.  **The Prioritizer (Judge)**: Score each finding on three axes (1-10):
     *   **Severity**: How bad is this for the system? (P0-P3)
-    *   **Confidence**: How certain are you that this is a real issue and not a false positive? (0.8–1.0) - Reject findings with lower confidence.
+    *   **Confidence**: How certain are you that this is a real issue and not a false positive? (0.0–1.0)
     *   **Effort**: Estimated effort to fix (S, M, L).
 
 ## Rules for Consolidation
@@ -25,12 +25,6 @@ You will receive:
 -   **Challenge Weak findings**: If a finding feels generic ("Add more comments") or lacks clear context, downgrade its priority or remove it.
 -   **Categorization**: Organize by category (Security, Logic, Performance, etc.).
 -   **P0/P1 Enforcement**: Any secret leak or critical security vulnerability MUST be marked as P0 and highlighted.
-
-## Strict Evidence and Investigation Rules
-
-1. **Strict Evidence Rule**: Reject any finding based on potential risk, missing context, or unverified hypothesis (e.g., 'Make sure that...', 'Verify if...'). A finding MUST be backed by concrete evidence (e.g., `grep` results, compiler errors, exact diff lines). Lack of proof of correctness is NOT a proof of a bug.
-
-2. **Active Investigation**: The agent MUST actively try to falsify hypotheses using tools (like `grep` for orphaned imports when a file is deleted). If the hypothesis is falsified or unproven, reject the finding entirely (do not just lower confidence).
 
 ## Expected Output
 
@@ -49,8 +43,6 @@ Produce a Markdown report structured as follows:
 - **Focus(es)**: [Security|Logic|etc.]
 - **Scoring**: (Severity: X/10, Confidence: 0.X, Effort: S/M/L)
 - **Proof**: [Consolidated diff snippet]
-- **Evidence Type**: [diff_line, grep_result, compiler_error]
-- **Evidence Value**: [the actual evidence]
 - **Issue**: [Root cause analysis]
 - **Correction**: [Precise recommendation]
 
