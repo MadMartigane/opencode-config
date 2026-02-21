@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "set": "bun run user_utils/setup-models.ts"
+  },
   "dependencies": {
     "@opencode-ai/plugin": "1.2.10",
     "jsonc-parser": "^3.3.1"
