@@ -1,88 +1,244 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 870">
   <defs>
     <style>
-      .box { fill: #f8f9fa; stroke: #343a40; stroke-width: 2; rx: 8; }
-      .box-primary { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; rx: 8; }
-      .box-sub { fill: #fff3e0; stroke: #f57c00; stroke-width: 2; rx: 8; }
-      .box-audit { fill: #f3e5f5; stroke: #8e24aa; stroke-width: 2; rx: 8; }
-      .text { font-family: sans-serif; font-size: 14px; fill: #212529; text-anchor: middle; dominant-baseline: middle; }
-      .text-bold { font-weight: bold; }
-      .text-small { font-size: 12px; fill: #6c757d; }
-      .arrow { stroke: #495057; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
-      .arrow-dashed { stroke: #495057; stroke-width: 2; fill: none; stroke-dasharray: 5,5; marker-end: url(#arrowhead); }
+      .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; fill: #64748b; }
+      .badge-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.5px; }
+      .card-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; dominant-baseline: central; }
+      .card-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #64748b; dominant-baseline: central; }
+      .label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #94a3b8; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
+      .label-pass { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #10b981; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
+      .label-block { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #ef4444; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
+      .phase-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 600; dominant-baseline: central; }
+      .wave-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: #7c3aed; }
+      .wave-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #a78bfa; font-weight: 600; }
+      .arrow { stroke: #cbd5e1; stroke-width: 2; fill: none; marker-end: url(#arrow-default); }
+      .arrow-bold { stroke: #94a3b8; stroke-width: 2.5; fill: none; marker-end: url(#arrow-bold); }
+      .arrow-pass { stroke: #6ee7b7; stroke-width: 2; fill: none; marker-end: url(#arrow-pass); }
+      .arrow-bidir { stroke: #cbd5e1; stroke-width: 2; fill: none; }
     </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#495057" />
+
+    <marker id="arrow-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#cbd5e1" />
     </marker>
+    <marker id="arrow-bold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+    </marker>
+    <marker id="arrow-pass" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6ee7b7" />
+    </marker>
+    <marker id="arrow-bidir-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#cbd5e1" />
+    </marker>
+
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="grad-violet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="grad-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="grad-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="grad-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="grad-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
   </defs>
 
   <!-- Background -->
-  <rect width="100%" height="100%" fill="#ffffff" />
+  <rect x="0" y="0" width="960" height="870" fill="#ffffff" rx="16" />
 
-  <!-- Nodes -->
-  <rect x="50" y="275" width="120" height="50" class="box" />
-  <text x="110" y="300" class="text text-bold">PR / Git Diff</text>
+  <!-- Title -->
+  <text x="480" y="36" class="title" text-anchor="middle">Rocket-Review Workflow</text>
+  <text x="480" y="54" class="subtitle" text-anchor="middle">Code audit orchestration with specialized subagents</text>
 
-  <rect x="220" y="275" width="140" height="50" class="box-primary" />
-  <text x="290" y="295" class="text text-bold">Rocket-Review</text>
-  <text x="290" y="310" class="text text-small">(Primary Agent)</text>
+  <!-- STEP 1: Initialization and Triage -->
 
-  <rect x="410" y="275" width="120" height="50" class="box-sub" />
-  <text x="470" y="295" class="text text-bold">Router-review</text>
-  <text x="470" y="310" class="text text-small">(Triage)</text>
+  <rect x="40" y="82" width="80" height="24" rx="12" fill="url(#grad-blue)" />
+  <text x="80" y="94" class="badge-text">STEP 1</text>
 
-  <!-- Parallel Audits -->
-  <rect x="580" y="50" width="120" height="40" class="box-audit" />
-  <text x="640" y="70" class="text text-bold">Security</text>
+  <text x="136" y="90" class="phase-label" fill="#3b82f6">Initialization &amp; Triage</text>
 
-  <rect x="580" y="120" width="120" height="40" class="box-audit" />
-  <text x="640" y="140" class="text text-bold">Performance</text>
+  <!-- Rocket-Review card -->
+  <rect x="60" y="116" width="200" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="60" y="116" width="5" height="56" rx="2" fill="url(#grad-indigo)" />
+  <text x="84" y="138" class="card-title" fill="#4f46e5">Rocket-Review</text>
+  <text x="84" y="156" class="card-sub">Confirms branches</text>
 
-  <rect x="580" y="190" width="120" height="40" class="box-audit" />
-  <text x="640" y="210" class="text text-bold">Style</text>
+  <!-- Router-review card -->
+  <rect x="370" y="116" width="190" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="370" y="116" width="5" height="56" rx="2" fill="url(#grad-blue)" />
+  <text x="394" y="138" class="card-title" fill="#2563eb">Router-review</text>
+  <text x="394" y="156" class="card-sub">Analyzes diff, selects focuses</text>
 
-  <rect x="580" y="260" width="120" height="40" class="box-audit" />
-  <text x="640" y="280" class="text text-bold">Logic</text>
+  <!-- JSON output pill -->
+  <rect x="680" y="124" width="180" height="36" rx="18" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" />
+  <text x="770" y="146" class="card-sub" fill="#2563eb" font-weight="700" text-anchor="middle">Focus list (JSON)</text>
 
-  <rect x="580" y="330" width="120" height="40" class="box-audit" />
-  <text x="640" y="350" class="text text-bold">Architecture</text>
+  <!-- Arrows Step 1 -->
+  <path d="M 260 144 L 360 144" class="arrow" />
+  <text x="310" y="134" class="label">delegates</text>
+  <path d="M 560 144 L 670 144" class="arrow" />
 
-  <rect x="580" y="400" width="120" height="40" class="box-audit" />
-  <text x="640" y="420" class="text text-bold">Accessibility</text>
+  <!-- Connector Step 1 to 2 -->
+  <path d="M 480 172 L 480 200" class="arrow-bold" />
 
-  <rect x="580" y="470" width="120" height="40" class="box-audit" />
-  <text x="640" y="490" class="text text-bold">Testing</text>
+  <!-- STEP 2: Parallel Specialized Audits -->
 
-  <rect x="410" y="520" width="120" height="50" class="box-sub" />
-  <text x="470" y="540" class="text text-bold">Critic-review</text>
-  <text x="470" y="555" class="text text-small">(Consolidate)</text>
+  <rect x="40" y="208" width="80" height="24" rx="12" fill="url(#grad-violet)" />
+  <text x="80" y="220" class="badge-text">STEP 2</text>
 
-  <rect x="220" y="520" width="140" height="50" class="box" />
-  <text x="290" y="545" class="text text-bold">Final Report</text>
+  <text x="136" y="216" class="phase-label" fill="#7c3aed">Parallel Specialized Audits</text>
 
-  <!-- Edges -->
-  <path d="M 170 300 L 210 300" class="arrow" />
-  <path d="M 360 300 L 400 300" class="arrow" />
-  
-  <!-- Router to Audits (Dashed to indicate optional/conditional) -->
-  <path d="M 530 300 C 550 300, 550 70, 570 70" class="arrow-dashed" />
-  <path d="M 530 300 C 550 300, 550 140, 570 140" class="arrow-dashed" />
-  <path d="M 530 300 C 550 300, 550 210, 570 210" class="arrow-dashed" />
-  <path d="M 530 300 C 550 300, 550 280, 570 280" class="arrow-dashed" />
-  <path d="M 530 300 C 550 300, 550 350, 570 350" class="arrow-dashed" />
-  <path d="M 530 300 C 550 300, 550 420, 570 420" class="arrow-dashed" />
-  <path d="M 530 300 C 550 300, 550 490, 570 490" class="arrow-dashed" />
+  <!-- Wave container -->
+  <rect x="60" y="240" width="840" height="120" rx="14" fill="#faf5ff" stroke="#c4b5fd" stroke-width="2" stroke-dasharray="8,4" />
+  <text x="88" y="262" class="wave-title">Audit Wave</text>
+  <text x="195" y="262" class="wave-sub">max 4 concurrent Code-Audit agents</text>
 
-  <!-- Audits to Critic -->
-  <path d="M 700 70 C 760 70, 760 545, 540 545" class="arrow" />
-  <path d="M 700 140 C 750 140, 750 545, 540 545" class="arrow" />
-  <path d="M 700 210 C 740 210, 740 545, 540 545" class="arrow" />
-  <path d="M 700 280 C 730 280, 730 545, 540 545" class="arrow" />
-  <path d="M 700 350 C 720 350, 720 545, 540 545" class="arrow" />
-  <path d="M 700 420 C 710 420, 710 545, 540 545" class="arrow" />
-  <path d="M 700 490 C 710 490, 710 545, 540 545" class="arrow" />
+  <!-- Audit cards -->
+  <rect x="80" y="278" width="170" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="80" y="278" width="5" height="52" rx="2" fill="url(#grad-violet)" />
+  <text x="104" y="298" class="card-title" fill="#7c3aed">Security</text>
+  <text x="104" y="316" class="card-sub">Code-Audit agent</text>
 
-  <!-- Critic to Report -->
-  <path d="M 410 545 L 370 545" class="arrow" />
+  <rect x="270" y="278" width="170" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="270" y="278" width="5" height="52" rx="2" fill="url(#grad-violet)" />
+  <text x="294" y="298" class="card-title" fill="#7c3aed">Logic</text>
+  <text x="294" y="316" class="card-sub">Code-Audit agent</text>
+
+  <rect x="460" y="278" width="170" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="460" y="278" width="5" height="52" rx="2" fill="url(#grad-violet)" />
+  <text x="484" y="298" class="card-title" fill="#7c3aed">Performance</text>
+  <text x="484" y="316" class="card-sub">Code-Audit agent</text>
+
+  <rect x="650" y="278" width="170" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="650" y="278" width="5" height="52" rx="2" fill="url(#grad-violet)" />
+  <text x="674" y="298" class="card-title" fill="#7c3aed">Architecture</text>
+  <text x="674" y="316" class="card-sub">Code-Audit agent</text>
+
+  <!-- "All reports" pill below wave -->
+  <rect x="370" y="374" width="220" height="32" rx="16" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1.5" />
+  <text x="480" y="394" class="card-sub" fill="#7c3aed" font-weight="700" text-anchor="middle">All reports collected</text>
+
+  <!-- Connector Step 2 to 3 -->
+  <path d="M 480 360 L 480 374" class="arrow-bold" />
+  <path d="M 480 406 L 480 430" class="arrow-bold" />
+
+  <!-- STEP 3: Cross Examination -->
+
+  <rect x="40" y="438" width="80" height="24" rx="12" fill="url(#grad-orange)" />
+  <text x="80" y="450" class="badge-text">STEP 3</text>
+
+  <text x="136" y="446" class="phase-label" fill="#ea580c">Cross-Examination</text>
+
+  <!-- Critic-review card -->
+  <rect x="200" y="472" width="200" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="200" y="472" width="5" height="56" rx="2" fill="url(#grad-orange)" />
+  <text x="224" y="494" class="card-title" fill="#ea580c">Critic-review</text>
+  <text x="224" y="512" class="card-sub">Challenges &amp; consolidates</text>
+
+  <!-- Consolidated report pill -->
+  <rect x="520" y="480" width="240" height="36" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5" />
+  <text x="640" y="502" class="card-sub" fill="#ea580c" font-weight="700" text-anchor="middle">Consolidated Report (source of truth)</text>
+
+  <!-- Arrow -->
+  <path d="M 400 500 L 510 500" class="arrow" />
+
+  <!-- Connector Step 3 to 4 -->
+  <path d="M 480 528 L 480 558" class="arrow-bold" />
+
+  <!-- STEP 4: Convert to Actionable Tasks -->
+
+  <rect x="40" y="566" width="80" height="24" rx="12" fill="url(#grad-amber)" />
+  <text x="80" y="578" class="badge-text">STEP 4</text>
+
+  <text x="136" y="574" class="phase-label" fill="#d97706">Convert to Tasks</text>
+
+  <!-- Task pills -->
+  <rect x="200" y="598" width="120" height="32" rx="8" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.5" />
+  <text x="260" y="618" class="card-sub" fill="#92400e" font-weight="700" text-anchor="middle">T1 — P0</text>
+
+  <rect x="340" y="598" width="120" height="32" rx="8" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.5" />
+  <text x="400" y="618" class="card-sub" fill="#92400e" font-weight="700" text-anchor="middle">T2 — P1</text>
+
+  <rect x="480" y="598" width="120" height="32" rx="8" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.5" />
+  <text x="540" y="618" class="card-sub" fill="#92400e" font-weight="700" text-anchor="middle">T3 — P1</text>
+
+  <rect x="620" y="598" width="120" height="32" rx="8" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.5" />
+  <text x="680" y="618" class="card-sub" fill="#92400e" font-weight="700" text-anchor="middle">T4 — P2</text>
+
+  <!-- Connector Step 4 to 5 -->
+  <path d="M 480 630 L 480 660" class="arrow-bold" />
+
+  <!-- STEP 5: User Validation -->
+
+  <rect x="40" y="668" width="80" height="24" rx="12" fill="url(#grad-teal)" />
+  <text x="80" y="680" class="badge-text">STEP 5</text>
+
+  <text x="136" y="676" class="phase-label" fill="#0d9488">User Validation</text>
+
+  <!-- User card -->
+  <rect x="200" y="700" width="160" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="200" y="700" width="5" height="56" rx="2" fill="#64748b" />
+  <text x="224" y="722" class="card-title" fill="#334155">User</text>
+  <text x="224" y="740" class="card-sub">Approves / rejects tasks</text>
+
+  <!-- Bidirectional arrows -->
+  <path d="M 360 716 L 460 716" class="arrow-bidir" marker-end="url(#arrow-bidir-r)" />
+  <path d="M 460 740 L 360 740" class="arrow-bidir" marker-end="url(#arrow-bidir-r)" />
+  <text x="410" y="706" class="label">Challenge</text>
+  <text x="410" y="754" class="label">Adjust</text>
+
+  <!-- Rocket-Review card -->
+  <rect x="470" y="700" width="200" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="470" y="700" width="5" height="56" rx="2" fill="url(#grad-indigo)" />
+  <text x="494" y="722" class="card-title" fill="#4f46e5">Rocket-Review</text>
+  <text x="494" y="740" class="card-sub">Presents task list</text>
+
+  <!-- BLOCK gate -->
+  <rect x="730" y="710" width="130" height="36" rx="18" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5" />
+  <text x="795" y="732" class="label-block" font-weight="700">BLOCK until validated</text>
+
+  <path d="M 670 728 L 720 728" class="arrow" />
+
+  <!-- Validated gate -->
+  <rect x="730" y="750" width="130" height="28" rx="14" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" />
+  <text x="795" y="768" class="label-pass" font-weight="700">Tasks Validated</text>
+
+  <!-- Connector Step 5 to 6 -->
+  <path d="M 480 756 L 480 790" class="arrow-bold" />
+
+  <!-- STEP 6: Generate Rocket Implementation Brief -->
+
+  <rect x="40" y="798" width="80" height="24" rx="12" fill="url(#grad-emerald)" />
+  <text x="80" y="810" class="badge-text">STEP 6</text>
+
+  <text x="136" y="806" class="phase-label" fill="#059669">Rocket Implementation Brief</text>
+
+  <!-- Report card -->
+  <rect x="260" y="832" width="220" height="36" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5" />
+  <text x="370" y="854" class="card-title" fill="#059669" text-anchor="middle">Implementation Brief</text>
+
+  <!-- Hand off pill -->
+  <rect x="560" y="832" width="200" height="36" rx="18" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" />
+  <text x="660" y="854" class="card-sub" fill="#059669" font-weight="700" text-anchor="middle">Hand off to Rocket</text>
+
+  <path d="M 480 850 L 550 850" class="arrow-pass" />
 
 </svg>
