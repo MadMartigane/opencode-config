@@ -75,23 +75,25 @@ Pour chaque tâche `Tn` du plan validé :
 
      **INTERDICTION** : Ne JAMAIS sauter cette étape ou effectuer les modifications vous-même via Read/Edit/Write, même pour une tâche simple. Votre contexte doit rester propre et lean.
 
-     - b. **Vérification Matérielle (Low Context)** :
-       - Si `Code-Only` répond "DONE", lancez `git diff --stat`.
-       - Si `git diff --stat` est vide, incrémentez `essais` et relancez `Code-Only` en signalant l'absence de modification physique.
-     - c. **Smoke Check Unitaire** :
-       - Appelez l'agent `Code-Smoke` via l'outil `task`. `Code-Smoke` effectue une validation rapide et ciblée (lint, tsc, tests unitaires des fichiers modifiés) sans charger de skill ni déléguer à Test-Expert.
-       - Passez un prompt contenant :
-         - **Task Summary**: Bref résumé de ce qui devait être implémenté
-         - **Validation Commands**: Commandes rapides à exécuter (ex: `tsc --noEmit`, `eslint src/changed-file.ts`)
-     - d. **Décision** :
-       - Si la réponse contient "✅ SMOKE OK" :
-         - **Break Loop**. Notez la tâche comme DONE. Passez à la tâche suivante `Tn+1`.
-       - Si la réponse contient "❌ SMOKE FAILED" :
-         - Extrayez les erreurs de la réponse.
-         - Incrémentez `essais`.
-         - Affichez un message "Smoke check échoué, relance de Code-Only...".
-         - Enrichissez le prompt initial avec une section `## ❌ CORRECTION REQUIRED` contenant les erreurs détaillées.
-         - Relancez `Code-Only` avec ce prompt enrichi (retour à l'étape a).
+      - b. **Vérification Matérielle (Low Context)** :
+        - Si `Code-Only` répond "DONE", lancez `git diff --stat`.
+        - Si `git diff --stat` est vide, incrémentez `essais` et relancez `Code-Only` en signalant l'absence de modification physique.
+      - c. **Smoke Check Unitaire** :
+        - Appelez l'agent `Code-Smoke` via l'outil `task`. `Code-Smoke` effectue une validation rapide et ciblée (lint, tsc, tests unitaires des fichiers modifiés) sans charger de skill ni déléguer à Test-Expert.
+        - Passez un prompt contenant :
+          - **Files (Whitelist)**: Liste des fichiers autorisés à être modifiés (copié de la section Files du prompt Code-Only)
+          - **Task Summary**: Bref résumé de ce qui devait être implémenté
+          - **Validation Commands**: Commandes rapides à exécuter (ex: `tsc --noEmit`, `eslint src/changed-file.ts`)
+          - **Scope Interpretation**: (Optional) Clarifications on what changes are legitimate for this task (e.g., 'allow adding missing imports', 'allow removing unused code created by this task')
+      - d. **Décision** :
+        - Si la réponse contient "✅ SMOKE OK" :
+          - **Break Loop**. Notez la tâche comme DONE. Passez à la tâche suivante `Tn+1`.
+        - Si la réponse contient "❌ SMOKE FAILED" :
+          - Extrayez les erreurs de la réponse.
+          - Incrémentez `essais`.
+          - Affichez un message "Smoke check échoué, relance de Code-Only...".
+          - Enrichissez le prompt initial avec une section `## ❌ CORRECTION REQUIRED` contenant les erreurs détaillées.
+          - Relancez `Code-Only` avec ce prompt enrichi (retour à l'étape a).
 
 3. **Finalisation de la Tâche** :
    - **Si Succès (SMOKE OK)** :

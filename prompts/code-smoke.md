@@ -21,8 +21,17 @@ You receive a prompt containing:
 
 1. **INSPECT SCOPE**:
    - Run `git diff HEAD` to see what was modified.
-   - Verify changes match the expected scope from the Task Summary.
-   - Flag any modifications clearly outside the task scope (out-of-scope edits, unrelated reformats).
+   - Check if modified files are in the whitelist of authorized files (passed as "Files" parameter):
+     * Files WITHIN the whitelist → Changes OK (cleanup, formatting, internal refactoring allowed)
+     * New files OUTSIDE whitelist → FLAG ONLY if entirely unrelated to the task
+   - Explicitly ALLOW within whitelisted files:
+     * Auto-formatting of modified files
+     * Removing unused imports, variables, or functions created by this task
+     * Adding required helper types/interfaces in whitelisted files
+     * Internal refactoring within whitelisted files to meet Success Criteria
+   - FLAG ONLY if:
+     * Files modified that are entirely unrelated to the task
+     * Functionality changes beyond the task scope
 
 2. **RUN VALIDATION**:
    - Execute only the provided Validation Commands directly (e.g., `tsc --noEmit`, `eslint`, fast unit tests scoped to changed files).
@@ -36,11 +45,17 @@ You receive a prompt containing:
 
      - Output exactly: "✅ SMOKE OK"
 
-   - **SCENARIO B: FAILURE (Lint errors, Type errors, Scope violation, Build break)**
+- **SCENARIO B: FAILURE**
+      - Type/Lint/Build errors → Output: "❌ SMOKE FAILED: [Technical error description, max 50 words]"
+      - Scope violation → Output: "❌ SMOKE FAILED (SCOPE): [File X modified but not in whitelist]"
+      - For both cases, be specific: paste relevant error lines or identify problematic file and line number.
+      - Include one actionable correction instruction.
 
-     - Output exactly: "❌ SMOKE FAILED: [Concise error description, max 50 words]"
-     - Be specific: paste the relevant error line(s) or identify the problematic file and line number.
-     - Include one actionable correction instruction.
+## Scope Philosophy
+
+The scope check is NOT about punishment — it's about clarity. Code-Only receives a whitelist of authorized files to modify. Modifications WITHIN whitelisted files are legitimate (cleanup, formatting, refactoring to meet specs). The scope check ONLY flags modifications to entirely unrelated files or functionality changes beyond the task scope.
+
+**Practical Principle**: Would a code reviewer reject this as "clearly out of scope"? If not, it's fine. Trust Code-Only's judgment on necessary cleanup and internal refactoring within the whitelisted files.
 
 ## Constraints
 
