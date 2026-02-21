@@ -1,20 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 870">
   <defs>
     <style>
-      /* Typography */
       .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 22px; font-weight: 700; fill: #0f172a; }
       .subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; fill: #64748b; }
-      .badge-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; letter-spacing: 0.5px; }
-      .card-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; dominant-baseline: middle; }
-      .card-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #64748b; dominant-baseline: middle; }
-      .label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #94a3b8; text-anchor: middle; dominant-baseline: middle; font-weight: 600; }
-      .label-fail { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #ef4444; text-anchor: middle; dominant-baseline: middle; font-weight: 600; }
-      .label-pass { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #10b981; text-anchor: middle; dominant-baseline: middle; font-weight: 600; }
+      .badge-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.5px; }
+      .card-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; dominant-baseline: central; }
+      .card-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #64748b; dominant-baseline: central; }
+      .label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #94a3b8; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
+      .label-fail { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #ef4444; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
+      .label-pass { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #10b981; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
       .loop-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: #f97316; }
       .loop-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #fb923c; font-weight: 600; }
-      .phase-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 600; dominant-baseline: middle; }
-
-      /* Arrows */
+      .phase-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 600; dominant-baseline: central; }
       .arrow { stroke: #cbd5e1; stroke-width: 2; fill: none; marker-end: url(#arrow-default); }
       .arrow-bold { stroke: #94a3b8; stroke-width: 2.5; fill: none; marker-end: url(#arrow-bold); }
       .arrow-fail { stroke: #fca5a5; stroke-width: 2; fill: none; stroke-dasharray: 6,4; marker-end: url(#arrow-fail); }
@@ -22,7 +19,6 @@
       .arrow-bidir { stroke: #cbd5e1; stroke-width: 2; fill: none; }
     </style>
 
-    <!-- Markers -->
     <marker id="arrow-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#cbd5e1" />
     </marker>
@@ -38,22 +34,7 @@
     <marker id="arrow-bidir-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#cbd5e1" />
     </marker>
-    <marker id="arrow-bidir-l" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto">
-      <polygon points="8 0, 0 3, 8 6" fill="#cbd5e1" />
-    </marker>
 
-    <!-- Shadows -->
-    <filter id="shadow-sm" x="-4%" y="-4%" width="108%" height="116%">
-      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06" />
-    </filter>
-    <filter id="shadow-md" x="-4%" y="-4%" width="108%" height="116%">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.08" />
-    </filter>
-    <filter id="shadow-glow-orange" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#f97316" flood-opacity="0.15" />
-    </filter>
-
-    <!-- Gradients -->
     <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#3b82f6" />
       <stop offset="100%" stop-color="#2563eb" />
@@ -81,52 +62,40 @@
   </defs>
 
   <!-- Background -->
-  <rect width="100%" height="100%" fill="#ffffff" rx="16" />
+  <rect x="0" y="0" width="960" height="870" fill="#ffffff" rx="16" />
 
   <!-- Title -->
   <text x="480" y="36" class="title" text-anchor="middle">Rocket Workflow</text>
   <text x="480" y="54" class="subtitle" text-anchor="middle">Tech Lead orchestration with mandatory delegation</text>
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- PHASE 1 — Initialization & Analysis                    -->
-  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PHASE 1 — Initialization & Analysis               -->
+  <!-- ══════════════════════════════════════════════════ -->
 
-  <!-- Phase badge -->
   <rect x="40" y="82" width="80" height="24" rx="12" fill="url(#grad-blue)" />
   <text x="80" y="94" class="badge-text">PHASE 1</text>
 
-  <!-- Phase title -->
   <text x="136" y="90" class="phase-label" fill="#3b82f6">Initialization &amp; Analysis</text>
   <text x="345" y="90" class="card-sub">(automatic)</text>
 
   <!-- Rocket card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="60" y="112" width="180" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="60" y="112" width="5" height="56" rx="2" fill="url(#grad-rocket)" />
-  </g>
+  <rect x="60" y="112" width="180" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="60" y="112" width="5" height="56" rx="2" fill="url(#grad-rocket)" />
   <text x="82" y="135" class="card-title" fill="#3b82f6">Rocket</text>
   <text x="82" y="153" class="card-sub">Scans project context</text>
 
   <!-- Analysis items -->
-  <g filter="url(#shadow-sm)">
-    <rect x="290" y="108" width="150" height="32" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
-  </g>
+  <rect x="290" y="108" width="150" height="32" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" />
   <text x="306" y="128" class="card-sub" fill="#3b82f6" font-weight="600">.cursor/rules</text>
 
-  <g filter="url(#shadow-sm)">
-    <rect x="460" y="108" width="150" height="32" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
-  </g>
+  <rect x="460" y="108" width="150" height="32" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" />
   <text x="476" y="128" class="card-sub" fill="#3b82f6" font-weight="600">package.json</text>
 
-  <g filter="url(#shadow-sm)">
-    <rect x="630" y="108" width="150" height="32" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
-  </g>
+  <rect x="630" y="108" width="150" height="32" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" />
   <text x="646" y="128" class="card-sub" fill="#3b82f6" font-weight="600">Architecture scan</text>
 
   <!-- Summary card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="830" y="108" width="90" height="32" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="1" />
-  </g>
+  <rect x="830" y="108" width="90" height="32" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5" />
   <text x="875" y="128" class="card-sub" fill="#2563eb" font-weight="700" text-anchor="middle">Summary</text>
 
   <!-- Arrows Phase 1 -->
@@ -135,34 +104,28 @@
   <path d="M 610 124 L 620 124" class="arrow" />
   <path d="M 780 124 L 820 124" class="arrow" />
 
-  <!-- Connector Phase 1 → 2 -->
+  <!-- Connector Phase 1 to 2 -->
   <path d="M 480 168 L 480 198" class="arrow-bold" />
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- PHASE 2 — Design & Planning                            -->
-  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PHASE 2 — Design & Planning                       -->
+  <!-- ══════════════════════════════════════════════════ -->
 
-  <!-- Phase badge -->
   <rect x="40" y="210" width="80" height="24" rx="12" fill="url(#grad-amber)" />
   <text x="80" y="222" class="badge-text">PHASE 2</text>
 
-  <!-- Phase title -->
   <text x="136" y="218" class="phase-label" fill="#d97706">Design &amp; Planning</text>
   <text x="290" y="218" class="card-sub">(interactive)</text>
 
   <!-- User card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="140" y="242" width="160" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="140" y="242" width="5" height="56" rx="2" fill="#64748b" />
-  </g>
+  <rect x="140" y="242" width="160" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="140" y="242" width="5" height="56" rx="2" fill="#64748b" />
   <text x="164" y="264" class="card-title" fill="#334155">User</text>
   <text x="164" y="282" class="card-sub">Reviews &amp; approves</text>
 
   <!-- Rocket card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="420" y="242" width="180" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="420" y="242" width="5" height="56" rx="2" fill="url(#grad-rocket)" />
-  </g>
+  <rect x="420" y="242" width="180" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="420" y="242" width="5" height="56" rx="2" fill="url(#grad-rocket)" />
   <text x="444" y="264" class="card-title" fill="#3b82f6">Rocket</text>
   <text x="444" y="282" class="card-sub">Proposes plan (T1, T2...)</text>
 
@@ -173,63 +136,49 @@
   <text x="360" y="294" class="label">Iterate</text>
 
   <!-- Validation gate -->
-  <g filter="url(#shadow-sm)">
-    <rect x="660" y="252" width="140" height="36" rx="18" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.5" />
-  </g>
+  <rect x="660" y="252" width="140" height="36" rx="18" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.5" />
   <text x="730" y="274" class="card-sub" fill="#92400e" font-weight="700" text-anchor="middle">Plan Validated</text>
 
   <path d="M 600 270 L 650 270" class="arrow" />
 
-  <!-- Connector Phase 2 → 3 -->
+  <!-- Connector Phase 2 to 3 -->
   <path d="M 480 298 L 480 340" class="arrow-bold" />
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- PHASE 3 — Supervised Implementation                    -->
-  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PHASE 3 — Supervised Implementation               -->
+  <!-- ══════════════════════════════════════════════════ -->
 
-  <!-- Phase badge -->
   <rect x="40" y="348" width="80" height="24" rx="12" fill="url(#grad-orange)" />
   <text x="80" y="360" class="badge-text">PHASE 3</text>
 
-  <!-- Phase title -->
   <text x="136" y="356" class="phase-label" fill="#ea580c">Supervised Implementation</text>
   <text x="360" y="356" class="card-sub">(automatic loop)</text>
 
   <!-- Loop container -->
-  <g filter="url(#shadow-glow-orange)">
-    <rect x="60" y="380" width="840" height="210" rx="14" fill="#fffbf5" stroke="#fed7aa" stroke-width="1.5" stroke-dasharray="8,4" />
-  </g>
+  <rect x="60" y="380" width="840" height="210" rx="14" fill="#fffbf5" stroke="#fdba74" stroke-width="2" stroke-dasharray="8,4" />
   <text x="88" y="402" class="loop-title">Per-Task Loop</text>
   <text x="240" y="402" class="loop-sub">for each Tn — max 3 attempts</text>
 
   <!-- Step 1: Rocket prepares prompt -->
-  <g filter="url(#shadow-sm)">
-    <rect x="88" y="420" width="150" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="88" y="420" width="5" height="52" rx="2" fill="url(#grad-rocket)" />
-  </g>
+  <rect x="88" y="420" width="150" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="88" y="420" width="5" height="52" rx="2" fill="url(#grad-rocket)" />
   <text x="112" y="440" class="card-title" fill="#3b82f6">Rocket</text>
   <text x="112" y="458" class="card-sub">Prepares prompt</text>
 
   <!-- Step 2: Code-Only implements -->
-  <g filter="url(#shadow-sm)">
-    <rect x="296" y="420" width="150" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="296" y="420" width="5" height="52" rx="2" fill="url(#grad-orange)" />
-  </g>
+  <rect x="296" y="420" width="150" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="296" y="420" width="5" height="52" rx="2" fill="url(#grad-orange)" />
   <text x="320" y="440" class="card-title" fill="#ea580c">Code-Only</text>
   <text x="320" y="458" class="card-sub">Implements task</text>
 
-  <!-- Step 3: git diff --stat -->
-  <g filter="url(#shadow-sm)">
-    <rect x="504" y="420" width="140" height="52" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
-  </g>
+  <!-- Step 3: git diff stat -->
+  <rect x="504" y="420" width="140" height="52" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
   <text x="574" y="440" class="card-title" fill="#475569" text-anchor="middle">git diff --stat</text>
   <text x="574" y="458" class="card-sub" text-anchor="middle">Verify changes</text>
 
   <!-- Step 4: Code-Smoke -->
-  <g filter="url(#shadow-sm)">
-    <rect x="700" y="420" width="150" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="700" y="420" width="5" height="52" rx="2" fill="url(#grad-emerald)" />
-  </g>
+  <rect x="700" y="420" width="150" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="700" y="420" width="5" height="52" rx="2" fill="url(#grad-emerald)" />
   <text x="724" y="440" class="card-title" fill="#059669">Code-Smoke</text>
   <text x="724" y="458" class="card-sub">Lint, tsc, tests</text>
 
@@ -243,104 +192,84 @@
   <path d="M 644 446 L 690 446" class="arrow" />
 
   <!-- SMOKE OK result -->
-  <g filter="url(#shadow-sm)">
-    <rect x="740" y="510" width="110" height="32" rx="16" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" />
-  </g>
+  <rect x="740" y="510" width="110" height="32" rx="16" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" />
   <text x="795" y="530" class="label-pass" text-anchor="middle" font-weight="700">SMOKE OK</text>
 
   <!-- SMOKE FAILED result -->
-  <g filter="url(#shadow-sm)">
-    <rect x="560" y="530" width="130" height="32" rx="16" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5" />
-  </g>
+  <rect x="560" y="530" width="130" height="32" rx="16" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5" />
   <text x="625" y="550" class="label-fail" text-anchor="middle" font-weight="700">SMOKE FAILED</text>
 
-  <!-- Arrow: Code-Smoke → SMOKE OK -->
+  <!-- Arrow: Code-Smoke to SMOKE OK -->
   <path d="M 775 472 L 790 500" class="arrow-pass" />
 
-  <!-- Arrow: Code-Smoke → SMOKE FAILED -->
+  <!-- Arrow: Code-Smoke to SMOKE FAILED -->
   <path d="M 750 472 L 670 524" class="arrow-fail" />
 
-  <!-- Retry arrow: SMOKE FAILED → Code-Only (curved back) -->
+  <!-- Retry arrow: SMOKE FAILED back to Code-Only -->
   <path d="M 560 546 C 420 570, 340 530, 340 480" class="arrow-fail" />
   <text x="420" y="548" class="label-fail">Retry with errors</text>
 
-  <!-- Next task arrow: SMOKE OK → out of loop -->
+  <!-- Next task arrow: SMOKE OK out of loop -->
   <path d="M 850 530 L 880 530 L 880 560" class="arrow-pass" />
   <text x="870" y="518" class="label-pass">Next Tn</text>
 
   <!-- Blocked after 3 fails -->
-  <g filter="url(#shadow-sm)">
-    <rect x="88" y="530" width="200" height="32" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
-  </g>
-  <text x="188" y="550" class="label-fail" text-anchor="middle">After 3 fails → Ask user</text>
+  <rect x="88" y="530" width="200" height="32" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5" />
+  <text x="188" y="550" class="label-fail" text-anchor="middle">After 3 fails — Ask user</text>
 
-  <!-- Connector Phase 3 → 4 -->
+  <!-- Connector Phase 3 to 4 -->
   <path d="M 480 590 L 480 630" class="arrow-bold" />
   <text x="480" y="618" class="label">All tasks pass</text>
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- PHASE 4 — Full QA                                      -->
-  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PHASE 4 — Full QA                                 -->
+  <!-- ══════════════════════════════════════════════════ -->
 
-  <!-- Phase badge -->
   <rect x="40" y="640" width="80" height="24" rx="12" fill="url(#grad-emerald)" />
   <text x="80" y="652" class="badge-text">PHASE 4</text>
 
-  <!-- Phase title -->
   <text x="136" y="648" class="phase-label" fill="#059669">Full QA</text>
   <text x="210" y="648" class="card-sub">(automatic)</text>
 
   <!-- Code-Cleaner card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="260" y="674" width="180" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="260" y="674" width="5" height="56" rx="2" fill="url(#grad-emerald)" />
-  </g>
+  <rect x="260" y="674" width="180" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="260" y="674" width="5" height="56" rx="2" fill="url(#grad-emerald)" />
   <text x="284" y="696" class="card-title" fill="#059669">Code-Cleaner</text>
   <text x="284" y="714" class="card-sub">Full QA &amp; refinement</text>
 
   <!-- Test-Expert card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="520" y="674" width="170" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
-    <rect x="520" y="674" width="5" height="56" rx="2" fill="#06b6d4" />
-  </g>
+  <rect x="520" y="674" width="170" height="56" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+  <rect x="520" y="674" width="5" height="56" rx="2" fill="#06b6d4" />
   <text x="544" y="696" class="card-title" fill="#0891b2">Test-Expert</text>
   <text x="544" y="714" class="card-sub">Runs full test suites</text>
 
-  <!-- Arrow Cleaner → Test-Expert -->
+  <!-- Arrow Cleaner to Test-Expert -->
   <path d="M 440 702 L 510 702" class="arrow" />
 
   <!-- Validation result -->
-  <g filter="url(#shadow-sm)">
-    <rect x="750" y="686" width="130" height="32" rx="16" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" />
-  </g>
+  <rect x="750" y="686" width="130" height="32" rx="16" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5" />
   <text x="815" y="706" class="label-pass" text-anchor="middle" font-weight="700">QA PASSED</text>
 
   <path d="M 690 702 L 740 702" class="arrow-pass" />
 
-  <!-- Connector Phase 4 → 5 -->
+  <!-- Connector Phase 4 to 5 -->
   <path d="M 480 730 L 480 770" class="arrow-bold" />
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- PHASE 5 — Closure                                      -->
-  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PHASE 5 — Closure                                 -->
+  <!-- ══════════════════════════════════════════════════ -->
 
-  <!-- Phase badge -->
   <rect x="40" y="778" width="80" height="24" rx="12" fill="url(#grad-violet)" />
   <text x="80" y="790" class="badge-text">PHASE 5</text>
 
-  <!-- Phase title -->
   <text x="136" y="786" class="phase-label" fill="#7c3aed">Closure</text>
 
   <!-- Report card -->
-  <g filter="url(#shadow-sm)">
-    <rect x="260" y="810" width="180" height="36" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5" />
-  </g>
+  <rect x="260" y="810" width="180" height="36" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5" />
   <text x="350" y="832" class="card-title" fill="#7c3aed" text-anchor="middle">Final Report</text>
 
   <!-- Ready to version -->
-  <g filter="url(#shadow-sm)">
-    <rect x="520" y="810" width="200" height="36" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5" />
-  </g>
+  <rect x="520" y="810" width="200" height="36" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5" />
   <text x="620" y="832" class="card-title" fill="#7c3aed" text-anchor="middle">Ready to version</text>
 
   <path d="M 440 828 L 510 828" class="arrow" />
