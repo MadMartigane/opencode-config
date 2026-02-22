@@ -405,6 +405,31 @@
       "task": false,
       "sequential-thinking_sequentialthinking": true
     }
+  },
+  "Analyst": {
+    "mode": "subagent",
+    "description": "Senior software analyst for root cause analysis (debugging) and technical solution design (features, bug fixes, refactoring). Use this agent to investigate bugs or architect solutions before implementation. Read-only: produces structured analysis reports.",
+    "model": "{file:./models/analyst_model.txt}",
+    "prompt": "{file:./prompts/analyst.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": false,
+      "write": false,
+      "task": false,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": false,
+      "todoread": false,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "playwright_browser_*": false
+    }
   }
 },
 }

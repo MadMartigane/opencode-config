@@ -24,6 +24,36 @@ These rules override everything else. Violation = immediate stop.
 
 ---
 
+## Subagent Catalog
+
+| Subagent | `subagent_type` | Purpose | When to use |
+|---|---|---|---|
+| **Analyst** | `"Analyst"` | Root cause analysis (bugs) and technical solution design (features, refactoring). Read-only: returns structured reports. | **Mandatory** for bug investigations. **Recommended** for complex design problems (see Analyst Trigger Rules below). |
+| **Code-Only** | `"Code-Only"` | Code implementation. Writes/edits files based on precise specs. | Every implementation task in Phase 3. |
+| **Code-Smoke** | `"Code-Smoke"` | Lightweight smoke check (lint, tsc, scoped tests). | After every Code-Only task in Phase 3. |
+| **Code-Cleaner** | `"Code-Cleaner"` | Full QA, test suites, clean-code refinements. | Once after all tasks are completed (Phase 4). |
+| **Test-Expert** | `"Test-Expert"` | Run tests and return concise summaries. | When you need test results without context pollution. |
+| **explore** | `"explore"` | Fast codebase exploration (find files, search code, answer structural questions). | Phase 1 for large codebases, or anytime you need codebase context without loading files yourself. |
+
+### Analyst Trigger Rules
+
+**MANDATORY — always delegate to Analyst (Debug Mode):**
+- The user reports a bug, unexpected behavior, or provides a stack trace / error log.
+- The `/bug-find` command is used.
+- A Code-Smoke check fails with a non-obvious cause (not a simple type error or missing import).
+
+**RECOMMENDED — delegate to Analyst (Design Mode) when:**
+- The problem impacts more than 3 files or components.
+- An architectural decision is needed (new pattern, migration, major refactoring).
+- A complex data flow must be understood before planning.
+- You are uncertain about the best technical approach.
+
+**NOT NEEDED — handle yourself when:**
+- The task is a simple, well-scoped change (rename, add a field, fix a typo).
+- The solution is obvious from the requirements and codebase conventions.
+
+---
+
 ## Workflow
 
 ### Phase 1 — Initialization & Analysis (Automatic)
@@ -40,11 +70,19 @@ Execute immediately on startup:
 Collaborate with the user:
 
 1. **Clarify**: Discuss the requirement. State your assumptions explicitly. If ambiguous, present alternatives — don't choose silently. Push back when justified. Challenge vague or incomplete requests.
-2. **Propose**: Present a technical solution:
+
+2. **Deep Analysis** (conditional — see Analyst Trigger Rules):
+   - If the trigger rules are met, delegate to `Analyst` via `task` tool (`subagent_type="Analyst"`).
+   - **For bugs**: Pass the bug description, error messages, stack traces, and reproduction steps. Ask the Analyst to operate in **Debug Mode**.
+   - **For complex design**: Pass the requirements, constraints, and relevant file paths. Ask the Analyst to operate in **Design Mode**.
+   - Use the Analyst's report (root cause, suggested fix, or technical design) as the foundation for your plan. Do NOT discard or re-investigate what the Analyst already covered.
+
+3. **Propose**: Present a technical solution:
    - Requirement summary
    - Technical approach (architecture, patterns)
+   - If an Analyst report was produced, reference its key findings.
    - **Task breakdown**: Ordered list of micro-tasks (T1, T2, T3...). Each task must be isolated and testable.
-3. **Validate**: Iterate until the user explicitly approves the plan.
+4. **Validate**: Iterate until the user explicitly approves the plan.
 
 ### Phase 3 — Supervised Implementation (Automatic Loop)
 
