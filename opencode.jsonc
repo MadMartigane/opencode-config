@@ -2,8 +2,8 @@
   "$schema": "https://opencode.ai/config.json",
   "tui": {
     "scroll_acceleration": {
-      "enabled": true,
-    },
+      "enabled": true
+    }
   },
   "mcp": {
     "brave-search": {
@@ -11,8 +11,8 @@
       "command": ["bun", "x", "@modelcontextprotocol/server-brave-search"],
       "enabled": true,
       "environment": {
-        "BRAVE_API_KEY": "${BRAVE_API_KEY}",
-      },
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
     },
     "sequential-thinking": {
       "type": "local",
@@ -20,14 +20,14 @@
       "command": [
         "bun",
         "x",
-        "@modelcontextprotocol/server-sequential-thinking",
-      ],
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
     },
     "playwright": {
       "type": "local",
       "command": ["bun", "x", "@playwright/mcp@latest"],
-      "enabled": false,
-    },
+      "enabled": false
+    }
   },
   "provider": {
     "ovh-ai-internal": {
@@ -35,40 +35,40 @@
       "name": "Internal OVH AI playwright_browser_handle_dialogpoint",
       "options": {
         "baseURL": "https://oai.endpoints.preprod.ai.cloud.ovh.net/v1/",
-        "apiKey": "michael.baudchon@corp.ovh.com",
+        "apiKey": "michael.baudchon@corp.ovh.com"
       },
       "models": {
         "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8": {
           "name": "Qwen3-Coder-480B-A35B-Instruct-FP8 (internal)",
           "limit": {
             "context": 256000,
-            "output": 65536,
-          },
-        },
-      },
-    },
+            "output": 65536
+          }
+        }
+      }
+    }
   },
   "command": {
     "plan-validate": {
       "template": "Je valide le plan, passe à l'implémentation.",
-      "description": "Plan OK, go implementation !",
+      "description": "Plan OK, go implementation !"
     },
     "plan-update": {
       "template": "Mets à jour le plan et soumets le moi à nouveau, il faut que je le valide avant toute implémentation.",
-      "description": "Update the plan, wait validation.",
+      "description": "Update the plan, wait validation."
     },
     "plan-build": {
       "template": "Élabore un plan détaillé et soumets le moi, je vois le valider avant toute implémentation.",
-      "description": "Build the plan, wait validation.",
+      "description": "Build the plan, wait validation."
     },
     "commit-push": {
       "template": "Ticket : $ARGUMENTS\n\nCommit et push les changements. Utilise **Git-Expert** pour générer un message conforme. Si un ticket est fourni (ou trouvé dans la branche), inclus-le en footer (ex: ref: ODRER-1234).",
-      "description": "Commit and push changes with ticket reference.",
+      "description": "Commit and push changes with ticket reference."
     },
     "bug-find": {
       "template": "$ARGUMENTS\n\nTrouve l'origine du bug et propose un plan précis de correction. Je dois valider le plan avant toute implémentation.",
-      "description": "Find bug, build plan, wait validation.",
-    },
+      "description": "Find bug, build plan, wait validation."
+    }
   },
   "agent": {
   "plan": {
@@ -112,32 +112,6 @@
       "todowrite": true,
       "todoread": true,
       "brave-search_brave_web_search": false,
-      "brave-search_brave_local_search": false,
-      "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
-    }
-  },
-  "Code": {
-    "disable": true,
-    "mode": "primary",
-    "model": "{file:./models/code_model.txt}",
-    "prompt": "{file:./prompts/code.md}",
-    "temperature": 0.3,
-    "tools": {
-      "bash": true,
-      "read": true,
-      "glob": true,
-      "grep": true,
-      "list": true,
-      "edit": true,
-      "write": true,
-      "task": true,
-      "skills*": false,
-      "skills_clean-code": true,
-      "webfetch": true,
-      "todowrite": true,
-      "todoread": true,
-      "brave-search_brave_web_search": true,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
       "playwright_browser_*": false
@@ -312,7 +286,7 @@
     "mode": "subagent",
     "description": "Full QA and Code Refinement specialist. Called once after all tasks are completed in the Rocket workflow. Runs complete test suites via Test-Expert, applies clean-code refinements, and ensures global consistency across all changes.",
     "prompt": "{file:./prompts/code-cleaner.md}",
-    "model": "{file:./models/code_validator_model.txt}",
+    "model": "{file:./models/code_cleaner_model.txt}",
     "temperature": 0.1,
     "tools": {
       "bash": true,
@@ -431,5 +405,5 @@
       "playwright_browser_*": false
     }
   }
-},
+}
 }
