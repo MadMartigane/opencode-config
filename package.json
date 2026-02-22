@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "set": "bun run user_utils/setup-models.ts"
+    "set": "bun run user_utils/setup-models.ts",
+    "metrics": "bun run user_utils/session-metrics.ts"
   },
   "dependencies": {
     "@opencode-ai/plugin": "1.2.10",

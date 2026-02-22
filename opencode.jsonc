@@ -2,13 +2,17 @@
   "$schema": "https://opencode.ai/config.json",
   "tui": {
     "scroll_acceleration": {
-      "enabled": true
+      "enabled": false
     }
   },
   "mcp": {
     "brave-search": {
       "type": "local",
-      "command": ["bun", "x", "@modelcontextprotocol/server-brave-search"],
+      "command": [
+        "bun",
+        "x",
+        "@modelcontextprotocol/server-brave-search"
+      ],
       "enabled": true,
       "environment": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
@@ -23,10 +27,13 @@
         "@modelcontextprotocol/server-sequential-thinking"
       ]
     },
-    "playwright": {
-      "type": "local",
-      "command": ["bun", "x", "@playwright/mcp@latest"],
-      "enabled": false
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      },
+      "enabled": true
     }
   },
   "provider": {
@@ -88,10 +95,10 @@
       "webfetch": true,
       "todowrite": true,
       "todoread": true,
-      "brave-search_brave_web_search": true,
+      "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "build": {
@@ -114,7 +121,7 @@
       "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Rocket": {
@@ -135,10 +142,10 @@
       "webfetch": true,
       "todowrite": true,
       "todoread": true,
-      "brave-search_brave_web_search": true,
+      "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Rocket-Review": {
@@ -159,10 +166,10 @@
       "webfetch": true,
       "todowrite": true,
       "todoread": true,
-      "brave-search_brave_web_search": true,
+      "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Chatbot": {
@@ -186,27 +193,7 @@
       "brave-search_brave_web_search": true,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_navigate": true,
-      "playwright_browser_snapshot": true,
-      "playwright_browser_click": true,
-      "playwright_browser_type": true,
-      "playwright_browser_fill_form": true,
-      "playwright_browser_select_option": true,
-      "playwright_browser_hover": true,
-      "playwright_browser_drag": true,
-      "playwright_browser_press_key": true,
-      "playwright_browser_take_screenshot": true,
-      "playwright_browser_wait_for": true,
-      "playwright_browser_tabs": true,
-      "playwright_browser_navigate_back": true,
-      "playwright_browser_evaluate": true,
-      "playwright_browser_console_messages": true,
-      "playwright_browser_network_requests": true,
-      "playwright_browser_close": true,
-      "playwright_browser_file_upload": true,
-      "playwright_browser_handle_dialog": true,
-      "playwright_browser_resize": true,
-      "playwright_browser_install": true
+      "context7_*": true
     }
   },
   "Code-Audit": {
@@ -229,7 +216,7 @@
       "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Code-Only": {
@@ -255,7 +242,7 @@
       "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Code-Smoke": {
@@ -279,7 +266,7 @@
       "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": false,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Code-Cleaner": {
@@ -301,7 +288,7 @@
       "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": false
     }
   },
   "Test-Expert": {
@@ -321,7 +308,8 @@
       "write": false,
       "todowrite": false,
       "todoread": false,
-      "sequential-thinking_sequentialthinking": true
+      "sequential-thinking_sequentialthinking": true,
+      "context7_*": false
     }
   },
   "Git-Expert": {
@@ -347,7 +335,8 @@
       "playwright_browser_*": false,
       "brave-search_brave_web_search": false,
       "brave-search_brave_local_search": false,
-      "sequential-thinking_sequentialthinking": false
+      "sequential-thinking_sequentialthinking": false,
+      "context7_*": false
     }
   },
   "Router-review": {
@@ -362,7 +351,8 @@
       "glob": true,
       "list": true,
       "task": false,
-      "sequential-thinking_sequentialthinking": true
+      "sequential-thinking_sequentialthinking": true,
+      "context7_*": false
     }
   },
   "Critic-review": {
@@ -377,7 +367,8 @@
       "glob": true,
       "list": true,
       "task": false,
-      "sequential-thinking_sequentialthinking": true
+      "sequential-thinking_sequentialthinking": true,
+      "context7_*": false
     }
   },
   "Analyst": {
@@ -402,7 +393,7 @@
       "brave-search_brave_web_search": true,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "playwright_browser_*": false
+      "context7_*": true
     }
   }
 }
