@@ -216,10 +216,10 @@
       "webfetch": true,
       "todowrite": false,
       "todoread": false,
-      "brave-search_brave_web_search": false,
+      "brave-search_brave_web_search": true,
       "brave-search_brave_local_search": false,
       "sequential-thinking_sequentialthinking": true,
-      "context7_*": false
+      "context7_*": true
     }
   },
   "Code-Only": {
