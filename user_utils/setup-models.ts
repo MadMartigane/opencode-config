@@ -12,6 +12,53 @@ const CONFIG_PATH = join(CONFIG_ROOT_DIR, "opencode.jsonc");
 const MODELS_DIR = join(CONFIG_ROOT_DIR, "models");
 const PRESETS_PATH = join(__dirname, "model-presets.json");
 
+function extractAllFileReferences(configContent: string): string[] {
+  const regex = /\{file:(\.\/[^}]+)\}/g;
+  const matches: string[] = [];
+  let match;
+  while ((match = regex.exec(configContent)) !== null) {
+    matches.push(match[1]);
+  }
+  return [...new Set(matches)];
+}
+
+function filterManagedFiles(filePaths: string[]): string[] {
+  return filePaths.filter(
+    (path) => (path.startsWith("./keys/") || path.startsWith("./models/")) && !path.startsWith("./prompts/")
+  );
+}
+
+function ensureDirectoriesExist(filePaths: string[]): void {
+  const directories = new Set<string>();
+  for (const filePath of filePaths) {
+    const dir = dirname(filePath);
+    if (dir && dir !== ".") {
+      directories.add(dir);
+    }
+  }
+  for (const dir of directories) {
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true });
+      console.log(`📁 Created directory: ${dir}`);
+    }
+  }
+}
+
+function ensureFilesExist(filePaths: string[]): void {
+  for (const filePath of filePaths) {
+    if (!existsSync(filePath)) {
+      let content = "";
+      if (filePath.startsWith("./models/") && filePath.endsWith(".txt")) {
+        content = "opencode/kimi-k2.5";
+      } else if (filePath.startsWith("./keys/") && filePath.endsWith(".txt")) {
+        content = "";
+      }
+      writeFileSync(filePath, content);
+      console.log(`📝 Created file: ${filePath}`);
+    }
+  }
+}
+
 function loadPresetsFile(): Record<string, Record<string, string>> {
   if (!existsSync(PRESETS_PATH)) {
     return {};
@@ -376,6 +423,12 @@ async function promptModelSelection(rl: Interface): Promise<string | null> {
 }
 
 function initializeConfigAndModels(): Record<string, any> {
+  const configContent = readFileSync(CONFIG_PATH, "utf-8");
+  const allFileRefs = extractAllFileReferences(configContent);
+  const managedFiles = filterManagedFiles(allFileRefs);
+  ensureDirectoriesExist(managedFiles);
+  ensureFilesExist(managedFiles);
+
   if (!existsSync(MODELS_DIR)) {
     mkdirSync(MODELS_DIR, { recursive: true });
   }
