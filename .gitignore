@@ -3,4 +3,5 @@ models/
 node_modules/
 ./bun.lock
 user_utils/model-presets.json
+keys/
 
