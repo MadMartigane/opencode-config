@@ -12,6 +12,11 @@ const CONFIG_PATH = join(CONFIG_ROOT_DIR, "opencode.jsonc");
 const MODELS_DIR = join(CONFIG_ROOT_DIR, "models");
 const PRESETS_PATH = join(__dirname, "model-presets.json");
 
+function resolveConfigPath(relativePath: string): string {
+  const normalized = relativePath.startsWith("./") ? relativePath.slice(2) : relativePath;
+  return join(CONFIG_ROOT_DIR, normalized);
+}
+
 function extractAllFileReferences(configContent: string): string[] {
   const regex = /\{file:(\.\/[^}]+)\}/g;
   const matches: string[] = [];
@@ -31,7 +36,8 @@ function filterManagedFiles(filePaths: string[]): string[] {
 function ensureDirectoriesExist(filePaths: string[]): void {
   const directories = new Set<string>();
   for (const filePath of filePaths) {
-    const dir = dirname(filePath);
+    const absolutePath = resolveConfigPath(filePath);
+    const dir = dirname(absolutePath);
     if (dir && dir !== ".") {
       directories.add(dir);
     }
@@ -46,14 +52,15 @@ function ensureDirectoriesExist(filePaths: string[]): void {
 
 function ensureFilesExist(filePaths: string[]): void {
   for (const filePath of filePaths) {
-    if (!existsSync(filePath)) {
+    const absolutePath = resolveConfigPath(filePath);
+    if (!existsSync(absolutePath)) {
       let content = "";
       if (filePath.startsWith("./models/") && filePath.endsWith(".txt")) {
         content = "opencode/kimi-k2.5";
       } else if (filePath.startsWith("./keys/") && filePath.endsWith(".txt")) {
         content = "";
       }
-      writeFileSync(filePath, content);
+      writeFileSync(absolutePath, content);
       console.log(`📝 Created file: ${filePath}`);
     }
   }
