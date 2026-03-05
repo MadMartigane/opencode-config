@@ -59,15 +59,15 @@
   },
   "command": {
     "plan-validate": {
-      "template": "Je valide le plan, passe à l'implémentation.",
+      "template": "Je valide le plan, passe à l'implémentation. Utilise au max les sous-agents pour économiser ton context et parallélise les tasks dès que possible.",
       "description": "Plan OK, go implementation !"
     },
     "plan-update": {
-      "template": "Mets à jour le plan et soumets le moi à nouveau, il faut que je le valide avant toute implémentation.",
+      "template": "$ARGUMENTS\n\nMets à jour le plan et soumets le moi à nouveau, pour validation.",
       "description": "Update the plan, wait validation."
     },
     "plan-build": {
-      "template": "Élabore un plan détaillé et soumets le moi, je vois le valider avant toute implémentation.",
+      "template": "$ARGUMENTS\n\nÉlabore un plan, soumets le moi de façon résumée, élégente et facile à lire puis attends que je le valide.",
       "description": "Build the plan, wait validation."
     },
     "commit-push": {
@@ -75,7 +75,7 @@
       "description": "Commit and push changes with ticket reference."
     },
     "bug-find": {
-      "template": "$ARGUMENTS\n\nTrouve l'origine du bug et propose un plan précis de correction. Je dois valider le plan avant toute implémentation.",
+      "template": "$ARGUMENTS\n\nUtilise le sous-agents **Analyst** pour trouver l'origine du bug et élabrer un plan précis de correction. Je dois valider le plan avant toute implémentation.",
       "description": "Find bug, build plan, wait validation."
     }
   },
