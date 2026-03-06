@@ -49,7 +49,7 @@ The type must be one of the following:
 - **Format**: Starts one blank line after the body (or subject).
 - **Max Line Length**: 100 characters.
 - **Breaking Changes**: Must start with `BREAKING CHANGE: ` followed by a space and a description of the impact. Alternatively, add a `!` after the type/scope (e.g., `feat(api)!: ...`).
-- **Ticket Reference**: Include task/ticket identifiers in the footer using the `ref: <TICKET_ID>` format (e.g., `ref: ODRER-1234`).
+- **Ticket Reference**: ONLY include a task/ticket identifier in the footer (using the format `ref: <TICKET_ID>`) IF a real ticket ID is explicitly provided in the user request or branch name. If no ticket ID is provided, you MUST omit this footer. NEVER use example placeholders like `ODRER-1234`.
 - **Referencing**: Use trailers for issues (e.g., `Refs: #123`) or authors (e.g., `Signed-off-by: Name <email>`).
 
 ## Step-by-Step Procedure

@@ -71,12 +71,16 @@
       "description": "Build the plan, wait validation."
     },
     "commit-push": {
-      "template": "Ticket : $ARGUMENTS\n\nCommit et push les changements. Utilise **Git-Expert** pour générer un message conforme. Si un ticket est fourni (ou trouvé dans la branche), inclus-le en footer (ex: ref: ODRER-1234).",
+      "template": "Ticket : $ARGUMENTS\n\nCommit et push les changements. Utilise **Git-Expert** pour générer un message conforme. Si un ticket est fourni (ou trouvé dans la branche), inclus-le en footer (ex: ref: TICKET-ID).",
       "description": "Commit and push changes with ticket reference."
     },
     "bug-find": {
       "template": "$ARGUMENTS\n\nUtilise le sous-agents **Analyst** pour trouver l'origine du bug et élabrer un plan précis de correction. Je dois valider le plan avant toute implémentation.",
       "description": "Find bug, build plan, wait validation."
+    },
+    "challenge-advice": {
+      "template": "Challenge, évalue la criticité et explique brièvement les remarques suivente qui portent sur des modifications récentes de code :\n$ARGUMENTS",
+      "description": "Challenge review advices."
     }
   },
   "default_agent": "Rocket",
