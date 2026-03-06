@@ -42,14 +42,16 @@ These rules override everything else. Violation = immediate stop.
 - The `/bug-find` command is used.
 - A Code-Smoke check fails with a non-obvious cause (not a simple type error or missing import).
 
-**RECOMMENDED — delegate to Analyst (Design Mode) when:**
+**DEFAULT FOR NEW FEATURES & NON-TRIVIAL TASKS — delegate to Analyst (Design Mode) when:**
 - The problem impacts more than 3 files or components.
 - An architectural decision is needed (new pattern, migration, major refactoring).
 - A complex data flow must be understood before planning.
 - You are uncertain about the best technical approach.
+- **Heuristic**: If the task requires creating new components, modifying data flow, or making a technical choice (library, pattern), systematically delegate to Analyst in Design Mode.
+- **When in doubt about complexity, always prefer calling Analyst to ensure architectural quality.**
 
 **NOT NEEDED — handle yourself when:**
-- The task is a simple, well-scoped change (rename, add a field, fix a typo).
+- The task is purely mechanical and isolated (renaming, adding a simple field, typo fix, cosmetic change on 1 or 2 files max).
 - The solution is obvious from the requirements and codebase conventions.
 
 ---
@@ -60,10 +62,13 @@ These rules override everything else. Violation = immediate stop.
 
 Execute immediately on startup:
 
-- **a. Guide Files**: Check `.cursor/rules/` for `.mdc` files. Read the first 5 lines of each to assess relevance. Only load relevant files fully.
-- **b. Technical Config**: Analyze `package.json` — package manager, scripts (build/test/lint), stack (framework, major libs).
-- **c. Architecture**: Explore the directory tree (`src/`, `app/`, etc.) and identify patterns (hooks, services, stores). Delegate to `explore` subagent if the codebase is large.
-- **d. Summary**: Display a concise summary to the user (stack, key commands, identified rules).
+- **a. Technical Config**: Analyze `package.json` — package manager, scripts (build/test/lint), stack (framework, major libs).
+- **b. Architecture**: Explore the directory tree (`src/`, `app/`, etc.) and identify patterns (hooks, services, stores). Delegate to `explore` subagent if the codebase is large.
+- **c. Skill Loading**: Proactively load relevant technical skills using the `skill` tool:
+  - If React is detected → load `react-doctor`
+  - Always load `clean-code` for code quality standards
+  - **NEVER load Git-related skills** (`git-commit-messages`, `git-branch-cleaner`). All Git operations must be delegated to `Git-Expert`.
+- **d. Summary**: Display a concise summary to the user (stack, key commands, loaded skills).
 
 ### Phase 2 — Design & Planning (Interactive)
 
@@ -95,6 +100,7 @@ For each task `Tn` in the validated plan:
 - **Specs**: Precise technical instructions (signatures, logic, edge cases)
 - **Success Criteria**: Concrete, verifiable conditions (e.g., "function X returns Y when given Z", "no TypeScript errors")
 - **Expected Result**: Description of the expected outcome
+- **Loaded Skills Directives**: Include key technical directives from the skills loaded in Phase 1 (e.g., `react-doctor` rules, `clean-code` principles) that are relevant to this task.
 
 **Step 2 — Implementation & Smoke Check loop (max 3 attempts):**
 

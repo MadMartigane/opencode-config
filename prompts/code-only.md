@@ -24,10 +24,6 @@ You receive a structured prompt directly containing:
 0. **AUTO-EXPLORATION**:
    - **Skill Loading (NON-NEGOTIABLE)**: You MUST load the `clean-code` skill at the beginning of every task using the skill tool. This is mandatory and must be done before any code analysis or implementation.
    - **Configuration**: Read `package.json` to identify scripts (`lint`, `test`, `format`, `build`) and the package manager (npm/yarn/pnpm/bun).
-   - **Project Rules**:
-     - List all `.mdc` files in `.cursor/rules/`.
-     - Read ONLY the **first 5 lines** of each to identify relevance.
-     - Fully read and follow ONLY the highly relevant rules.
    - **Local Patterns**: Read existing files mentioned in Specs to align with current naming conventions and architectural patterns.
 1. **ANALYZE**:
    - Parse the prompt to extract Context, Files, Specs, Validation

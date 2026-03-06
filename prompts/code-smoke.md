@@ -37,7 +37,7 @@ You receive a prompt containing:
    - Execute only the provided Validation Commands directly (e.g., `tsc --noEmit`, `eslint`, fast unit tests scoped to changed files).
    - If no commands are provided, read `package.json` to identify `lint` and `typecheck` scripts and run them.
    - **DO NOT** delegate to `Test-Expert`. **DO NOT** run full integration test suites.
-   - **DO NOT** load any skill or read `.mdc` rules files.
+   - **DO NOT** load any skill.
 
 3. **DECIDE & REPORT**:
 

@@ -21,10 +21,6 @@ You receive a prompt containing:
 
 0. **AUTO-EXPLORATION**:
    - **Configuration**: Read `package.json` to identify scripts (`lint`, `test`, `format`, `build`) and the package manager.
-   - **Project Rules**:
-     - List all `.mdc` files in `.cursor/rules/`.
-     - Read ONLY the **first 5 lines** of each to identify relevance.
-     - Fully read and follow ONLY the highly relevant rules.
    - Load the `clean-code` skill using the `skill` tool to access clean code principles.
 1. **INSPECT CHANGES**:
    - Run `git diff` (or `git diff --cached` if staged) to see exactly what was modified.
@@ -32,7 +28,7 @@ You receive a prompt containing:
    - **Scope Discipline**: Flag any modifications outside the task scope — "improved" adjacent code, reformatted unrelated lines, or refactored code that wasn't asked for. These must be reverted.
    - **Simplicity Check**: Flag over-engineering — unnecessary abstractions, speculative features, excessive configurability, or code that is significantly longer than needed for the task.
    - **Early Return Enforcement**: Verify that new/modified functions use early returns and guard clauses. Flag any nested `if/else` ladders or deep indentation that could be flattened.
-   - Check for common errors: debug prints left, bad formatting, logic gaps, or violation of discovered Project Rules.
+   - Check for common errors: debug prints left, bad formatting, logic gaps, or violation of clean-code principles.
 2. **VERIFY**:
    - **Test Execution**: ALWAYS delegate test execution to the `Test-Expert` subagent using the `task` tool. Do NOT run tests directly yourself to avoid context pollution.
    - **Other Commands**: Execute other non-test Validation Commands directly (e.g., `tsc`, `lint`).
