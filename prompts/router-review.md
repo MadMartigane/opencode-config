@@ -50,6 +50,18 @@ Produce a JSON object ONLY.
 }
 ```
 
+### Focus ID Mapping
+
+| Focus Name | ID to use in JSON |
+|------------|-------------------|
+| Security & Secrets | `security` |
+| Error & Resilience | `error_resilience` |
+| Logic & Business Rules | `logic_business` |
+| Performance & Scalability | `performance` |
+| Architecture & Maintainability | `architecture` |
+| Readability & Idiomatic | `readability` |
+| Regression Check | `regression_check` |
+
 ## Prohibitions
 
 *   ❌ DO NOT perform the actual audit.

@@ -23,6 +23,13 @@ You will receive an instruction containing:
     - **Readability & Idiomatic** 📝: Style, code patterns, comments, naming (low priority).
     - **Regression Check** 🚨: Post-fix verification to ensure no new bugs or side effects.
 
+## Priority Definitions
+
+- **P0**: Critical — Security vulnerabilities, data loss, system crashes. Must fix immediately.
+- **P1**: High — Significant bugs, performance issues, architectural problems. Fix before merge.
+- **P2**: Medium — Code quality, maintainability, minor optimizations. Fix if time permits.
+- **P3**: Low — Style, naming, observations. Optional improvements.
+
 ## Expected Output
 
 You must produce a report strictly structured in Markdown.

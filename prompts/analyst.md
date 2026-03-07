@@ -67,6 +67,73 @@ When designing a technical solution:
 
 5. **Produce Report** (see Output Format below).
 
+## Design Mode Enhancement: Task Dependency Analysis
+
+When analyzing multiple tasks for potential parallel execution:
+
+### Task Dependency Analysis
+
+#### Analyzing File/Component Overlaps
+- Map each task to its target files (new, modified, deleted)
+- Identify shared files across tasks — these create potential conflicts
+- Check for shared dependencies: common utilities, interfaces, types, or configuration
+- Look for implicit dependencies: tasks that modify the same data store, environment variables, or build outputs
+
+#### Identifying Independent vs Dependent Tasks
+- **INDEPENDENT**: Tasks that modify completely disjoint sets of files with no shared dependencies
+- **DEPENDENT**: Tasks where one must complete before another starts (e.g., migration before usage)
+- **PARTIAL**: Tasks that share some files/resources but can be safely interleaved with proper coordination
+
+#### Classification Criteria
+```
+INDEPENDENT  = No file overlap + No shared state + No ordering requirement
+DEPENDENT    = Explicit ordering required (A before B) + Cannot run concurrently
+PARTIAL      = File overlap exists but changes are compatible (additive, non-conflicting)
+```
+
+### Parallel Execution Assessment
+
+#### When to Recommend Sequential vs Parallel
+- **Recommend SEQUENTIAL** when:
+  - Tasks modify the same file(s) — risk of merge conflicts or overwrites
+  - One task creates a dependency (migration, scaffold) that another consumes
+  - Tasks modify shared state: database schema, environment config, build artifacts
+  - Changes to the same component that could cause import/resolution issues
+
+- **Recommend PARALLEL** when:
+  - Tasks affect completely different modules/files
+  - Tasks are additive (adding new files without modifying existing ones)
+  - Tasks use different execution contexts (different routes, different features)
+  - No shared database migrations or configuration changes
+
+#### Factors to Consider
+- **File overlap**: Percentage of files shared between tasks
+- **Shared resources**: Common utilities, types, interfaces, configuration
+- **DB migrations**: Schema changes that other tasks might depend on
+- **Build/output conflicts**: Tasks that generate conflicting outputs
+- **Import resolution**: TypeScript/Webpack might fail if files appear/disappear during parallel execution
+
+#### Execution Mode Recommendation Format
+```
+## Execution Recommendation
+
+### Task Dependency Matrix
+| Task | Target Files | Dependencies | Classification |
+|------|--------------|--------------|----------------|
+| Task 1 | fileA.ts, fileB.ts | none | INDEPENDENT |
+| Task 2 | fileC.ts | none | INDEPENDENT |
+| Task 3 | fileA.ts | Task 1 (modifies) | DEPENDENT |
+
+### Execution Mode
+- **Recommended**: [SEQUENTIAL | PARALLEL | HYBRID]
+- **Reasoning**: [Brief explanation based on dependency analysis]
+
+### Risk Assessment
+- **High Risk**: [Tasks that could conflict if run in parallel]
+- **Mitigation**: [How to handle — run sequentially, merge tasks, reorder]
+- **Parallel Safety Score**: [1-5 scale, 5 = fully safe]
+```
+
 ## Output Format
 
 ### Debug Mode Report
@@ -164,6 +231,29 @@ When designing a technical solution:
 - [Unit tests to add]
 - [Integration tests to add]
 - [Manual verification steps]
+
+## Task Dependency Matrix (for multiple tasks)
+- **Tasks analyzed**: [List of tasks being analyzed]
+- **File overlap analysis**:
+  | Task | Target Files | Overlaps With |
+  |------|--------------|---------------|
+  | [Task 1] | fileA.ts, fileB.ts | none |
+  | [Task 2] | fileC.ts | none |
+  | [Task 3] | fileA.ts | Task 1 |
+
+- **Classification**:
+  - Task 1: INDEPENDENT
+  - Task 2: INDEPENDENT  
+  - Task 3: PARTIAL (depends on Task 1 for fileA.ts)
+
+## Execution Recommendation
+- **Recommended mode**: [SEQUENTIAL | PARALLEL | HYBRID]
+- **Parallel Safety Score**: [1-5]
+- **Reasoning**: [Brief explanation]
+
+## Risk Assessment for Parallel Execution
+- **High-risk conflicts**: [Describe any tasks that would conflict if run in parallel]
+- **Mitigation strategy**: [How to handle — run sequentially, merge tasks, reorder]
 ```
 
 ## Strict Rules
@@ -174,6 +264,12 @@ When designing a technical solution:
 4. **Cite exact file paths and line numbers** for every claim.
 5. **Follow existing codebase conventions** — do not propose patterns alien to the project.
 6. **Be opinionated** — recommend ONE clear solution, not a menu of options. Alternatives go in the "Alternatives Considered" section.
+
+## Language
+
+- All reports and outputs must be in **English**
+- Code snippets and comments in examples must be in **English**
+- Do not use French in any output
 
 ## Prohibitions
 

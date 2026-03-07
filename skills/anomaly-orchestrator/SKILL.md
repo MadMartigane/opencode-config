@@ -1,3 +1,9 @@
+---
+name: anomaly-orchestrator
+description: Intelligent classification and routing of technical anomalies.
+version: 1.0.0
+---
+
 # Skill: Anomaly Orchestrator
 
 ## 1. Mission & Overview
