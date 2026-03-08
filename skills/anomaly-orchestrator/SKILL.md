@@ -7,7 +7,7 @@ version: 1.0.0
 # Skill: Anomaly Orchestrator
 
 ## 1. Mission & Overview
-The **Anomaly Orchestrator** is responsible for the intelligent classification and routing of technical anomalies (errors, bugs, regressions). Its primary goal is to determine whether a problem can be resolved mechanically by an implementation agent or if it requires higher-level cognitive analysis, architectural decisions, or complex troubleshooting by the **Analyst**.
+The **Anomaly Orchestrator** is responsible for the intelligent classification and routing of technical anomalies (errors, bugs, regressions). Its primary goal is to determine whether a problem can be resolved mechanically by an implementation agent or if it requires higher-level cognitive analysis, architectural decisions, or complex troubleshooting by the **BugFinder**.
 
 ## 2. Decision Matrix: Simple vs Complex
 
@@ -16,25 +16,21 @@ Use the following criteria to classify the anomaly and determine the routing pat
 | Category | Characteristics | Routing |
 | :--- | :--- | :--- |
 | **SIMPLE Problems** | - Lint/formatting errors (auto-fixable)<br>- Missing obvious imports<br>- Typos or incorrect naming conventions<br>- Trivial TypeScript type fixes (e.g., adding `any` as temporary fix or obvious union types)<br>- Broken test with an obvious, single-point cause<br>- Simple syntax errors | **Direct Resolution** (Code-Only) |
-| **COMPLEX Problems** | - Architectural issues (wrong patterns or violation of project structure)<br>- Refactoring requiring design decisions or impacting multiple modules<br>- Non-trivial logical bugs with no immediate obvious cause<br>- Changes impacting multiple interdependent files<br>- Performance regressions requiring profiling/analysis<br>- API inconsistencies requiring a decision on the source of truth<br>- Unclear root cause or intermittent failures | **Analyst Escalation** |
+| **COMPLEX Problems** | - Architectural issues (wrong patterns or violation of project structure)<br>- Refactoring requiring design decisions or impacting multiple modules<br>- Non-trivial logical bugs with no immediate obvious cause<br>- Changes impacting multiple interdependent files<br>- Performance regressions requiring profiling/analysis<br>- API inconsistencies requiring a decision on the source of truth<br>- Unclear root cause or intermittent failures | **BugFinder Escalation** |
 
-## 3. Analyst Escalation Procedure
+## 3. BugFinder Escalation Procedure
 
-When a problem is classified as **COMPLEX**, invoke the **Analyst** subagent:
-
-### Modes of Operation
-- **Debug Mode**: Use for bugs, unexpected behavior, stack traces, or logic failures where the root cause is hidden.
-- **Design Mode**: Use for refactoring, architectural decisions, or introducing new patterns where multiple implementations are possible.
+When a problem is classified as **COMPLEX**, invoke the **BugFinder** subagent:
 
 ### Context Requirements
-Provide the Analyst with:
+Provide the BugFinder with:
 - Complete error messages and stack traces.
 - Paths to all relevant files.
 - Step-by-step reproduction instructions (if applicable).
 - Original requirements or expected behavior.
 
 ### Processing the Report
-Once the Analyst provides a report:
+Once the BugFinder provides a report:
 1. Extract the **Root Cause** to understand the "Why".
 2. Extract the **Technical Solution** to define the "How".
 3. Use the structured solution to guide the next implementation task.
@@ -61,7 +57,7 @@ If an implementation attempt fails, follow this protocol:
 3. **Retry**: Prepare a new prompt for the implementation agent.
 4. **Correction Section**: Explicitly include a `## CORRECTION REQUIRED` section at the top of the prompt.
 5. **Details**: Include the exact error from the previous attempt and what specifically needs to change to avoid repeating the mistake.
-6. **Escalation**: If 3 attempts fail, escalate the anomaly to **COMPLEX** and invoke the **Analyst**.
+6. **Escalation**: If 3 attempts fail, escalate the anomaly to **COMPLEX** and invoke the **BugFinder**.
 
 ## 6. Success Criteria
 

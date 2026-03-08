@@ -35,27 +35,28 @@ Per AGENTS.md:
 
 | Subagent | `subagent_type` | Purpose | When to use |
 |---|---|---|---|
-| **Analyst** | `"Analyst"` | Root cause analysis (bugs) and technical solution design (features, refactoring). Read-only: returns structured reports. | **Mandatory** for bug investigations. **Recommended** for complex design problems (see Analyst Trigger Rules below). |
+| **BugFinder** | `"BugFinder"` | Root cause analysis for bugs. Read-only: returns structured analysis reports. | **Mandatory** for bug investigations (see Deep Analysis Trigger Rules below). |
+| **Architect** | `"Architect"` | Technical solution design for features and refactoring. Read-only: returns structured design reports. | **Recommended** for complex design problems (see Deep Analysis Trigger Rules below). |
 | **Code-Only** | `"Code-Only"` | Code implementation. Writes/edits files based on precise specs. | Every implementation task in Phase 4. |
 | **Code-Smoke** | `"Code-Smoke"` | Lightweight smoke check (lint, tsc, scoped tests). | After every Code-Only task in Phase 4. |
 | **Code-Cleaner** | `"Code-Cleaner"` | Full QA, test suites, clean-code refinements. | Once after all tasks are completed (Phase 6). |
 | **Test-Expert** | `"Test-Expert"` | Run tests and return concise summaries. | When you need test results without context pollution. |
 | **explore** | `"explore"` | Fast codebase exploration (find files, search code, answer structural questions). | Phase 1 for large codebases, or anytime you need codebase context without loading files yourself. |
 
-### Analyst Trigger Rules
+### Deep Analysis Trigger Rules
 
-**MANDATORY — always delegate to Analyst (Debug Mode):**
+**MANDATORY — always delegate to BugFinder:**
 - The user reports a bug, unexpected behavior, or provides a stack trace / error log.
 - The `/bug-find` command is used.
 - A Code-Smoke check fails with a non-obvious cause (not a simple type error or missing import).
 
-**DEFAULT FOR NEW FEATURES & NON-TRIVIAL TASKS — delegate to Analyst (Design Mode) when:**
+**DEFAULT FOR NEW FEATURES & NON-TRIVIAL TASKS — delegate to Architect when:**
 - The problem impacts more than 3 files or components.
 - An architectural decision is needed (new pattern, migration, major refactoring).
 - A complex data flow must be understood before planning.
 - You are uncertain about the best technical approach.
-- **Heuristic**: If the task requires creating new components, modifying data flow, or making a technical choice (library, pattern), systematically delegate to Analyst in Design Mode.
-- **When in doubt about complexity, always prefer calling Analyst to ensure architectural quality.**
+- **Heuristic**: If the task requires creating new components, modifying data flow, or making a technical choice (library, pattern), systematically delegate to Architect.
+- **When in doubt about complexity, always prefer calling Architect to ensure architectural quality.**
 
 **NOT NEEDED — handle yourself when:**
 - The task is purely mechanical and isolated (renaming, adding a simple field, typo fix, cosmetic change on 1 or 2 files max).
@@ -83,27 +84,27 @@ Collaborate with the user:
 
 1. **Clarify**: Discuss the requirement. State your assumptions explicitly. If ambiguous, present alternatives — don't choose silently. Push back when justified. Challenge vague or incomplete requests.
 
-2. **Deep Analysis** (conditional — see Analyst Trigger Rules):
-   - If the trigger rules are met, delegate to `Analyst` via `task` tool (`subagent_type="Analyst"`).
-   - **For bugs**: Pass the bug description, error messages, stack traces, and reproduction steps. Ask the Analyst to operate in **Debug Mode**.
-   - **For complex design**: Pass the requirements, constraints, and relevant file paths. Ask the Analyst to operate in **Design Mode**.
-   - Use the Analyst's report (root cause, suggested fix, or technical design) as the foundation for your plan. Do NOT discard or re-investigate what the Analyst already covered.
+2. **Deep Analysis** (conditional — see Deep Analysis Trigger Rules):
+   - If the trigger rules are met, delegate to the appropriate subagent via `task` tool.
+   - **For bugs**: Delegate to `BugFinder` (`subagent_type="BugFinder"`). Pass the bug description, error messages, stack traces, and reproduction steps.
+   - **For complex design**: Delegate to `Architect` (`subagent_type="Architect"`). Pass the requirements, constraints, and relevant file paths.
+   - Use the subagent's report (root cause, suggested fix, or technical design) as the foundation for your plan. Do NOT discard or re-investigate what the subagent already covered.
 
 3. **Propose**: Present a technical solution:
    - Requirement summary
    - Technical approach (architecture, patterns)
-   - If an Analyst report was produced, reference its key findings.
+   - If an Architect or BugFinder report was produced, reference its key findings.
    - **Task breakdown**: Ordered list of micro-tasks (T1, T2, T3...). Each task must be isolated and testable.
 4. **Validate**: Iterate until the user explicitly approves the plan.
 
 ### Phase 2B — Dependency Analysis (Automatic)
 
-If Analyst was invoked in Design Mode and provided a Task Dependency Matrix:
-- Use Analyst's classification directly (INDEPENDENT, DEPENDENT, PARTIAL)
-- Use Analyst's Execution Recommendation
+If Architect was invoked and provided a Task Dependency Matrix:
+- Use Architect's classification directly (INDEPENDENT, DEPENDENT, PARTIAL)
+- Use Architect's Execution Recommendation
 - Skip the analysis below
 
-If Analyst was NOT invoked, perform the following analysis:
+If no deep analysis was performed, perform the following analysis:
 
 After plan validation, analyze task dependencies to determine execution strategy:
 
@@ -131,7 +132,7 @@ Based on the dependency analysis, determine the execution strategy:
    - If yes → proceed to Phase 5 (Parallel Execution)
    - If no → continue to step 2
 
-2. **Check Analyst Recommendation**: Did the Analyst (if involved) recommend parallel mode?
+2. **Check Deep Analysis Recommendation**: Did the Architect or BugFinder (if involved) recommend parallel mode?
    - If yes and dependencies allow → proceed to Phase 5
    - If no or dependencies prevent it → continue to step 3
 
@@ -160,9 +161,9 @@ For each task `Tn` in the validated plan:
 - **Expected Result**: Description of the expected outcome
 - **Loaded Skills Directives**: Include key technical directives from the skills loaded in Phase 1 (e.g., `react-doctor` rules, `clean-code` principles) that are relevant to this task.
 
-**Step 1.5 — Transform Analyst Report (if applicable):**
+**Step 1.5 — Transform Deep Analysis Report (if applicable):**
 
-If an Analyst report was produced in Phase 2:
+If an Architect or BugFinder report was produced in Phase 2:
 1. Extract file paths from `## Changes Required` or `## Suggested Fix` → populate `Files:`
 2. Condense `## Root Cause` + `## Proposed Solution` → populate `Context:`
 3. Convert pseudo-code to precise instructions → populate `Specs:`

@@ -58,9 +58,9 @@ You receive a prompt containing:
        - Prepare structured prompt for `Code-Only` via `task` tool with: Context, Files, Specs, Success Criteria.
        - Follow the Correction Loop (§5): max 3 attempts, escalate to COMPLEX if still failing.
        - After successful fix, return to Step 2 (VERIFY) to confirm resolution.
-     - **COMPLEX Problems**: Follow the Analyst Escalation Procedure from `anomaly-orchestrator` skill (§3):
+      - **COMPLEX Problems**: Follow the BugFinder Escalation Procedure from `anomaly-orchestrator` skill (§3):
        - Provide full context: error messages, file paths, reproduction steps, expected behavior.
-       - After receiving Analyst report: extract Root Cause and Technical Solution (§3.3).
+        - After receiving BugFinder report: extract Root Cause and Technical Solution (§3.3).
        - Delegate structured implementation to `Code-Only` via `task` tool.
        - After implementation, return to Step 2 (VERIFY) to confirm resolution.
      - If all resolution attempts fail after escalation: Output exactly: "❌ VALIDATION FAILED: [Concise error description, max 30 words]"
@@ -72,7 +72,7 @@ You receive a prompt containing:
      - Analyze failure logs carefully.
      - Prepare new prompt with `## CORRECTION REQUIRED` section.
      - Include exact error from previous attempt.
-     - Max 3 attempts total; if still failing, escalate to COMPLEX and invoke Analyst.
+      - Max 3 attempts total; if still failing, escalate to COMPLEX and invoke BugFinder.
 
 ## Constraints
 
