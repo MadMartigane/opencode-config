@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { createInterface, type Interface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
@@ -172,6 +172,33 @@ function getTopModelsInPreset(preset: Record<string, string>): Array<{ model: st
     .slice(0, 3);
 }
 
+function sanitizePresetAgainstConfig(
+  preset: Record<string, string>,
+  agentsList: Record<string, any>
+): { sanitized: Record<string, string>; removed: string[]; missing: string[] } {
+  const sanitized: Record<string, string> = {};
+  const removed: string[] = [];
+  const missing: string[] = [];
+
+  const agentNames = Object.keys(agentsList);
+
+  for (const agentName of Object.keys(preset)) {
+    if (agentsList[agentName]) {
+      sanitized[agentName] = preset[agentName];
+    } else {
+      removed.push(agentName);
+    }
+  }
+
+  for (const agentName of agentNames) {
+    if (!preset[agentName]) {
+      missing.push(agentName);
+    }
+  }
+
+  return { sanitized, removed, missing };
+}
+
 async function loadPreset(
   rl: Interface,
   presets: Record<string, Record<string, string>>,
@@ -190,15 +217,20 @@ async function loadPreset(
   });
 
   const selectedName = await promptUserSelection(rl, presetNames, "Select a preset to load:", displayItems);
-  const preset = presets[selectedName];
+  const rawPreset = presets[selectedName];
 
-  for (const [agentName, modelName] of Object.entries(preset)) {
+  const { sanitized, removed, missing } = sanitizePresetAgainstConfig(rawPreset, agentsList);
+
+  if (removed.length > 0) {
+    console.warn(`⚠️ Preset contains unknown agents (skipped): ${removed.join(", ")}`);
+  }
+
+  if (missing.length > 0) {
+    console.info(`ℹ️ Agents not in preset (skipped): ${missing.join(", ")}`);
+  }
+
+  for (const [agentName, modelName] of Object.entries(sanitized)) {
     const agent = agentsList[agentName];
-    if (!agent) {
-      console.warn(`⚠️ Agent ${agentName} not found in current config, skipping.`);
-      continue;
-    }
-
     const fileName = getModelFileName(agent);
     if (!fileName) continue;
 
@@ -429,6 +461,34 @@ async function promptModelSelection(rl: Interface): Promise<string | null> {
   return await promptUserSelection(rl, modelsArray, message);
 }
 
+function cleanOrphanedModelFiles(agentsList: Record<string, any>): void {
+  const referencedFiles = new Set<string>();
+  for (const agent of Object.values(agentsList)) {
+    const fileName = getModelFileName(agent);
+    if (fileName) {
+      referencedFiles.add(fileName);
+    }
+  }
+
+  const allFiles = readdirSync(MODELS_DIR, { withFileTypes: true });
+  for (const file of allFiles) {
+    if (!file.isFile() || !file.name.endsWith(".txt")) {
+      continue;
+    }
+
+    // Explicitly exclude the backup directory and any backup-prefixed entries
+    if (file.name === "backup" || file.name.startsWith("backup")) {
+      continue;
+    }
+
+    if (!referencedFiles.has(file.name)) {
+      const filePath = join(MODELS_DIR, file.name);
+      unlinkSync(filePath);
+      console.log(`🗑️ Deleted orphaned model file: ${file.name}`);
+    }
+  }
+}
+
 function initializeConfigAndModels(): Record<string, any> {
   const configContent = readFileSync(CONFIG_PATH, "utf-8");
   const allFileRefs = extractAllFileReferences(configContent);
@@ -442,6 +502,7 @@ function initializeConfigAndModels(): Record<string, any> {
 
   const agentsList = parseAgentsFromConfigFile();
   individualizeSharedModelFiles(agentsList);
+  cleanOrphanedModelFiles(agentsList);
   updateConfigWithIndividualFiles(agentsList);
 
   return agentsList;
