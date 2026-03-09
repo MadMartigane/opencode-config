@@ -75,7 +75,7 @@
       "description": "Commit and push changes with ticket reference."
     },
     "bug-find": {
-      "template": "$ARGUMENTS\n\nUtilise le sous-agents **Analyst** pour trouver l'origine du bug et élabrer un plan précis de correction. Je dois valider le plan avant toute implémentation.",
+      "template": "$ARGUMENTS\n\nUtilise le sous-agent **BugFinder** pour trouver l'origine du bug et élabrer un plan précis de correction. Je dois valider le plan avant toute implémentation.",
       "description": "Find bug, build plan, wait validation."
     },
     "challenge-advice": {
@@ -378,11 +378,36 @@
       "context7_*": false
     }
   },
-  "Analyst": {
+  "Architect": {
     "mode": "subagent",
-    "description": "Senior software analyst for root cause analysis (debugging) and technical solution design (features, bug fixes, refactoring). Use this agent to investigate bugs or architect solutions before implementation. Read-only: produces structured analysis reports.",
-    "model": "{file:./models/analyst_model.txt}",
-    "prompt": "{file:./prompts/analyst.md}",
+    "description": "Senior software architect for technical solution design and architecture decisions. Use this agent to design features, plan refactoring, or make technology choices. Read-only: produces structured architecture reports.",
+    "model": "{file:./models/architect_model.txt}",
+    "prompt": "{file:./prompts/architect.md}",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "list": true,
+      "edit": false,
+      "write": false,
+      "task": false,
+      "skills*": false,
+      "webfetch": true,
+      "todowrite": false,
+      "todoread": false,
+      "brave-search_brave_web_search": true,
+      "brave-search_brave_local_search": false,
+      "sequential-thinking_sequentialthinking": true,
+      "context7_*": true
+    }
+  },
+  "BugFinder": {
+    "mode": "subagent",
+    "description": "Senior software investigator for root cause analysis and systematic debugging. Use this agent to find the origin of bugs through deep codebase investigation. Read-only: produces structured bug analysis reports.",
+    "model": "{file:./models/bugfinder_model.txt}",
+    "prompt": "{file:./prompts/bugfinder.md}",
     "temperature": 0.1,
     "tools": {
       "bash": true,

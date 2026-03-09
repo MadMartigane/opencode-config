@@ -26,6 +26,13 @@ You will receive:
 -   **Categorization**: Organize by category (Security, Logic, Performance, etc.).
 -   **P0/P1 Enforcement**: Any secret leak or critical security vulnerability MUST be marked as P0 and highlighted.
 
+## Priority Definitions
+
+- **P0**: Critical — Security vulnerabilities, data loss, system crashes. Must fix immediately.
+- **P1**: High — Significant bugs, performance issues, architectural problems. Fix before merge.
+- **P2**: Medium — Code quality, maintainability, minor optimizations. Fix if time permits.
+- **P3**: Low — Style, naming, observations. Optional improvements.
+
 ## Expected Output
 
 Produce a Markdown report structured as follows:
