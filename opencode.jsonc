@@ -71,7 +71,7 @@
       "description": "Build the plan, wait validation."
     },
     "commit-push": {
-      "template": "Ticket : $ARGUMENTS\n\nCommit et push les changements. Utilise **Git-Expert** pour générer un message conforme. Si un ticket est fourni (ou trouvé dans la branche), inclus-le en footer (ex: ref: TICKET-ID).",
+      "template": "Ticket : $ARGUMENTS\n\nCommit et push les changements. Utilise **Git-Expert** pour générer un message conforme. Si un ticket est fourni (ou trouvé dans la branche), inclus-le en footer (ex: ref: TICKET-ID).\nIl est possible que des changements impactent plusieurs domaines distinct, si tel est le cas, split en plusieurs commits cohérents.",
       "description": "Commit and push changes with ticket reference."
     },
     "bug-find": {
@@ -81,6 +81,10 @@
     "challenge-advice": {
       "template": "Challenge, évalue la criticité et explique brièvement les remarques suivente qui portent sur des modifications récentes de code :\n$ARGUMENTS",
       "description": "Challenge review advices."
+    },
+    "resume" :{
+      "template": "Résume ce qui vient d'être fait dans cette session dans `RESUME.md`. Si il existe écrase le sans confirmation, si il n'exsite pas crée le. Un agent de codage doit être capable de reprendre la session avec ce résumé.",
+      "description": "Resume work un RESUME.md"
     }
   },
   "default_agent": "Rocket",
