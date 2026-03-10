@@ -52,9 +52,25 @@ The type must be one of the following:
 - **Ticket Reference**: ONLY include a task/ticket identifier in the footer (using the format `ref: <TICKET_ID>`) IF a real ticket ID is explicitly provided in the user request or branch name. If no ticket ID is provided, you MUST omit this footer. NEVER use example placeholders like `ODRER-1234`.
 - **Referencing**: Use trailers for issues (e.g., `Refs: #123`) or authors (e.g., `Signed-off-by: Name <email>`).
 
+## Commit Splitting (MANDATORY)
+
+When staged or unstaged changes span **multiple distinct domains** (e.g., a dependency bump alongside a config change, a bug fix alongside a new feature), you MUST split them into separate, focused commits. A single commit MUST represent one cohesive unit of change.
+
+**Decision rule**: If you cannot describe all changes with a single `<type>(<scope>): <subject>` line without using "and" or "also", the changes MUST be split.
+
+**Procedure for splitting**:
+1. Identify logical groups of files belonging to the same change domain.
+2. Stage only the files for the first group: `git add <files>`.
+3. Commit that group with its own message.
+4. Repeat for each remaining group.
+
+Never use `git add .` or `git add -A` when changes span multiple domains.
+
+---
+
 ## Step-by-Step Procedure
 
-1. **Analysis**: Run `git status` and `git diff` to understand the changes. Identify if multiple features or fixes are mixed; if so, recommend splitting the commit.
+1. **Analysis**: Run `git status` and `git diff` to understand the changes. If changes span multiple distinct domains, **immediately apply the Commit Splitting procedure above** before proceeding.
 2. **Type/Scope Determination**:
     - Identify the primary intent (e.g., `feat`, `fix`).
     - Define a scope if it helps clarify the context (e.g., `auth`, `parser`, `ui`).
