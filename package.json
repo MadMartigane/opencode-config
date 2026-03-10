@@ -4,7 +4,7 @@
     "metrics": "bun run user_utils/session-metrics.ts"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "1.2.22",
+    "@opencode-ai/plugin": "1.2.24",
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
