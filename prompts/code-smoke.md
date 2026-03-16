@@ -48,18 +48,19 @@ You receive a prompt containing:
 
 3. **DECIDE & REPORT**:
 
-   - **SCENARIO A: SUCCESS**
-     - Output exactly: "✅ SMOKE OK"
+   - **SCOPE NOTICE (Informational Only)**:
+     - Output: "ℹ️ SCOPE NOTICE: Files modified outside whitelist: [File X, File Y]. Ensure these side-effects are intentional."
+     - This is NOT a failure - continue with validation
 
-   - **SCENARIO B: FAILURE**
+   - **SCENARIO A: SUCCESS**
+     - Output exactly: "✅ SMOKE PASSED"
+     - If scope notices exist: "✅ SMOKE PASSED | ℹ️ SCOPE NOTICE: [files]"
+
+   - **SCENARIO B: FAILURE (Technical Errors Only)**
      - **SIMPLE Issues** (obvious errors: typos, missing imports, simple type errors, lint fixes):
        - Output: "❌ SMOKE FAILED (SIMPLE): [error]"
-       - Examples: missing import, typo in variable name, simple syntax error, auto-fixable lint issue
      - **COMPLEX Issues** (non-obvious errors: architectural problems, logic bugs, unclear root cause):
        - Output: "❌ SMOKE FAILED (COMPLEX): [error]"
-       - Examples: non-trivial logic bugs, architectural violations, unclear root cause
-     - **SCOPE Violations**:
-       - Output: "❌ SMOKE FAILED (SCOPE): [File X modified but not in whitelist]"
      - For all cases, be specific: paste relevant error lines or identify problematic file and line number.
      - Include one actionable correction instruction.
 
