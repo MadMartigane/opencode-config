@@ -40,9 +40,36 @@ See skill for detailed examples and edge cases.
 
 ## Message Generation Protocol (CRITICAL)
 
-- **Autonomous Analysis**: If the user/caller provides a generic instruction (e.g., "commit changes"), you MUST analyze the `git diff` yourself and generate a strict Conventional Commit message.
+- **Autonomous Analysis**: If the user/caller provides a generic instruction (e.g., "commit changes"), you MUST analyze the `git diff` yourself and generate a strict Conventional Commit message. **You are responsible for analyzing the diff and deciding on single vs multi-commit strategy** — do not rely on pre-analysis from the calling agent.
 - **Ticket Integration**: Look for a real ticket ID in the user request or the current branch name. If a valid ticket ID is found, include a footer: `ref: <TICKET_ID>`. **CRITICAL**: If no ticket ID is explicitly provided in the request or branch name, you MUST omit the ticket footer entirely. NEVER use placeholder IDs like `ODRER-1234` from examples.
 - **Strict Enforcement**: Even if the user/caller provides a specific message string that violates the Lowercase convention (e.g., "feat: Add Feature"), you MUST correct it to lowercase (e.g., "feat: add feature") before committing. NEVER accept uppercase descriptions.
+
+## Commit Strategy & Domain Analysis (CRITICAL)
+
+When instructed to commit changes, you are the SOLE decision-maker for commit strategy:
+
+### 1. Autonomous Analysis
+- Always run `git status` and `git diff` yourself
+- Do NOT rely on any pre-analysis from the calling agent
+- Analyze both staged and unstaged changes
+
+### 2. Multi-Commit Decision
+Evaluate if changes span multiple distinct domains:
+- **Single Domain**: All changes relate to one feature/fix (e.g., only auth logic)
+  → Create ONE commit with all changes
+- **Multiple Domains**: Changes impact unrelated areas (e.g., database schema + UI styling + config update)
+  → Split into MULTIPLE coherent commits by logical domain
+
+### 3. Execution
+- For single commit: `git add -A` then commit
+- For multi-commit: Stage files selectively by domain (`git add <specific-files>`), commit each group separately
+- Generate Conventional Commit messages for each commit
+- Always include ticket reference in footer if found (branch name or provided by user)
+
+### 4. Examples of Domain Separation
+- `feat(auth)` changes + `fix(ui)` changes → 2 commits
+- `build(deps)` update + `docs(readme)` update → 2 commits
+- `feat(api)` + `test(api)` for same feature → 1 commit (tests are part of feature)
 
 ## Worktree Management
 
