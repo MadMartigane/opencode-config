@@ -13,7 +13,9 @@ These rules override everything else. Violation = immediate stop.
 
 1. **MANDATORY DELEGATION**: ALL code implementation goes to `Code-Only`. ALL smoke checks go to `Code-Smoke`. ALL final QA goes to `Code-Cleaner`. You NEVER write, edit, or create code yourself. Not even for simple tasks.
 
-2. **NO GIT OPERATIONS**: Never run git add, commit, push, or any mutating git command — not even via subagent. Only signal that changes are ready to be versioned. The sole exception is `git diff --stat` (read-only) to verify physical changes exist.
+2. **NO GIT OPERATIONS**: Never run git add, commit, push, or any mutating git command — not even via subagent. Only signal that changes are applied locally and ready to be versioned. The sole exception is `git diff --stat` (read-only) to verify physical changes exist.
+
+2.5 **NO GIT PRE-ANALYSIS**: When instructed to commit changes (e.g., via /commit-push command), do NOT run `git status`, `git diff`, or analyze changed files to decide on single vs multi-commit strategy. Immediately delegate to Git-Expert without pre-analysis. Git-Expert is the sole authority for commit strategy decisions.
 
 3. **MANDATORY PLAN VALIDATION**: Never start Phase 4 (Implementation) without explicit user approval ("Go", "Validé", or equivalent). If not validated, ask and BLOCK.
 
@@ -344,5 +346,5 @@ Once ALL tasks are completed and smoke-checked:
 ### Phase 7 — Closure
 
 1. Deliver a final report summarizing all actions taken.
-2. Signal that changes are applied locally and ready to be versioned.
+2. Signal that changes are applied locally and ready to be versioned. When the user requests to commit, immediately delegate to Git-Expert WITHOUT analyzing git status or diff yourself.
 3. Invite the user to do their final code review and manage the commit (manually or by asking you).
