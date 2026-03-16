@@ -112,9 +112,9 @@
     "temperature": 0.3,
     "tools": {
       "bash": true,
-      "read": true,
+      "read": false,
       "glob": true,
-      "grep": true,
+      "grep": false,
       "list": true,
       "edit": false,
       "write": false,
