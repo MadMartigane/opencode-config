@@ -57,7 +57,7 @@
       }
     }
   },
-  "default_agent": "Rocket",
+  "default_agent": "rocket",
   "agent": {
   "plan": {
     "disable": true,
@@ -105,7 +105,7 @@
       "context7_*": false
     }
   },
-  "Rocket": {
+  "rocket": {
     "mode": "primary",
     "model": "{file:./models/rocket_model.txt}",
     "prompt": "{file:./prompts/rocket.md}",
@@ -129,7 +129,7 @@
       "context7_*": false
     }
   },
-  "Rocket-Review": {
+  "rocket-review": {
     "mode": "primary",
     "model": "{file:./models/rocket_review_model.txt}",
     "prompt": "{file:./prompts/rocket-review.md}",
@@ -153,7 +153,7 @@
       "context7_*": false
     }
   },
-  "Chatbot": {
+  "chatbot": {
     "mode": "primary",
     "model": "{file:./models/chatbot_model.txt}",
     "prompt": "{file:./prompts/chatbot.md}",
@@ -177,7 +177,7 @@
       "context7_*": true
     }
   },
-  "Code-Audit": {
+  "code-audit": {
     "mode": "subagent",
     "model": "{file:./models/code_audit_model.txt}",
     "prompt": "{file:./prompts/code-audit.md}",
@@ -200,7 +200,7 @@
       "context7_*": true
     }
   },
-  "Code-Only": {
+  "code-only": {
     "mode": "subagent",
     "description": "Primary subagent for code implementation. Specialized in precise file modifications and creation based on technical specs. Use this agent for all physical coding tasks to maintain context efficiency.",
     "prompt": "{file:./prompts/code-only.md}",
@@ -226,9 +226,9 @@
       "context7_*": false
     }
   },
-  "Code-Smoke": {
+  "code-smoke": {
     "mode": "subagent",
-    "description": "Lightweight per-task smoke check agent. Runs fast scoped validation (lint, tsc, unit tests on changed files) after each Code-Only task. No refinement, no skill loading, no full test suites. Use this agent for rapid blocking-error detection in the Rocket per-task loop.",
+    "description": "Lightweight per-task smoke check agent. Runs fast scoped validation (lint, tsc, unit tests on changed files) after each code-only task. No refinement, no skill loading, no full test suites. Use this agent for rapid blocking-error detection in the rocket per-task loop.",
     "prompt": "{file:./prompts/code-smoke.md}",
     "model": "{file:./models/code_smoke_model.txt}",
     "temperature": 0.1,
@@ -250,9 +250,9 @@
       "context7_*": false
     }
   },
-  "Code-Cleaner": {
+  "code-cleaner": {
     "mode": "subagent",
-    "description": "Full QA and Code Refinement specialist. Called once after all tasks are completed in the Rocket workflow. Runs complete test suites via Test-Expert, applies clean-code refinements, and ensures global consistency across all changes.",
+    "description": "Full QA and Code Refinement specialist. Called once after all tasks are completed in the rocket workflow. Runs complete test suites via test-expert, applies clean-code refinements, and ensures global consistency across all changes.",
     "prompt": "{file:./prompts/code-cleaner.md}",
     "model": "{file:./models/code_cleaner_model.txt}",
     "temperature": 0.1,
@@ -272,7 +272,7 @@
       "context7_*": false
     }
   },
-  "Test-Expert": {
+  "test-expert": {
     "mode": "subagent",
     "description": "Specialized in running tests and providing concise summaries. Use this agent to avoid context pollution from verbose test logs.",
     "prompt": "{file:./prompts/test-expert.md}",
@@ -293,7 +293,7 @@
       "context7_*": false
     }
   },
-  "Git-Expert": {
+  "git-expert": {
     "mode": "subagent",
     "description": "Specialized Git manager. Use this agent for all repository operations: generating conventional commits, rebasing, and cleaning history. This is the only authorized agent for Git-related tasks.",
     "model": "{file:./models/git_expert_model.txt}",
@@ -320,9 +320,9 @@
       "context7_*": false
     }
   },
-  "Router-review": {
+  "router-review": {
     "mode": "subagent",
-    "description": "Lightweight triage agent for the Rocket-Review workflow. Analyzes Git diffs and selects relevant audit focuses.",
+    "description": "Lightweight triage agent for the rocket-review workflow. Analyzes Git diffs and selects relevant audit focuses.",
     "model": "{file:./models/router_review_model.txt}",
     "prompt": "{file:./prompts/router-review.md}",
     "temperature": 0.1,
@@ -336,9 +336,9 @@
       "context7_*": false
     }
   },
-  "Critic-review": {
+  "critic-review": {
     "mode": "subagent",
-    "description": "Senior auditor and technical critic for the Rocket-Review workflow. Consolidates and challenges multiple audit reports.",
+    "description": "Senior auditor and technical critic for the rocket-review workflow. Consolidates and challenges multiple audit reports.",
     "model": "{file:./models/critic_review_model.txt}",
     "prompt": "{file:./prompts/critic-review.md}",
     "temperature": 0.1,
@@ -352,7 +352,7 @@
       "context7_*": false
     }
   },
-  "Architect": {
+  "architect": {
     "mode": "subagent",
     "description": "Senior software architect for technical solution design and architecture decisions. Use this agent to design features, plan refactoring, or make technology choices. Read-only: produces structured architecture reports.",
     "model": "{file:./models/architect_model.txt}",
@@ -377,7 +377,7 @@
       "context7_*": true
     }
   },
-  "BugFinder": {
+  "bugfinder": {
     "mode": "subagent",
     "description": "Senior software investigator for root cause analysis and systematic debugging. Use this agent to find the origin of bugs through deep codebase investigation. Read-only: produces structured bug analysis reports.",
     "model": "{file:./models/bugfinder_model.txt}",

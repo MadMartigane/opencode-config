@@ -63,11 +63,11 @@ Git worktrees allow multiple working trees to be associated with a single reposi
 
 | Component | Role |
 |-----------|------|
-| **Rocket** | Orchestrator with dual-mode capability (sequential/parallel) |
+| **rocket** | Orchestrator with dual-mode capability (sequential/parallel) |
 | **Analyst** | Analyzes dependencies and recommends execution strategy |
 | **Worktree Manager** | Handles worktree lifecycle (create, switch, cleanup) |
-| **Git-Expert** | Manages merge strategies and resolves conflicts |
-| **Code-Only** | Implements changes in a worktree-aware manner |
+| **git-expert** | Manages merge strategies and resolves conflicts |
+| **code-only** | Implements changes in a worktree-aware manner |
 
 ---
 
@@ -217,7 +217,7 @@ During this phase, the Analyst examines:
 
 ### Phase 3: Execution Mode Decision
 
-Based on dependency analysis, Rocket decides between:
+Based on dependency analysis, rocket decides between:
 
 | Condition | Decision | Rationale |
 |-----------|----------|------------|
@@ -287,7 +287,7 @@ When parallel execution is chosen:
 
 1. **Merge Preparation**
    - Each worktree branch is merged into main
-   - Git-Expert handles conflict resolution
+   - git-expert handles conflict resolution
 
 2. **Validation**
    - Run full test suite
@@ -303,7 +303,7 @@ When parallel execution is chosen:
 
 ## Agents Reference
 
-### Rocket: Orchestrator
+### rocket: Orchestrator
 
 **Responsibilities**:
 - Analyze task requirements
@@ -354,7 +354,7 @@ git worktree list
 git worktree remove <path>
 ```
 
-### Git-Expert: Merge and Conflicts
+### git-expert: Merge and Conflicts
 
 **Responsibilities**:
 - Execute merges
@@ -367,7 +367,7 @@ git worktree remove <path>
 - `ours`: Keep our version (avoid conflicts)
 - `octopus`: Merge multiple branches
 
-### Code-Only: Worktree-Aware Implementation
+### code-only: Worktree-Aware Implementation
 
 **Responsibilities**:
 - Execute tasks within worktree context

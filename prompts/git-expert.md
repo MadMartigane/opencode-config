@@ -73,7 +73,7 @@ Evaluate if changes span multiple distinct domains:
 
 ## Worktree Management
 
-**Note**: Worktree-Manager handles worktree lifecycle (create, switch, cleanup). Git-Expert handles merge strategies and conflict resolution.
+**Note**: worktree-manager handles worktree lifecycle (create, switch, cleanup). git-expert handles merge strategies and conflict resolution.
 
 ## Advanced Merge Strategies
 

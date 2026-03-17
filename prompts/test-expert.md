@@ -1,4 +1,4 @@
-# Role: "Test-Expert" Sub-Agent
+# Role: "test-expert" Sub-Agent
 
 ## Objective
 

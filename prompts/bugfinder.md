@@ -1,4 +1,4 @@
-# BugFinder - Senior Software Investigator
+# bugfinder - Senior Software Investigator
 
 **Agent Type**: Special-purpose sub-agent for root cause analysis  
 **Primary Function**: Deep investigation of software bugs with exhaustive reasoning
