@@ -30,11 +30,15 @@ Every design choice in these workflows serves one or more of these principles:
 
 | Agent | Role | Used by |
 |---|---|---|
+| **explore** | Mandatory codebase exploration and context gathering. | rocket |
+| **architect** | Mandatory design authority for features/enhancements/structural changes. Read-only analysis. | rocket |
+| **bugfinder** | Root-cause investigation for complex bugs and unclear failures. Read-only analysis. | rocket, code-cleaner |
 | **code-only** | Implements code changes from structured specs. Responds "DONE" or "ERROR". | rocket, code-cleaner |
-| **code-smoke** | Fast scoped validation (lint, tsc, unit tests on changed files). Responds "SMOKE OK" or "SMOKE FAILED". | rocket |
-| **code-cleaner** | Full QA: complete test suites, clean-code refinements, cross-task consistency. | rocket |
+| **code-smoke** | Fast scoped validation (lint, tsc, unit tests on changed files). Responds "SMOKE PASSED" or "SMOKE FAILED". | rocket |
+| **code-cleaner** | Full QA orchestration: complete validation, clean-code refinements, global consistency. | rocket |
 | **test-expert** | Runs tests and returns concise summaries. Isolates verbose test output from orchestrator context. | code-cleaner |
-| **git-expert** | Git operations: conventional commits, rebasing, history cleanup. Invoked only on explicit user request. | On-demand |
+| **worktree-manager** | Creates/cleans isolated Git worktrees for opt-in parallel execution with file overlap. | rocket |
+| **git-expert** | Git operations: merge, commit, push, rebase, history cleanup. Invoked only on explicit user request. | rocket (on-demand), worktree flow |
 | **router-review** | Triage agent. Analyzes diffs and selects relevant audit focuses. | rocket-review |
 | **code-audit** | Specialized auditor. One instance per focus (Security, Perf, Logic, etc.). | rocket-review |
 | **critic-review** | Senior auditor. Consolidates audit reports, challenges findings, filters false positives. | rocket-review |
@@ -43,63 +47,85 @@ Every design choice in these workflows serves one or more of these principles:
 
 ## rocket Workflow
 
-rocket takes a user request, breaks it into micro-tasks, and executes them through a supervised delegation loop with quality gates at every step.
+rocket takes a request, decomposes it into micro-tasks, and executes through strict delegation with explicit gates. The orchestrator never writes code itself.
 
-### Phase 1 — Initialization & Analysis
+### Phase 1 — Exploration (Mandatory Delegation)
 
-Runs automatically on startup. rocket scans the project to build context:
+Runs automatically at the beginning and is never skipped:
 
-- Reads guide files (`.cursor/rules/*.mdc`) for project-specific rules
-- Analyzes `package.json` for stack, scripts, and dependencies
-- Explores the directory structure and identifies architectural patterns
-- Presents a concise summary to the user
+- Delegates to `explore` to inspect stack, architecture, scripts, and key file patterns
+- Builds context from project conventions and constraints
+- Reports a concise project understanding before planning
 
-### Phase 2 — Design & Planning
+### Phase 2 — Planning & Success Criteria (Interactive)
 
-Interactive collaboration with the user:
+Collaborative planning with explicit design delegation:
 
-1. **Clarify** — rocket discusses the requirement, states assumptions, presents alternatives if ambiguous, and pushes back on vague requests.
-2. **Propose** — A technical solution with an ordered task breakdown (T1, T2, T3...). Each task is isolated and testable.
-3. **Validate** — The user must explicitly approve the plan ("Go" / "Validé"). rocket will not proceed without approval.
+1. **Clarify** — rocket refines scope, assumptions, and measurable outcomes with the user.
+2. **Design Delegation** — rocket calls `architect` for all features/enhancements/structural changes (mandatory).
+3. **Bug Investigation (when needed)** — rocket calls `bugfinder` for unclear root causes.
+4. **Propose** — rocket presents ordered micro-tasks (T1, T2...) with file scope and success criteria.
+5. **Validate** — execution starts only after explicit user approval ("Go" / "Validé").
 
-### Phase 3 — Supervised Implementation
+### Phase 3 — Execution Strategy Selection (Automatic)
 
-Once the plan is validated, rocket chains tasks autonomously without intermediate user approval:
+Before coding, rocket chooses the safest execution mode:
 
-```
-For each task Tn:
+- **Dependency analysis**: if tasks depend on each other → sequential mode
+- **File overlap analysis**: if tasks touch the same files → user chooses sequential or worktree-parallel
+- **Default mode**: if independent and no overlap → parallel mode in the main workspace
 
-  1. rocket prepares a structured prompt (Context, Files, Specs, Success Criteria)
+### Phase 4 — Sequential Execution (When Required)
 
-  2. Implementation & Smoke Check loop (max 3 attempts):
-     a. code-only implements the task
-     b. rocket verifies physical changes exist (git diff --stat)
-     c. code-smoke runs scoped validation
-     d. SMOKE OK → next task | SMOKE FAILED → retry with error context
+Used when dependencies exist (or user requests sequential). For each task `Tn`:
 
-  3. If failed after 3 attempts → STOP, ask user for help
-```
+1. rocket prepares a structured implementation prompt (Context, Files, Specs, Success Criteria).
+2. `code-only` implements the task.
+3. rocket verifies that real file changes exist (`git diff --stat`).
+4. `code-smoke` runs scoped validation.
+5. On smoke failure, rocket retries with correction context (max 3 attempts, then stop and escalate to user).
 
-### Phase 4 — Full QA
+### Phase 5 — Parallel Execution (Default)
 
-Once all tasks pass their smoke checks, `code-cleaner` runs a single comprehensive QA pass:
-- Full test suites (via `test-expert`)
-- Clean-code refinements across the entire diff
-- Cross-task consistency verification
+Used when tasks are independent and file scopes do not overlap:
 
-### Phase 5 — Closure
+- rocket launches multiple `code-only` tasks concurrently in the same workspace
+- Verifies aggregate changes
+- Runs `code-smoke` per task
+- Retries only failing tasks (bounded to 3 attempts per task)
 
-rocket delivers a final report and signals that changes are ready to be versioned. The user decides when and how to commit — manually or by requesting `git-expert`.
+### Phase 5b — Worktree Parallel Execution (Opt-In)
+
+Used only when explicitly requested or when overlap exists and user still wants parallelism:
+
+1. `worktree-manager` provisions isolated worktrees per task
+2. `code-only` executes in parallel inside each worktree
+3. `code-smoke` validates each worktree
+4. `git-expert` merges worktree branches back
+5. `worktree-manager` cleans temporary worktrees
+
+### Phase 6 — Global QA (Mandatory)
+
+After all task-level smoke checks pass, rocket always calls `code-cleaner`:
+
+- Full validation and consistency pass across all changes
+- Full test orchestration via `test-expert`
+- Clean-code refinements delegated back to `code-only` when needed
+- Classification/escalation flow for anomalies (including `bugfinder` for complex failures)
+
+### Phase 7 — Closure
+
+rocket returns the final implementation report and confirms changes are local. Any commit/push/rebase action is delegated to `git-expert` only when the user explicitly asks.
 
 ![rocket Workflow](./assets/rocket-workflow.svg)
 
 ### Why This Works
 
-- **No context pollution** — rocket never sees raw code or full diffs. It stays sharp across 10+ tasks in a single session.
-- **Structural guardrails** — `edit`/`write` tools are disabled at the config level. Delegation isn't optional, it's enforced.
-- **Quality at every step** — Smoke checks catch regressions immediately. Full QA catches cross-task issues. Two layers of defense.
-- **Bounded failure** — 3-attempt max prevents infinite retry loops. Human escalation is built into the workflow.
-- **Predictable execution** — The same loop runs for every task. No special cases, no shortcuts.
+- **Delegation by construction** — architecture, coding, smoke checks, QA, and Git ops are split across purpose-built agents.
+- **Design quality upfront** — `architect` is mandatory for feature/enhancement design before implementation begins.
+- **Adaptive execution speed** — automatic routing to sequential, parallel, or worktree-parallel based on dependencies and overlap.
+- **Two-level quality gates** — fast per-task smoke checks plus mandatory global QA prevent regressions and drift.
+- **Bounded failure model** — retries are capped (max 3) and complex failures escalate instead of looping endlessly.
 
 ---
 
