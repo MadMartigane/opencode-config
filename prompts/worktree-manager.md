@@ -91,7 +91,7 @@ git worktree prune
 
 ## Integration Points
 
-- **Called By**: `rocket` in Phase 5 (Parallel Execution)
+- **Called By**: `rocket` via `/parallel-worktree` command
 - **Works With**:
   - `git-expert`: For merge operations after task completion
   - `code-only`: Prepares isolated environment for execution

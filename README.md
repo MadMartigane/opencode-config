@@ -12,7 +12,7 @@ Every design choice in these workflows serves one or more of these principles:
 - **Context hygiene** — LLM context windows are finite and precious. The orchestrator (rocket) never loads full diffs or file contents. It delegates, receives concise reports, and moves on. This prevents context pollution and keeps the orchestrator sharp across long multi-task sessions.
 - **Constraints-first prompting** — Critical rules are placed at the top of every prompt, before the workflow description. LLMs exhibit primacy bias — instructions read first are followed more reliably, especially by smaller models.
 - **English prompts, localized responses** — All system prompts and subagent instructions are written in English for maximum instruction-following accuracy across model sizes. The orchestrator responds to the user in French via an explicit language directive.
-- **Single responsibility per agent** — Each subagent does exactly one thing. `code-only` codes. `code-smoke` validates. `code-cleaner` refines. No agent wears multiple hats. This reduces hallucination and improves output quality.
+- **Single responsibility per agent** — Each subagent does exactly one thing. `code-only` codes. `code-smoke` validates. No agent wears multiple hats. This reduces hallucination and improves output quality.
 - **Fail-fast with bounded retries** — Every implementation task has a max 3-attempt loop with smoke checks. If it can't be fixed in 3 tries, the system stops and asks for human help instead of spiraling.
 
 ---
@@ -32,11 +32,9 @@ Every design choice in these workflows serves one or more of these principles:
 |---|---|---|
 | **explore** | Mandatory codebase exploration and context gathering. | rocket |
 | **architect** | Mandatory design authority for features/enhancements/structural changes. Read-only analysis. | rocket |
-| **bugfinder** | Root-cause investigation for complex bugs and unclear failures. Read-only analysis. | rocket, code-cleaner |
-| **code-only** | Implements code changes from structured specs. Responds "DONE" or "ERROR". | rocket, code-cleaner |
-| **code-smoke** | Fast scoped validation (lint, tsc, unit tests on changed files). Responds "SMOKE PASSED" or "SMOKE FAILED". | rocket |
-| **code-cleaner** | Full QA orchestration: complete validation, clean-code refinements, global consistency. | rocket |
-| **test-expert** | Runs tests and returns concise summaries. Isolates verbose test output from orchestrator context. | code-cleaner |
+| **bugfinder** | Root-cause investigation for complex bugs and unclear failures. Read-only analysis. | rocket |
+| **code-only** | Implements code changes from structured specs. Responds "DONE" or "ERROR". | rocket |
+| **code-smoke** | Unified validation agent: per-task (syntax+lint) and final (syntax+lint+tests+build). Reports diagnostics, never fixes. | rocket |
 | **worktree-manager** | Creates/cleans isolated Git worktrees for opt-in parallel execution with file overlap. | rocket |
 | **git-expert** | Git operations: merge, commit, push, rebase, history cleanup. Invoked only on explicit user request. | rocket (on-demand), worktree flow |
 | **router-review** | Triage agent. Analyzes diffs and selects relevant audit focuses. | rocket-review |
@@ -85,7 +83,7 @@ Used when dependencies exist (or user requests sequential). For each task `Tn`:
 4. `code-smoke` runs scoped validation.
 5. On smoke failure, rocket retries with correction context (max 3 attempts, then stop and escalate to user).
 
-### Phase 5 — Parallel Execution (Default)
+### Phase 4b — Parallel Execution (DEFAULT)
 
 Used when tasks are independent and file scopes do not overlap:
 
@@ -94,26 +92,11 @@ Used when tasks are independent and file scopes do not overlap:
 - Runs `code-smoke` per task
 - Retries only failing tasks (bounded to 3 attempts per task)
 
-### Phase 5b — Worktree Parallel Execution (Opt-In)
+### Phase 5 — Global Validation (MANDATORY)
 
-Used only when explicitly requested or when overlap exists and user still wants parallelism:
+After all tasks complete, rocket calls `code-smoke` in "final" mode for complete validation (syntax check, lint, full test suite, build). `code-smoke` provides detailed diagnostic reports on failure, and rocket handles retry loops with enriched context.
 
-1. `worktree-manager` provisions isolated worktrees per task
-2. `code-only` executes in parallel inside each worktree
-3. `code-smoke` validates each worktree
-4. `git-expert` merges worktree branches back
-5. `worktree-manager` cleans temporary worktrees
-
-### Phase 6 — Global QA (Mandatory)
-
-After all task-level smoke checks pass, rocket always calls `code-cleaner`:
-
-- Full validation and consistency pass across all changes
-- Full test orchestration via `test-expert`
-- Clean-code refinements delegated back to `code-only` when needed
-- Classification/escalation flow for anomalies (including `bugfinder` for complex failures)
-
-### Phase 7 — Closure
+### Phase 6 — Closure
 
 rocket returns the final implementation report and confirms changes are local. Any commit/push/rebase action is delegated to `git-expert` only when the user explicitly asks.
 
@@ -124,7 +107,7 @@ rocket returns the final implementation report and confirms changes are local. A
 - **Delegation by construction** — architecture, coding, smoke checks, QA, and Git ops are split across purpose-built agents.
 - **Design quality upfront** — `architect` is mandatory for feature/enhancement design before implementation begins.
 - **Adaptive execution speed** — automatic routing to sequential, parallel, or worktree-parallel based on dependencies and overlap.
-- **Two-level quality gates** — fast per-task smoke checks plus mandatory global QA prevent regressions and drift.
+- **Two-level quality gates** — fast per-task smoke checks plus mandatory Global Validation prevent regressions and drift.
 - **Bounded failure model** — retries are capped (max 3) and complex failures escalate instead of looping endlessly.
 
 ---
