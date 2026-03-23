@@ -12,6 +12,22 @@ const CONFIG_PATH = join(CONFIG_ROOT_DIR, "opencode.jsonc");
 const MODELS_DIR = join(CONFIG_ROOT_DIR, "models");
 const PRESETS_PATH = join(__dirname, "model-presets.json");
 
+const MIGRATION_MAP: Record<string, string> = {
+  "rocket_model.txt": "agentic.txt",
+  "chatbot_model.txt": "agentic.txt",
+  "rocket-review_model.txt": "agentic.txt",
+  "code-audit_model.txt": "thinker.txt",
+  "architect_model.txt": "thinker.txt",
+  "critic-review_model.txt": "thinker.txt",
+  "bugfinder_model.txt": "thinker.txt",
+  "architect-thinker_model.txt": "thinker.txt",
+  "code-only_model.txt": "coder.txt",
+  "explore_model.txt": "simple-fast.txt",
+  "code-smoke_model.txt": "simple-fast.txt",
+  "git-expert_model.txt": "simple-fast.txt",
+  "router-review_model.txt": "simple-fast.txt",
+};
+
 function resolveConfigPath(relativePath: string): string {
   const normalized = relativePath.startsWith("./") ? relativePath.slice(2) : relativePath;
   return join(CONFIG_ROOT_DIR, normalized);
@@ -20,11 +36,45 @@ function resolveConfigPath(relativePath: string): string {
 function extractAllFileReferences(configContent: string): string[] {
   const regex = /\{file:(\.\/[^}]+)\}/g;
   const matches: string[] = [];
-  let match;
+  let match: RegExpExecArray | null;
   while ((match = regex.exec(configContent)) !== null) {
     matches.push(match[1]);
   }
   return [...new Set(matches)];
+}
+
+function extractUniqueRoles(configContent: string): string[] {
+  const regex = /\{file:\.\/models\/(.+?)\.txt\}/g;
+  const roles = new Set<string>();
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(configContent)) !== null) {
+    roles.add(match[1]);
+  }
+  return Array.from(roles);
+}
+
+function migrateOldAgentSpecificPaths(configContent: string): string {
+  let updatedContent = configContent;
+  let hasChanges = false;
+
+  for (const [oldFile, newFile] of Object.entries(MIGRATION_MAP)) {
+    const oldPath = `./models/${oldFile}`;
+    const newPath = `./models/${newFile}`;
+    if (updatedContent.includes(oldPath)) {
+      const escapedOldPath = oldPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedOldPath, 'g');
+      updatedContent = updatedContent.replace(regex, newPath);
+      hasChanges = true;
+      console.log(`🔄 Migrated config: ${oldPath} -> ${newPath}`);
+    }
+  }
+
+  if (hasChanges) {
+    writeFileSync(CONFIG_PATH, updatedContent);
+    console.log("✅ opencode.jsonc updated with new role-based paths.");
+  }
+
+  return updatedContent;
 }
 
 function filterManagedFiles(filePaths: string[]): string[] {
@@ -89,17 +139,14 @@ function savePresetsFile(presets: Record<string, Record<string, string>>) {
 
 async function saveCurrentConfigAsPreset(
   rl: Interface,
-  agentsList: Record<string, any>,
+  roles: string[],
   presets: Record<string, Record<string, string>>,
 ) {
   const currentConfig: Record<string, string> = {};
-  for (const [agentName, agent] of Object.entries(agentsList)) {
-    const fileName = getModelFileName(agent);
-    if (!fileName) continue;
-
-    const filePath = join(MODELS_DIR, fileName);
+  for (const role of roles) {
+    const filePath = join(MODELS_DIR, `${role}.txt`);
     if (existsSync(filePath)) {
-      currentConfig[agentName] = readFileSync(filePath, "utf-8").trim();
+      currentConfig[role] = readFileSync(filePath, "utf-8").trim();
     }
   }
 
@@ -172,27 +219,55 @@ function getTopModelsInPreset(preset: Record<string, string>): Array<{ model: st
     .slice(0, 3);
 }
 
+function migratePreset(preset: Record<string, string>, agentsList: Record<string, any>): Record<string, string> {
+  const roleMapping: Record<string, string> = {};
+  for (const [agentName, agent] of Object.entries(agentsList)) {
+    const roleMatch = agent.model?.match(/\{file:\.\/models\/(.+?)\.txt\}/);
+    if (roleMatch) {
+      roleMapping[agentName] = roleMatch[1];
+    }
+  }
+
+  const newPreset: Record<string, string> = {};
+  let migrated = false;
+
+  for (const [key, value] of Object.entries(preset)) {
+    if (roleMapping[key]) {
+      const role = roleMapping[key];
+      if (!newPreset[role]) {
+        newPreset[role] = value;
+        migrated = true;
+      }
+    } else {
+      newPreset[key] = value;
+    }
+  }
+
+  if (migrated) {
+    console.log("🔄 Migrated legacy preset mapping to roles.");
+  }
+  return newPreset;
+}
+
 function sanitizePresetAgainstConfig(
   preset: Record<string, string>,
-  agentsList: Record<string, any>
+  roles: string[]
 ): { sanitized: Record<string, string>; removed: string[]; missing: string[] } {
   const sanitized: Record<string, string> = {};
   const removed: string[] = [];
   const missing: string[] = [];
 
-  const agentNames = Object.keys(agentsList);
-
-  for (const agentName of Object.keys(preset)) {
-    if (agentsList[agentName]) {
-      sanitized[agentName] = preset[agentName];
+  for (const roleName of Object.keys(preset)) {
+    if (roles.includes(roleName)) {
+      sanitized[roleName] = preset[roleName];
     } else {
-      removed.push(agentName);
+      removed.push(roleName);
     }
   }
 
-  for (const agentName of agentNames) {
-    if (!preset[agentName]) {
-      missing.push(agentName);
+  for (const roleName of roles) {
+    if (!preset[roleName]) {
+      missing.push(roleName);
     }
   }
 
@@ -202,6 +277,7 @@ function sanitizePresetAgainstConfig(
 async function loadPreset(
   rl: Interface,
   presets: Record<string, Record<string, string>>,
+  roles: string[],
   agentsList: Record<string, any>,
 ) {
   const presetNames = Object.keys(presets);
@@ -217,39 +293,40 @@ async function loadPreset(
   });
 
   const selectedName = await promptUserSelection(rl, presetNames, "Select a preset to load:", displayItems);
-  const rawPreset = presets[selectedName];
+  let rawPreset = presets[selectedName];
 
-  const { sanitized, removed, missing } = sanitizePresetAgainstConfig(rawPreset, agentsList);
+  // Try migrating if it looks like an old preset (contains agent names not in roles)
+  const needsMigration = Object.keys(rawPreset).some(key => !roles.includes(key));
+  if (needsMigration) {
+    rawPreset = migratePreset(rawPreset, agentsList);
+    presets[selectedName] = rawPreset;
+    savePresetsFile(presets);
+  }
+
+  const { sanitized, removed, missing } = sanitizePresetAgainstConfig(rawPreset, roles);
 
   if (removed.length > 0) {
-    console.warn(`⚠️ Preset contains unknown agents (skipped): ${removed.join(", ")}`);
+    console.warn(`⚠️ Preset contains unknown roles (skipped): ${removed.join(", ")}`);
   }
 
   if (missing.length > 0) {
-    console.info(`ℹ️ Agents not in preset (skipped): ${missing.join(", ")}`);
+    console.info(`ℹ️ Roles not in preset (skipped): ${missing.join(", ")}`);
   }
 
-  for (const [agentName, modelName] of Object.entries(sanitized)) {
-    const agent = agentsList[agentName];
-    const fileName = getModelFileName(agent);
-    if (!fileName) continue;
-
-    const filePath = join(MODELS_DIR, fileName);
+  for (const [roleName, modelName] of Object.entries(sanitized)) {
+    const filePath = join(MODELS_DIR, `${roleName}.txt`);
     writeFileSync(filePath, modelName);
-    console.log(`✅ Applied: ${modelName} -> ${agentName}`);
+    console.log(`✅ Applied: ${modelName} -> ${roleName}`);
   }
 
   console.log("\n✨ Preset loaded and applied!");
 }
 
-function applyGlobalOverride(modelName: string, agentsList: Record<string, any>): void {
-  for (const [agentName, agent] of Object.entries(agentsList)) {
-    const fileName = getModelFileName(agent);
-    if (fileName) {
-      const filePath = join(MODELS_DIR, fileName);
-      writeFileSync(filePath, modelName);
-      console.log(`✅ Updated ${agentName}: ${modelName}`);
-    }
+function applyGlobalOverride(modelName: string, roles: string[]): void {
+  for (const roleName of roles) {
+    const filePath = join(MODELS_DIR, `${roleName}.txt`);
+    writeFileSync(filePath, modelName);
+    console.log(`✅ Updated ${roleName}: ${modelName}`);
   }
 }
 
@@ -260,13 +337,17 @@ function getModelFileName(agent: any): string | null {
 
 function displayCurrentConfigurations(agentsList: Record<string, any>) {
   console.log("\n📋 Current Model Configurations:");
-  console.log("=".repeat(70));
-  console.log("Agent Name".padEnd(20) + "Type".padEnd(15) + "Current Model");
-  console.log("-".repeat(70));
+  console.log("=".repeat(85));
+  console.log("Agent Name".padEnd(20) + "Role".padEnd(15) + "Type".padEnd(15) + "Current Model");
+  console.log("-".repeat(85));
 
   for (const [agentName, agent] of Object.entries(agentsList)) {
     const type = agent.mode === "subagent" ? "subagent" : "primary";
     const emoji = type === "primary" ? "🟢" : "🔵";
+
+    // Get role from model path
+    const roleMatch = agent.model?.match(/\{file:\.\/models\/(.+?)\.txt\}/);
+    const role = roleMatch ? roleMatch[1] : "N/A";
 
     // Get current model
     const fileName = getModelFileName(agent);
@@ -278,10 +359,10 @@ function displayCurrentConfigurations(agentsList: Record<string, any>) {
       }
     }
 
-    console.log(`${emoji} ${agentName.padEnd(18)} ${type.padEnd(13)} ${currentModel}`);
+    console.log(`${emoji} ${agentName.padEnd(18)} ${role.padEnd(13)} ${type.padEnd(13)} ${currentModel}`);
   }
 
-  console.log("=".repeat(70));
+  console.log("=".repeat(85));
 }
 
 function getAvailableModels(): Set<string> {
@@ -301,27 +382,6 @@ function getAvailableModels(): Set<string> {
   }
 }
 
-function isModelAvailable(
-  modelName: string,
-  availableModels: Set<string>,
-): boolean {
-  return availableModels.has(modelName);
-}
-
-function findLatestFreeModel(availableModels: Set<string>): string | null {
-  const filtered = Array.from(availableModels).filter(
-    (model) => model.startsWith("opencode/") && model.endsWith("-free"),
-  );
-
-  if (filtered.length === 0) {
-    return null;
-  }
-
-  filtered.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-
-  return filtered[filtered.length - 1];
-}
-
 function parseAgentsFromConfig(configContent: string): Record<string, any> {
   const config = parse(configContent);
   return config.agent;
@@ -332,63 +392,46 @@ function parseAgentsFromConfigFile(): Record<string, any> {
   return parseAgentsFromConfig(configContent);
 }
 
-function findClosingBrace(str: string, start: number): number {
-  let count = 0;
-  for (let i = start; i < str.length; i++) {
-    if (str[i] === "{") count++;
-    else if (str[i] === "}") {
-      count--;
-      if (count === 0) return i;
-    }
-  }
-  return -1;
-}
+function cleanOrphanedModelFiles(roles: string[]): void {
+  const referencedFiles = new Set(roles.map(r => `${r}.txt`));
 
-function individualizeSharedModelFiles(agentsList: Record<string, any>) {
-  const fileToAgents: Record<string, string[]> = {};
-  for (const [agentName, agent] of Object.entries(agentsList)) {
-    const fileName = getModelFileName(agent);
-    if (fileName) {
-      if (!fileToAgents[fileName]) fileToAgents[fileName] = [];
-      fileToAgents[fileName].push(agentName);
+  const allFiles = readdirSync(MODELS_DIR, { withFileTypes: true });
+  for (const file of allFiles) {
+    if (!file.isFile() || !file.name.endsWith(".txt")) {
+      continue;
     }
-  }
-  for (const [fileName, agents] of Object.entries(fileToAgents)) {
-    if (agents.length > 1) {
-      const originalPath = join(MODELS_DIR, fileName);
-      if (existsSync(originalPath)) {
-        const content = readFileSync(originalPath, "utf-8");
-        for (const agentName of agents) {
-          const newFileName = `${agentName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_model.txt`;
-          const newPath = join(MODELS_DIR, newFileName);
-          writeFileSync(newPath, content);
-          agentsList[agentName].model = `{file:./models/${newFileName}}`;
-        }
-      } else {
-        console.warn(`⚠️ Original model file ${originalPath} not found, skipping individualization for ${agents.join(", ")}`);
-      }
+
+    // Explicitly exclude the backup directory and any backup-prefixed entries
+    if (file.name === "backup" || file.name.startsWith("backup")) {
+      continue;
+    }
+
+    if (!referencedFiles.has(file.name)) {
+      const filePath = join(MODELS_DIR, file.name);
+      unlinkSync(filePath);
+      console.log(`🗑️ Deleted orphaned model file: ${file.name}`);
     }
   }
 }
 
-function updateConfigWithIndividualFiles(agentsList: Record<string, any>) {
+function initializeConfigAndModels(): { roles: string[], agentsList: Record<string, any> } {
   let configContent = readFileSync(CONFIG_PATH, "utf-8");
-  const agentStart = configContent.indexOf('"agent": {');
-  if (agentStart === -1) {
-    console.error("❌ Could not find \"agent\": { in config");
-    return;
+  configContent = migrateOldAgentSpecificPaths(configContent);
+  
+  const allFileRefs = extractAllFileReferences(configContent);
+  const managedFiles = filterManagedFiles(allFileRefs);
+  ensureDirectoriesExist(managedFiles);
+  ensureFilesExist(managedFiles);
+
+  if (!existsSync(MODELS_DIR)) {
+    mkdirSync(MODELS_DIR, { recursive: true });
   }
-  const braceStart = agentStart + '"agent": {'.length - 1;
-  const agentEnd = findClosingBrace(configContent, braceStart);
-  if (agentEnd === -1) {
-    console.error("❌ Could not find matching brace for agent section");
-    return;
-  }
-  const before = configContent.substring(0, agentStart);
-  const after = configContent.substring(agentEnd + 1);
-  const newAgent = JSON.stringify(agentsList, null, 2);
-  const updated = before + '"agent": ' + newAgent + after;
-  writeFileSync(CONFIG_PATH, updated);
+
+  const roles = extractUniqueRoles(configContent);
+  const agentsList = parseAgentsFromConfigFile();
+  cleanOrphanedModelFiles(roles);
+
+  return { roles, agentsList };
 }
 
 async function promptUserSelection(
@@ -415,17 +458,16 @@ async function promptUserSelection(
   }
 }
 
-async function promptAgentType(rl: Interface): Promise<string> {
-  const choices = ["primary", "subagent", "global", "save-preset", "load-preset", "exit"];
+async function promptRoleSelection(rl: Interface, roles: string[]): Promise<string> {
+  const choices = [...roles, "global", "save-preset", "load-preset", "exit"];
   const displayItems = [
-    "🟢 primary agent",
-    "🔵 subagent",
-    "🌍 global override (all agents)",
+    ...roles.map(r => `🎭 role: ${r}`),
+    "🌍 global override (all roles)",
     "💾 save current config as preset",
     "📥 load preset",
     "❌ exit"
   ];
-  const message = "Do you want to configure a primary agent, a subagent, or manage presets?";
+  const message = "Select a role to configure or manage presets:";
   const selection = await promptUserSelection(rl, choices, message, displayItems);
   if (selection === "exit") {
     console.log("Goodbye! Have a great day!");
@@ -433,16 +475,6 @@ async function promptAgentType(rl: Interface): Promise<string> {
     process.exit(0);
   }
   return selection;
-}
-
-async function promptSpecificAgent(rl: Interface, agentType: string, agentsList: Record<string, any>): Promise<string> {
-  const primaries = Object.keys(agentsList).filter(name => agentsList[name].mode !== "subagent");
-  const subagents = Object.keys(agentsList).filter(name => agentsList[name].mode === "subagent");
-  if (agentType === "subagent") {
-    return await promptUserSelection(rl, subagents, "Select a subagent:");
-  } else {
-    return await promptUserSelection(rl, primaries, "Select a primary agent:");
-  }
 }
 
 async function promptModelSelection(rl: Interface): Promise<string | null> {
@@ -461,108 +493,6 @@ async function promptModelSelection(rl: Interface): Promise<string | null> {
   return await promptUserSelection(rl, modelsArray, message);
 }
 
-function cleanOrphanedModelFiles(agentsList: Record<string, any>): void {
-  const referencedFiles = new Set<string>();
-  for (const agent of Object.values(agentsList)) {
-    const fileName = getModelFileName(agent);
-    if (fileName) {
-      referencedFiles.add(fileName);
-    }
-  }
-
-  const allFiles = readdirSync(MODELS_DIR, { withFileTypes: true });
-  for (const file of allFiles) {
-    if (!file.isFile() || !file.name.endsWith(".txt")) {
-      continue;
-    }
-
-    // Explicitly exclude the backup directory and any backup-prefixed entries
-    if (file.name === "backup" || file.name.startsWith("backup")) {
-      continue;
-    }
-
-    if (!referencedFiles.has(file.name)) {
-      const filePath = join(MODELS_DIR, file.name);
-      unlinkSync(filePath);
-      console.log(`🗑️ Deleted orphaned model file: ${file.name}`);
-    }
-  }
-}
-
-function initializeConfigAndModels(): Record<string, any> {
-  const configContent = readFileSync(CONFIG_PATH, "utf-8");
-  const allFileRefs = extractAllFileReferences(configContent);
-  const managedFiles = filterManagedFiles(allFileRefs);
-  ensureDirectoriesExist(managedFiles);
-  ensureFilesExist(managedFiles);
-
-  if (!existsSync(MODELS_DIR)) {
-    mkdirSync(MODELS_DIR, { recursive: true });
-  }
-
-  const agentsList = parseAgentsFromConfigFile();
-  individualizeSharedModelFiles(agentsList);
-  cleanOrphanedModelFiles(agentsList);
-  updateConfigWithIndividualFiles(agentsList);
-
-  return agentsList;
-}
-
-function prepareModelSetup(): { modelFiles: Set<string>, availableModels: Set<string> } | null {
-  if (!existsSync(CONFIG_PATH)) {
-    console.error(`❌ opencode.jsonc non trouvé à: ${CONFIG_PATH}`);
-    return null;
-  }
-
-  initializeConfigAndModels();
-
-  const agentsList = parseAgentsFromConfigFile();
-
-  const modelFiles = new Set<string>();
-
-  for (const [agentName, agent] of Object.entries(agentsList)) {
-
-    const fileName = getModelFileName(agent);
-
-    if (fileName) modelFiles.add(fileName);
-
-  }
-
-  if (modelFiles.size === 0) {
-    console.log("❌ Aucun fichier de modèle trouvé dans opencode.jsonc");
-    return null;
-  }
-
-  const availableModels = getAvailableModels();
-
-  return { modelFiles, availableModels };
-}
-
-function writeProfileToModelFiles(modelFiles: Set<string>, profile: { primaryModel: string; subagentModel: string }, agentsList: Record<string, any>) {
-  const fileToAgent: Record<string, any> = {};
-  for (const [agentName, agent] of Object.entries(agentsList)) {
-    const fileName = getModelFileName(agent);
-    if (fileName) {
-      fileToAgent[fileName] = agent;
-    }
-  }
-
-  for (const fileName of modelFiles) {
-    const agent = fileToAgent[fileName];
-    const isSubagent = agent && agent.mode === 'subagent';
-
-    const modelName = isSubagent
-      ? profile.subagentModel
-      : profile.primaryModel;
-
-    const filePath = join(MODELS_DIR, fileName);
-    writeFileSync(filePath, modelName);
-    console.log(`✅ Saved: ${modelName} -> ${filePath}`);
-  }
-
-  console.log("\n✨ Configuration completed!");
-}
-
 async function interactiveSetupModels() {
   const rl = createInterface({
     input: process.stdin,
@@ -570,54 +500,48 @@ async function interactiveSetupModels() {
   });
 
   try {
-    const agentsList = initializeConfigAndModels();
+    const { roles, agentsList } = initializeConfigAndModels();
     displayCurrentConfigurations(agentsList);
 
-    const agentType = await promptAgentType(rl);
+    const selection = await promptRoleSelection(rl, roles);
 
-    if (agentType === "save-preset") {
+    if (selection === "save-preset") {
       const presets = loadPresetsFile();
-      await saveCurrentConfigAsPreset(rl, agentsList, presets);
+      await saveCurrentConfigAsPreset(rl, roles, presets);
       console.log("\n✨ Configuration completed!");
       return;
     }
 
-    if (agentType === "load-preset") {
+    if (selection === "load-preset") {
       const presets = loadPresetsFile();
       if (Object.keys(presets).length === 0) {
         console.log("No presets available.");
         return;
       }
-      await loadPreset(rl, presets, agentsList);
+      await loadPreset(rl, presets, roles, agentsList);
       console.log("\n✨ Configuration completed!");
       return;
     }
 
-    if (agentType === "global") {
+    if (selection === "global") {
       const model = await promptModelSelection(rl);
       if (model === null) {
         console.log("No model selected.");
         return;
       }
-      applyGlobalOverride(model, agentsList);
+      applyGlobalOverride(model, roles);
       console.log("\n✨ Configuration completed!");
       return;
     }
 
-    const specificAgent = await promptSpecificAgent(rl, agentType, agentsList);
+    // Role selection
     const model = await promptModelSelection(rl);
     if (model === null) {
       console.log("No model selected.");
       return;
     }
 
-    const fileName = getModelFileName(agentsList[specificAgent]);
-    if (!fileName) {
-      console.error(`❌ No model file found for ${specificAgent}`);
-      return;
-    }
-
-    const filePath = join(MODELS_DIR, fileName);
+    const filePath = join(MODELS_DIR, `${selection}.txt`);
     writeFileSync(filePath, model);
     console.log(`✅ Saved: ${model} -> ${filePath}`);
     console.log("\n✨ Configuration completed!");
