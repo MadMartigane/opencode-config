@@ -50,60 +50,32 @@
             "output": 32768,
           },
         },
+        "gpt-oss-120b": {
+          "name": "gpt-oss-120b (internal)",
+          "limit": {
+            "context": 131000,
+            "output": 32768,
+          },
+        },
       },
     },
   },
   "default_agent": "rocket",
   "agent": {
   "plan": {
-    "disable": true,
-    "model": "{file:./models/plan_model.txt}",
-    "temperature": 0.3,
-    "tools": {
-      "bash": true,
-      "read": true,
-      "glob": true,
-      "grep": true,
-      "list": true,
-      "edit": true,
-      "write": true,
-      "task": true,
-      "skills*": false,
-      "webfetch": true,
-      "todowrite": true,
-      "todoread": true,
-      "brave-search_brave_web_search": false,
-      "brave-search_brave_local_search": false,
-      "sequential-thinking_sequentialthinking": true,
-      "context7_*": false
-    }
+    "disable": true
   },
   "build": {
+    "disable": true
+  },
+  "explore": {
     "disable": false,
-    "model": "{file:./models/build_model.txt}",
-    "temperature": 0.3,
-    "tools": {
-      "bash": true,
-      "read": true,
-      "glob": true,
-      "grep": true,
-      "list": true,
-      "edit": true,
-      "write": true,
-      "task": true,
-      "skills*": false,
-      "webfetch": true,
-      "todowrite": true,
-      "todoread": true,
-      "brave-search_brave_web_search": false,
-      "brave-search_brave_local_search": false,
-      "sequential-thinking_sequentialthinking": true,
-      "context7_*": false
-    }
+    "temperature": 0.1,
+    "model": "{file:./models/simple-fast.txt}"
   },
   "rocket": {
     "mode": "primary",
-    "model": "{file:./models/rocket_model.txt}",
+    "model": "{file:./models/agentic.txt}",
     "prompt": "{file:./prompts/rocket.md}",
     "temperature": 0.3,
     "tools": {
@@ -127,7 +99,7 @@
   },
   "rocket-review": {
     "mode": "primary",
-    "model": "{file:./models/rocket_review_model.txt}",
+    "model": "{file:./models/agentic.txt}",
     "prompt": "{file:./prompts/rocket-review.md}",
     "temperature": 0.1,
     "tools": {
@@ -151,7 +123,7 @@
   },
   "chatbot": {
     "mode": "primary",
-    "model": "{file:./models/chatbot_model.txt}",
+    "model": "{file:./models/agentic.txt}",
     "prompt": "{file:./prompts/chatbot.md}",
     "temperature": 1,
     "tools": {
@@ -175,7 +147,7 @@
   },
   "code-audit": {
     "mode": "subagent",
-    "model": "{file:./models/code_audit_model.txt}",
+    "model": "{file:./models/thinker.txt}",
     "prompt": "{file:./prompts/code-audit.md}",
     "temperature": 0.1,
     "tools": {
@@ -200,7 +172,7 @@
     "mode": "subagent",
     "description": "Primary subagent for code implementation. Specialized in precise file modifications and creation based on technical specs. Use this agent for all physical coding tasks to maintain context efficiency.",
     "prompt": "{file:./prompts/code-only.md}",
-    "model": "{file:./models/code_only_model.txt}",
+    "model": "{file:./models/coder.txt}",
     "temperature": 0.1,
     "tools": {
       "bash": true,
@@ -226,7 +198,7 @@
     "mode": "subagent",
     "description": "Reporting-only validation agent. Per-task mode: syntax + lint for rapid blocking-error detection. Final mode: syntax + lint + tests + build for complete validation. Provides succinct PASS output or detailed diagnostic reports on failure. Use for all validation in the rocket workflow.",
     "prompt": "{file:./prompts/code-smoke.md}",
-    "model": "{file:./models/code_smoke_model.txt}",
+    "model": "{file:./models/simple-fast.txt}",
     "temperature": 0.1,
     "reminder": "You are a reporting-only validation agent. NEVER modify code. Two output modes: PASS = '✅ SMOKE PASSED' (single line); FAIL = detailed diagnostic report with What/Where/Why/Action Required sections. NO skill loading, NO delegation.",
     "tools": {
@@ -250,7 +222,7 @@
   "git-expert": {
     "mode": "subagent",
     "description": "Specialized Git manager. Use this agent for all repository operations: generating conventional commits, rebasing, and cleaning history. This is the only authorized agent for Git-related tasks.",
-    "model": "{file:./models/git_expert_model.txt}",
+    "model": "{file:./models/simple-fast.txt}",
     "prompt": "{file:./prompts/git-expert.md}",
     "temperature": 0.1,
     "tools": {
@@ -277,7 +249,7 @@
   "router-review": {
     "mode": "subagent",
     "description": "Lightweight triage agent for the rocket-review workflow. Analyzes Git diffs and selects relevant audit focuses.",
-    "model": "{file:./models/router_review_model.txt}",
+    "model": "{file:./models/simple-fast.txt}",
     "prompt": "{file:./prompts/router-review.md}",
     "temperature": 0.1,
     "tools": {
@@ -293,7 +265,7 @@
   "critic-review": {
     "mode": "subagent",
     "description": "Senior auditor and technical critic for the rocket-review workflow. Consolidates and challenges multiple audit reports.",
-    "model": "{file:./models/critic_review_model.txt}",
+    "model": "{file:./models/thinker.txt}",
     "prompt": "{file:./prompts/critic-review.md}",
     "temperature": 0.1,
     "tools": {
@@ -309,7 +281,7 @@
   "architect": {
     "mode": "subagent",
     "description": "Senior software architect for technical solution design and architecture decisions. Use this agent to design features, plan refactoring, or make technology choices. Read-only: produces structured architecture reports.",
-    "model": "{file:./models/architect_model.txt}",
+    "model": "{file:./models/thinker.txt}",
     "prompt": "{file:./prompts/architect.md}",
     "temperature": 0.1,
     "tools": {
@@ -334,7 +306,7 @@
   "architect-thinker": {
     "mode": "subagent",
     "description": "Diverse architectural reasoning worker for Self-Consistency",
-    "model": "{file:./models/architect_thinker_model.txt}",
+    "model": "{file:./models/thinker.txt}",
     "prompt": "{file:./prompts/architect.md}",
     "temperature": 0.7,
     "tools": {
@@ -359,7 +331,7 @@
   "bugfinder": {
     "mode": "subagent",
     "description": "Senior software investigator for root cause analysis and systematic debugging. Use this agent to find the origin of bugs through deep codebase investigation. Read-only: produces structured bug analysis reports.",
-    "model": "{file:./models/bugfinder_model.txt}",
+    "model": "{file:./models/thinker.txt}",
     "prompt": "{file:./prompts/bugfinder.md}",
     "temperature": 0.1,
     "tools": {
