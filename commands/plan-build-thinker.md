@@ -4,15 +4,18 @@ description: Build plan using architect in Self-Consistency mode (N parallel rea
 ---
 $1
 
-Prépare un plan découpé en tâches autonomes pour atteindre cet objectif.
-Délègue à l'agent `architect` en mode SELF-CONSISTENCY en lui donnant les objectifs à atteindre et non la façon (le quoi et pas le comment).
+Délègue l'analyse et la planification de cet objectif à l'agent `architect`.
 
-Configuration :
-- N = 3 (par défaut, 3 ou 5 appels parallèles)
+### Règles de délégation
 
-Instructions pour `architect`:
-- Use "SELF-CONSISTENCY" mode
-- Use {N} parallel calls to architect-thinker (default: 3)
-- Perform plurality vote on recommendations
-- Calculate confidence score
-- Produce a consolidated Technical Design Report
+- **Agent cible** : `architect`
+- **Langue** : Anglais (obligatoire pour communiquer avec les sous-agents)
+- **Périmètre** : Décris uniquement le résultat attendu (le "quoi"), laisse l'agent définir la solution technique (le "comment").
+
+### Directives obligatoires pour le prompt
+
+Ton prompt destiné à l'agent `architect` DOIT inclure ces instructions exactes :
+
+1. `Execute in SELF-CONSISTENCY mode (N=3).`
+2. `Produce a consolidated Technical Design Report.`
+3. `Include an Implementation Plan broken down into autonomous tasks with clear execution order and dependencies.`
