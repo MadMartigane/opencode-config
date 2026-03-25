@@ -40,8 +40,8 @@
         "apiKey": "michael.baudchon@corp.ovh.com"
       },
       "models": {
-        "Qwen/Qwen3.5-397B-A17B": {
-          "name": "Qwen3.5-397B-A17B (internal)",
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8": {
+          "name": "Qwen3-Coder-480B-A35B-Instruct-FP8 (internal)",
           "limit": {
             "context": 256000,
             "output": 65536
