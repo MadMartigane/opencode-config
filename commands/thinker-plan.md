@@ -5,7 +5,7 @@ description: Build implementation plan using architect in Self-Consistency mode 
 
 $1
 
-Délègue l'analyse et la planification de cet objectif à l'agent `architect`.
+Utilise l'outil `task` avec subagent_type="architect", pour obtenir une planification complète et détaillée pour cette demande.
 
 ### Instructions de délégation à l'agent `architect` (en anglais) :
 
