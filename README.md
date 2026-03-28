@@ -45,70 +45,37 @@ Every design choice in these workflows serves one or more of these principles:
 
 ## rocket Workflow
 
-rocket takes a request, decomposes it into micro-tasks, and executes through strict delegation with explicit gates. The orchestrator never writes code itself.
+rocket is a command-driven Tech Lead that guides the user through a structured process using explicit commands. It never writes code itself and maintains strong user gates.
 
-### Phase 1 — Exploration (Mandatory Delegation)
+### Recommended Workflow
 
-Runs automatically at the beginning and is never skipped:
+1. **Request** — User makes a request in natural language.
+2. **Exploration** — rocket automatically calls `explore` to understand the codebase.
+3. **Clarification** — rocket iteratively reformulates the request, identifies gaps, and challenges assumptions (`/clarify`).
+4. **Planning** — User types `/plan` (classic) or `/plan-thinker` (self-consistency) to trigger `architect`.
+5. **Validation** — User reviews the plan and validates it.
+6. **Execution** — User types `/execute` to launch the full implementation pipeline.
+7. **Closure** — rocket provides a concise summary.
 
-- Delegates to `explore` for initial codebase mapping, file discovery and conventions (simple exploration only)
-- Uses `bugfinder` when deep code understanding or complex logic analysis is required
-- Reports a concise project understanding before planning
+This command-based approach (`/clarify` → `/plan` → `/execute`) ensures strong understanding before any code is modified.
 
-### Phase 2 — Planning & Success Criteria (Interactive)
+### Execution Details
 
-Collaborative planning with explicit design delegation:
-
-1. **Clarify** — rocket refines scope, assumptions, and measurable outcomes with the user.
-2. **Design Delegation** — rocket calls `architect` for all features/enhancements/structural changes (mandatory).
-3. **Deep Analysis (when needed)** — rocket calls `bugfinder` for any complex logic understanding, smoke test failures requiring deep investigation, or unclear root causes.
-4. **Propose** — rocket presents ordered micro-tasks (T1, T2...) with file scope and success criteria.
-5. **Validate** — execution starts only after explicit user approval ("Go" / "Validé").
-
-### Phase 3 — Execution Strategy Selection (Automatic)
-
-Before coding, rocket chooses the safest execution mode:
-
-- **Dependency analysis**: if tasks depend on each other → sequential mode
-- **File overlap analysis**: if tasks touch the same files → user chooses sequential or worktree-parallel
-- **Default mode**: if independent and no overlap → parallel mode in the main workspace
-
-### Phase 4 — Sequential Execution (When Required)
-
-Used when dependencies exist (or user requests sequential). For each task `Tn`:
-
-1. rocket prepares a structured implementation prompt (Context, Files, Specs, Success Criteria).
-2. `code-only` implements the task.
-3. rocket verifies that real file changes exist (`git diff --stat`).
-4. `code-smoke` runs scoped validation.
-5. On smoke failure, rocket retries with correction context (max 3 attempts, then stop and escalate to user).
-
-### Phase 4b — Parallel Execution (DEFAULT)
-
-Used when tasks are independent and file scopes do not overlap:
-
-- rocket launches multiple `code-only` tasks concurrently in the same workspace
-- Verifies aggregate changes
-- Runs `code-smoke` per task
-- Retries only failing tasks (bounded to 3 attempts per task)
-
-### Phase 5 — Global Validation (MANDATORY)
-
-After all tasks complete, rocket calls `code-smoke` in "final" mode for complete validation (syntax check, lint, full test suite, build). `code-smoke` provides detailed diagnostic reports on failure, and rocket handles retry loops with enriched context.
-
-### Phase 6 — Closure
-
-rocket returns the final implementation report and confirms changes are local. Any commit/push/rebase action is delegated to `git-expert` only when the user explicitly asks.
+Once `/execute` is called:
+- rocket orchestrates `code-only` + `code-smoke` (per-task) for each task in the plan
+- A final global validation is always performed (`code-smoke` in final mode)
+- On failure, up to 3 retry cycles are attempted using `bugfinder` for deep analysis
+- All changes remain local. Git operations are only performed when explicitly requested via `git-expert`.
 
 ![rocket Workflow](./assets/rocket-workflow.svg)
 
 ### Why This Works
 
-- **Delegation by construction** — architecture, coding, smoke checks, QA, and Git ops are split across purpose-built agents.
-- **Design quality upfront** — `architect` is mandatory for feature/enhancement design before implementation begins.
-- **Adaptive execution speed** — automatic routing to sequential, parallel, or worktree-parallel based on dependencies and overlap.
-- **Two-level quality gates** — fast per-task smoke checks plus mandatory Global Validation prevent regressions and drift.
-- **Bounded failure model** — retries are capped (max 3) and complex failures escalate instead of looping endlessly.
+- **Clear user gates** — `/plan` and `/execute` create explicit validation points
+- **Strong clarification first** — the `/clarify` phase ensures high-quality requirements
+- **Delegation by construction** — `architect` handles planning, `code-only` handles implementation, `code-smoke` handles validation
+- **Quality gates** — per-task and global smoke tests with bounded retries (max 3)
+- **Command-driven** — explicit commands make the process predictable and controllable
 
 ---
 
@@ -158,3 +125,25 @@ The two workflows can be chained. When `rocket-review` completes its audit, it p
 - Severity classification
 
 This brief can be passed directly to `rocket` as input for a new implementation session. rocket will treat it as the initial requirement, skip to Phase 2 (Design & Planning), and propose a task breakdown to address the findings. This creates a closed loop: **Review → Brief → Implementation → Review**.
+
+---
+
+## Rocket Commands
+
+| Commande | Description |
+|----------|-------------|
+| `/clarify` | Phase itérative de reformulation, détection des ambiguïtés et challenge constructif de la demande. |
+| `/plan` | Génère un plan d’implémentation via `architect` en mode Classique (recommandé par défaut). |
+| `/plan-thinker` | Génère un plan via `architect` en mode Self-Consistency (3 chemins parallèles + synthèse). |
+| `/execute` | Valide le plan et déclenche l’exécution complète du workflow (tâches + smoke per-task + validation globale + retries si besoin). |
+
+**Workflow recommandé :**
+
+1. Faire une demande
+2. Laisser Rocket faire l’exploration automatique
+3. Itérer en clarification (`/clarify`) si nécessaire
+4. Taper `/plan` (ou `/plan-thinker` pour les cas complexes)
+5. Valider le plan proposé par l’architecte
+6. Taper `/execute` pour lancer l’implémentation complète et autonome
+
+Ce workflow assure une bonne compréhension initiale avant toute exécution.
