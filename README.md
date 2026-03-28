@@ -23,7 +23,7 @@ Every design choice in these workflows serves one or more of these principles:
 
 | Agent | Role |
 |---|---|
-| **rocket** | Tech Lead & orchestrator. Designs, plans, delegates, supervises. Never codes directly. |
+| **rocket** | Tech Lead & orchestrator. Designs, plans, delegates, supervises. Never codes directly — **all file modifications go through `code-only`**. |
 | **rocket-review** | Audit orchestrator. Analyzes diffs via parallel specialized audits and produces actionable reports. |
 
 ### Subagents (Internal Specialists)
@@ -62,6 +62,7 @@ This command-based approach (`/clarify` → `/plan` → `/execute`) ensures stro
 ### Execution Details
 
 Once `/execute` is called:
+- **CRITICAL**: rocket NEVER modifies files directly. ALL modifications are delegated to `code-only`.
 - rocket orchestrates `code-only` + `code-smoke` (per-task) for each task in the plan
 - A final global validation is always performed (`code-smoke` in final mode)
 - On failure, up to 3 retry cycles are attempted using `bugfinder` for deep analysis
@@ -73,7 +74,7 @@ Once `/execute` is called:
 
 - **Clear user gates** — `/plan` and `/execute` create explicit validation points
 - **Strong clarification first** — the `/clarify` phase ensures high-quality requirements
-- **Delegation by construction** — `architect` handles planning, `code-only` handles implementation, `code-smoke` handles validation
+- **Delegation by construction** — `architect` plans, `code-only` implements (rocket never touches files), `code-smoke` validates
 - **Quality gates** — per-task and global smoke tests with bounded retries (max 3)
 - **Command-driven** — explicit commands make the process predictable and controllable
 

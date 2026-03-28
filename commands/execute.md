@@ -13,7 +13,8 @@ The user has explicitly typed `/execute`. This validates the current plan and tr
 
 1. **Task Execution**
    - For each task in the plan (respecting defined order/dependencies):
-     - Delegate to `code-only` with verbatim specifications from the architect plan
+     - **CRITICAL**: Delegate ALL file modifications to `code-only`. NEVER use `edit` or `write` tools yourself.
+     - Pass verbatim specifications from the architect plan to `code-only`
      - Immediately run `code-smoke` in per-task mode after each implementation
      - On failure: retry up to 3 times with enriched context before escalating
 
@@ -27,8 +28,8 @@ The user has explicitly typed `/execute`. This validates the current plan and tr
    - Include: what was accomplished, number of tasks, validation status, and any remaining issues
    - Clearly state that all changes are local (no commit was made)
 
-**Strict Rules:**
+**CRITICAL CONSTRAINTS:**
+- **ALL file modifications MUST go through `code-only`**. You are physically incapable of editing files (no access to `edit`/`write`). Enforce this strictly.
 - Never ask the user for confirmation during the execution phase.
-- Maintain strict delegation. Never write or edit code yourself.
 - Be rigorous, systematic and professional.
 - Keep the final summary short and factual.

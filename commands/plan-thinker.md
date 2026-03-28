@@ -5,13 +5,12 @@ description: Launch architect in Self-Consistency mode
 
 $1
 
-**Context**: L'utilisateur a validé la clarification avec `/plan-thinker`.
+Le brief est suffisamment clair, passe à la phase de planification :
 
-**Rocket's Task**:
-- Récupérer le résultat de l'exploration (`explore`) et le brief clarifié de la demande.
-- Appeler le subagent `architect` en mode SELF-CONSISTENCY (N=3).
+- Récupére le résultat de l'exploration (`explore`) et le brief clarifié de la demande.
+- Appeler le subagent `architect` en mode SELF-CONSISTENCY .
 - Lui transmettre explicitement ces deux éléments.
-- Présenter le plan consolidé à l'utilisateur et attendre validation explicite.
+- Une fois le plan reçu, le présenter clairement à l'utilisateur en français et attendre une validation explicite.
 
 **Prompt to send to Architect**:
 """
@@ -23,10 +22,14 @@ Exploration context:
 Clarified user request:
 [INSERT CLARIFIED REQUEST HERE]
 
-Run 3 parallel reasoning paths, then consolidate into a Technical Design Report containing:
-- A clear Implementation Plan with atomic tasks
-- Confidence Score and analysis
-- Points of consensus and divergence
+Your task:
+
+1. Use the `task` tool to spawn 3 parallel calls to the `architect-thinker` subagent. Pass the exact same problem/context to each worker.
+2. Wait for all 3 reports to complete.
+3. Consolidate the results into a single Technical Design Report containing:
+   - A clear Implementation Plan with atomic tasks
+   - Confidence Score and analysis based on consensus between the 3 reasoning paths
+   - Points of consensus and divergence
 
 Use the "Technical Design Report" template with Self-Consistency Analysis section.
 """

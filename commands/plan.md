@@ -5,10 +5,9 @@ description: Launch architect in Classic mode after clarification
 
 $1
 
-**Context**: L'utilisateur a validé la clarification avec `/plan`.
+Le brief est suffisamment clair, passe à la phase de planification :
 
-**Rocket's Task**:
-- Récupérer le résultat de l'exploration (`explore`) et le brief clarifié de la demande.
+- Récupére le résultat de l'exploration (`explore`) et le brief clarifié de la demande.
 - Appeler le subagent `architect` en mode CLASSIC.
 - Lui transmettre explicitement ces deux éléments.
 - Une fois le plan reçu, le présenter clairement à l'utilisateur en français et attendre une validation explicite.
@@ -24,6 +23,7 @@ Clarified user request:
 [INSERT CLARIFIED REQUEST HERE]
 
 Produce a complete Implementation Plan based on the above.
+
 - Break down into atomic tasks (T1, T2...)
 - For each task: specify files, precise specifications, acceptance criteria
 - Define execution order and dependencies
