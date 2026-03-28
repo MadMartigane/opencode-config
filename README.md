@@ -30,9 +30,9 @@ Every design choice in these workflows serves one or more of these principles:
 
 | Agent | Role | Used by |
 |---|---|---|
-| **explore** | Mandatory codebase exploration and context gathering. | rocket |
+| **explore** | Fast codebase discovery and mapping (structure, files, patterns, conventions). Read-only. | rocket |
 | **architect** | Mandatory design authority for features/enhancements/structural changes. Read-only analysis. | rocket |
-| **bugfinder** | Root-cause investigation for complex bugs and unclear failures. Read-only analysis. | rocket |
+| **bugfinder** | Relentless Deep Code Intelligence & Root Cause investigation. Used for any complex logic understanding or unexpected behavior. Read-only. | rocket |
 | **code-only** | Implements code changes from structured specs. Responds "DONE" or "ERROR". | rocket |
 | **code-smoke** | Unified validation agent: per-task (syntax+lint) and final (syntax+lint+tests+build). Reports diagnostics, never fixes. | rocket |
 | **worktree-manager** | Creates/cleans isolated Git worktrees for opt-in parallel execution with file overlap. | rocket |
@@ -51,8 +51,8 @@ rocket takes a request, decomposes it into micro-tasks, and executes through str
 
 Runs automatically at the beginning and is never skipped:
 
-- Delegates to `explore` to inspect stack, architecture, scripts, and key file patterns
-- Builds context from project conventions and constraints
+- Delegates to `explore` for initial codebase mapping, file discovery and conventions (simple exploration only)
+- Uses `bugfinder` when deep code understanding or complex logic analysis is required
 - Reports a concise project understanding before planning
 
 ### Phase 2 — Planning & Success Criteria (Interactive)
@@ -61,7 +61,7 @@ Collaborative planning with explicit design delegation:
 
 1. **Clarify** — rocket refines scope, assumptions, and measurable outcomes with the user.
 2. **Design Delegation** — rocket calls `architect` for all features/enhancements/structural changes (mandatory).
-3. **Bug Investigation (when needed)** — rocket calls `bugfinder` for unclear root causes.
+3. **Deep Analysis (when needed)** — rocket calls `bugfinder` for any complex logic understanding, smoke test failures requiring deep investigation, or unclear root causes.
 4. **Propose** — rocket presents ordered micro-tasks (T1, T2...) with file scope and success criteria.
 5. **Validate** — execution starts only after explicit user approval ("Go" / "Validé").
 

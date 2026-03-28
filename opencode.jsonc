@@ -75,6 +75,7 @@
     "explore": {
       "disable": false,
       "model": "{file:./models/simple-fast.txt}",
+      "prompt": "{file:./prompts/explore.md}",
       "temperature": 0.1
     },
     "rocket": {
