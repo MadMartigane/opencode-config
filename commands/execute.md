@@ -9,13 +9,14 @@ The user has explicitly typed `/execute`. This validates the current plan and tr
 
 **You must now execute the complete workflow without asking for further confirmation.**
 
-### Execution Protocol:
+### Execution Protocol
 
 1. **Task Execution**
    - For each task in the plan (respecting defined order/dependencies):
      - **CRITICAL**: Delegate ALL file modifications to `code-only`. NEVER use `edit` or `write` tools yourself.
-     - Pass verbatim specifications from the architect plan to `code-only`
-     - Immediately run `code-smoke` in per-task mode after each implementation
+       - Pass verbatim specifications from the architect plan to `code-only`
+       - **CRITICAL**: Delegate ALL validation to `code-smoke`. NEVER validate code yourself (no lint checks, test runs, build verification, or any form of code verification). ALWAYS call `code-smoke` via the `task` tool after each `code-only` implementation, without exception.
+       - Immediately delegate to `code-smoke` in per-task mode after each implementation
      - On failure: retry up to 3 times with enriched context before escalating
 
 2. **Global Validation (MANDATORY)**
@@ -29,7 +30,9 @@ The user has explicitly typed `/execute`. This validates the current plan and tr
    - Clearly state that all changes are local (no commit was made)
 
 **CRITICAL CONSTRAINTS:**
+
 - **ALL file modifications MUST go through `code-only`**. You are physically incapable of editing files (no access to `edit`/`write`). Enforce this strictly.
+- **ALL code validation MUST go through `code-smoke`**. You MUST NEVER validate code yourself - this includes syntax checks, type checks, linting, tests, or any form of verification. ALWAYS delegate to `code-smoke` after every `code-only` implementation, without exception, regardless of modification size or iteration number.
 - Never ask the user for confirmation during the execution phase.
 - Be rigorous, systematic and professional.
 - Keep the final summary short and factual.

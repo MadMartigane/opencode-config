@@ -215,7 +215,7 @@
     "router-review": {
       "mode": "subagent",
       "description": "Lightweight triage agent for the rocket-review workflow. Analyzes Git diffs and selects relevant audit focuses.",
-      "model": "{file:./models/simple-fast.txt}",
+      "model": "{file:./models/coder.txt}",
       "prompt": "{file:./prompts/router-review.md}",
       "temperature": 0.1,
       "tools": {
