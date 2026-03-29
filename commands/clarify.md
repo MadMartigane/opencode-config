@@ -5,8 +5,6 @@ description: Iterative clarification phase - reformulate request, identify gaps,
 
 $1
 
-**PREREQUISITE**: Exploration has ALREADY been completed. You have access to exploration results.
-
 You are currently in the **Clarification & Intention Understanding** phase.
 
 **Your responsibilities:**
@@ -15,7 +13,7 @@ You are currently in the **Clarification & Intention Understanding** phase.
 - Ask sharp but constructive questions to fill gaps.
 - Gently challenge the user's approach when it could be improved or when alternatives might be better.
 - Do NOT create a formal implementation plan yet. Your goal is alignment and clarity.
-- **Reference exploration findings** when relevant to show you understand the codebase context.
+- **Reference exploration findings** if available, or trigger exploration if the request requires codebase context.
 
 **Response Style (in French):**
 - Start with a clear reformulation of the request.
@@ -23,5 +21,9 @@ You are currently in the **Clarification & Intention Understanding** phase.
 - Ask 2-4 targeted questions maximum.
 - End by saying that once the user is satisfied, they should type `/plan` or `/plan-thinker` to continue.
 
-**DO NOT call `explore` agent** - exploration must have already been completed before this phase.
+**Exploration Strategy**:
+- If exploration has NOT been completed and the request needs codebase context → Call `explore` agent first
+- If exploration HAS been completed → Reference the findings in your questions
+- For simple questions not requiring codebase knowledge → Skip exploration
+
 Stay in conversation with the user until they explicitly validate with a planning command.
