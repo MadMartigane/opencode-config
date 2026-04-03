@@ -107,38 +107,70 @@ Classic `/plan` follows a single reasoning path: one analysis, one plan. `/plan-
 
 ## rocket-review Workflow
 
-rocket-review is a specialized pipeline for code auditing and pull request reviews. It analyzes changes from multiple expert perspectives concurrently, then consolidates findings into a single actionable report.
+### What rocket-review is
 
-### How It Works
+`rocket-review` is a prompt-driven audit orchestrator, not a command chain. Its value comes from three design principles: **specialization** (each auditor focuses on one concern), **parallelism** (audits run concurrently), and **critic consolidation** (a senior auditor filters and merges findings). It reviews Git diffs or PR changes and produces either a user-facing audit report and/or a `rocket Implementation Brief`.
 
-1. **Triage** — `router-review` analyzes the Git diff and selects which audit focuses are relevant (e.g., a CSS change won't trigger a Security audit).
-2. **Parallel Audits** — Multiple `code-audit` instances run concurrently, each focused on a single aspect.
-3. **Consolidation** — `critic-review` consolidates all audit reports, challenges findings, resolves contradictions, and filters false positives.
-4. **Final Report** — A comprehensive review report is delivered to the user.
+### Base workflow (main path)
+
+The workflow follows exactly 4 stages:
+
+1. **Triage** — `router-review` analyzes the diff and selects relevant audit focuses.
+2. **Parallel specialized audits** — Multiple `code-audit` instances run concurrently, each focused on a single aspect.
+3. **Critic consolidation** — `critic-review` consolidates all audit reports, challenges findings, resolves contradictions, and filters false positives.
+4. **Final report / implementation brief** — A comprehensive review report or prioritized implementation brief is delivered.
+
+```
+Diff / PR → Router triage → Parallel audits → Critic filter → Final report / Rocket brief
+```
 
 ![rocket-review Workflow](./assets/rocket-review-workflow.svg)
 
-### Audit Focus Types
+### Why this workflow is easy to understand
 
-Only relevant focuses are triggered based on the nature of the changes:
+| Aspect | Count | Details |
+|--------|-------|---------|
+| **Explicit stages** | 4 | Triage → Parallel audits → Critic consolidation → Final report |
+| **Parallel layer** | 1 | All `code-audit` instances run concurrently |
+| **Filtering authority** | 1 | `critic-review` is the sole consolidator and filter |
+| **Handoff target** | 1 | `rocket` consumes the implementation brief |
+
+### Roles in the pipeline
+
+| Role | Responsibilities |
+|------|------------------|
+| `rocket-review` | Orchestrates the review flow and presents results to the user |
+| `router-review` | Analyzes the diff and selects relevant audit focuses for triage |
+| `code-audit` | Performs one focused audit per selected concern (Security, Performance, etc.) |
+| `critic-review` | Consolidates audit reports, deduplicates findings, and rejects false positives |
+
+### Current audit focus model
+
+The implemented focus taxonomy includes:
 
 | Focus | What it checks |
-|---|---|
+|-------|----------------|
 | Security | Vulnerabilities, insecure data handling, potential exploits |
-| Performance | Bottlenecks, inefficient algorithms, memory leaks |
-| Style | Coding standards, naming conventions, formatting |
-| Logic | Business logic correctness, algorithmic accuracy |
-| Architecture | Structural design, patterns, system integration |
-| Accessibility | WCAG compliance in UI changes |
-| Testing | Test coverage, test quality, edge-case handling |
+| Error & Resilience | Async handling, error boundaries, race conditions, edge cases |
+| Logic & Business Rules | Core algorithms, business logic, invariants, state consistency |
+| Performance & Scalability | Re-renders, loops, DB/IO efficiency, caching, bundle size |
+| Architecture & Maintainability | Coupling, SOLID, DRY, modularity, testability |
+| Readability & Idiomatic | Style, code patterns, comments, naming conventions |
+| Regression Check | Post-fix verification to ensure no new bugs or side effects were introduced |
 
-### Why This Works
+**Important notes:**
 
-- **Deeper expertise** — Each auditor has a single focus, leading to more thorough findings than a generalist pass.
-- **Reduced hallucination** — Narrow scope means less cognitive load per agent, producing higher-confidence results.
-- **Speed** — Parallel execution makes the review faster than sequential analysis of the same depth.
-- **Cost-efficiency** — Only relevant audits are triggered. A typo fix doesn't spawn a security review.
-- **Better signal-to-noise** — `critic-review` acts as a senior filter, ensuring only actionable feedback reaches the user.
+- `Regression Check` is **optional** and used only for post-fix verification, not during initial triage.
+- `router-review` currently routes only the initial six review focuses and **excludes** `Regression Check` during initial triage.
+
+### Why this workflow works
+
+- **Selective routing lowers cost and noise** — Only relevant audits are triggered based on the diff.
+- **Parallel specialists increase depth** — Each auditor has a narrow focus, producing higher-confidence findings.
+- **Critic reduces false positives** — `critic-review` filters hallucinations and merges overlapping issues.
+- **Final output is implementation-ready** — The consolidated report feeds directly into `rocket` for execution.
+
+**Caution:** This workflow is a filtering pipeline, not a guarantee of perfect bug detection. The `critic-review` stage serves as the safeguard against preventive-documentation false positives (e.g., mistaking a "CRITICAL" comment documenting an avoided pitfall as an active bug). Do not expect hallucination-free review or perfect accuracy.
 
 ---
 
@@ -150,6 +182,6 @@ The two workflows can be chained. When `rocket-review` completes its audit, it p
 - Suggested fixes with technical context
 - Severity classification
 
-This brief can be passed directly to `rocket` as input for a new implementation session. rocket will treat it as the initial requirement, skip to Phase 2 (Design & Planning), and propose a task breakdown to address the findings. This creates a closed loop: **Review → Brief → Implementation → Review**.
+This brief can be passed directly to `rocket` as input for a new implementation session. `rocket` consumes the brief as structured input for planning and execution. This creates a closed loop: **Review → Brief → Implementation → Re-review**.
 
 
