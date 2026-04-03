@@ -89,7 +89,13 @@ At planning time, users can choose `/plan-thinker` instead of `/plan` for ambigu
 
 ### Why use /plan-thinker for harder tasks?
 
-Classic `/plan` follows a single reasoning path: one analysis, one plan. `/plan-thinker` uses self-consistency decoding: multiple independent reasoning paths explore the problem in parallel, then a synthesis step identifies the consensus solution with a confidence score. Research shows this approach significantly improves accuracy on hard reasoning tasks. The self-consistency paper (Wang et al., 2022) reports gains of +17.9% on GSM8K math reasoning and +8.4% on MultiArith when using multiple paths versus greedy decoding [1]. On complex arithmetic reasoning, consistency between paths improves accuracy by up to 23.6% compared to single-path baselines [2]. The trade-off is straightforward: more compute (3× parallel calls) buys better robustness when the problem has multiple valid approaches or high ambiguity. For routine tasks, classic `/plan` is faster and sufficient. For architecture decisions, complex refactoring, or ambiguous requirements, `/plan-thinker` reduces the risk of missing critical alternatives.
+Classic `/plan` follows one reasoning path. `/plan-thinker` runs 3 independent reasoning paths, synthesizes the result, and reports a confidence score. The trade-off is simple: 3× more planning calls for better robustness on ambiguous or high-risk tasks.
+
+![Reported gains from self-consistency decoding](./assets/plan-thinker-gains.svg)
+
+- **Reported gains**: +17.9% on GSM8K, +8.4% on MultiArith, and up to +23.6% on complex arithmetic reasoning versus single-path baselines [1][2]
+- **Use `/plan-thinker` when**: architecture decisions, complex refactoring, or ambiguous requirements make missed alternatives expensive
+- **Use classic `/plan` when**: the task is routine and a faster single-path plan is sufficient
 
 *[1] Wang et al., "Self-Consistency Improves Chain of Thought Reasoning in Language Models", https://arxiv.org/abs/2203.11171*
 *[2] Ibid., Table 2, MultiArith results*

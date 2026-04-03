@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 280">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 16px; font-weight: 700; fill: #1e293b; }
+      .panel-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: #0f172a; }
+      .label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; fill: #334155; }
+      .label-small { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #475569; }
+      .badge-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 10px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: central; }
+      .bar-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 600; fill: #1e293b; }
+      .bar-value { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; font-weight: 700; fill: #0f172a; }
+      .note { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 10px; fill: #64748b; font-style: italic; }
+      .takeaway { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #475569; }
+    </style>
+
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="grad-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="grad-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background card -->
+  <rect x="0" y="0" width="980" height="280" fill="#ffffff" rx="12" />
+
+  <!-- Left Panel: Single path vs self-consistency -->
+  <rect x="20" y="20" width="450" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+  <text x="45" y="48" class="panel-title">Single path vs self-consistency</text>
+
+  <!-- /plan box -->
+  <rect x="45" y="70" width="180" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+  <text x="135" y="92" class="label" text-anchor="middle" font-weight="600">/plan</text>
+  <text x="135" y="112" class="label-small" text-anchor="middle">1 reasoning path</text>
+  <text x="135" y="128" class="label-small" text-anchor="middle">1 plan</text>
+
+  <!-- Arrow between -->
+  <path d="M 240 105 L 270 105" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-simple)" />
+  <defs>
+    <marker id="arrow-simple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <!-- /plan-thinker box -->
+  <rect x="285" y="70" width="180" height="70" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+  <text x="375" y="92" class="label" text-anchor="middle" font-weight="600" fill="#1d4ed8">/plan-thinker</text>
+  <text x="375" y="110" class="label-small" text-anchor="middle" fill="#1e40af">3 paths</text>
+  <text x="375" y="124" class="label-small" text-anchor="middle" fill="#1e40af">Consensus</text>
+  <text x="375" y="138" class="label-small" text-anchor="middle" fill="#1e40af">Confidence</text>
+
+  <!-- Amber badge: 3× calls -->
+  <rect x="395" y="60" width="50" height="18" rx="9" fill="url(#grad-amber)" />
+  <text x="420" y="69" class="badge-text">3× calls</text>
+
+  <!-- Right Panel: Reported gains -->
+  <rect x="510" y="20" width="450" height="200" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+  <text x="535" y="48" class="panel-title">Reported gains on harder reasoning benchmarks</text>
+
+  <!-- Bar chart -->
+  <!-- GSM8K: 17.9% - width proportional (17.9/23.6 * 280 = 212) -->
+  <rect x="535" y="70" width="212" height="32" rx="6" fill="url(#grad-blue)" opacity="0.8" />
+  <text x="545" y="90" class="bar-label" fill="#ffffff">GSM8K</text>
+  <text x="735" y="90" class="bar-value" fill="#1e293b">+17.9%</text>
+
+  <!-- MultiArith: 8.4% - width proportional (8.4/23.6 * 280 = 100) -->
+  <rect x="535" y="115" width="100" height="32" rx="6" fill="url(#grad-green)" opacity="0.8" />
+  <text x="545" y="135" class="bar-label" fill="#ffffff">MultiArith</text>
+  <text x="625" y="135" class="bar-value" fill="#1e293b">+8.4%</text>
+
+  <!-- Complex arithmetic: 23.6% - longest (280px) -->
+  <rect x="535" y="160" width="280" height="32" rx="6" fill="url(#grad-amber)" opacity="0.8" />
+  <text x="545" y="180" class="bar-label" fill="#ffffff">Complex arithmetic</text>
+  <text x="805" y="180" class="bar-value" fill="#1e293b">+23.6% max</text>
+
+  <!-- Source note -->
+  <text x="940" y="205" class="note" text-anchor="end">Source: Wang et al. (2022)</text>
+
+  <!-- Bottom takeaway strip -->
+  <rect x="20" y="235" width="940" height="30" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />
+  <text x="490" y="255" class="takeaway" text-anchor="middle" font-weight="500">Trade-off: more planning compute for higher robustness on ambiguous tasks</text>
+</svg>
