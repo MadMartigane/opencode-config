@@ -5,5 +5,9 @@
     "target": "ES2020",
     "moduleResolution": "node",
     "downlevelIteration": true
-  }
+  },
+  "exclude": [
+    "skills/fetch-pr-comments/fetch-pr-comment.ts",
+    "user_utils/session-metrics.ts"
+  ]
 }
