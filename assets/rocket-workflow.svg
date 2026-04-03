@@ -1,261 +1,134 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1260">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100">
   <defs>
     <style>
-      .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 30px; font-weight: 700; fill: #0f172a; }
-      .subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; fill: #64748b; }
-      .badge-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.4px; }
-      .phase-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 16px; font-weight: 700; dominant-baseline: central; }
-      .phase-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; fill: #64748b; dominant-baseline: central; }
-      .card-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; dominant-baseline: central; }
-      .card-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #64748b; dominant-baseline: central; }
-      .small { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 10px; fill: #94a3b8; dominant-baseline: central; }
-      .pill { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
-      .label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #64748b; text-anchor: middle; dominant-baseline: central; font-weight: 600; }
-      .label-ok { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #059669; text-anchor: middle; dominant-baseline: central; font-weight: 700; }
-      .label-fail { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #dc2626; text-anchor: middle; dominant-baseline: central; font-weight: 700; }
-      .label-note { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #7c3aed; text-anchor: middle; dominant-baseline: central; font-weight: 700; }
+      .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 26px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; fill: #64748b; }
+      .badge-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 10px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.3px; }
+      .step-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 15px; font-weight: 700; dominant-baseline: central; fill: #1e293b; }
+      .step-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #64748b; dominant-baseline: central; }
+      .card-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; font-weight: 700; dominant-baseline: central; }
+      .card-note { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 10px; fill: #64748b; dominant-baseline: central; }
+      .legend-text { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #334155; dominant-baseline: central; }
       .arrow { stroke: #cbd5e1; stroke-width: 2; fill: none; marker-end: url(#arrow-default); }
-      .arrow-bold { stroke: #94a3b8; stroke-width: 2.5; fill: none; marker-end: url(#arrow-bold); }
-      .arrow-ok { stroke: #34d399; stroke-width: 2; fill: none; marker-end: url(#arrow-ok); }
-      .arrow-fail { stroke: #fca5a5; stroke-width: 2; fill: none; stroke-dasharray: 6,4; marker-end: url(#arrow-fail); }
-      .loop-border { stroke: #fdba74; stroke-width: 2; fill: #fffbf5; stroke-dasharray: 8,4; }
+      .arrow-main { stroke: #3b82f6; stroke-width: 3; fill: none; marker-end: url(#arrow-main); }
+      .arrow-branch { stroke: #f59e0b; stroke-width: 2; fill: none; stroke-dasharray: 5,3; marker-end: url(#arrow-branch); }
     </style>
 
     <marker id="arrow-default" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#cbd5e1" />
     </marker>
-    <marker id="arrow-bold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+    <marker id="arrow-main" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
     </marker>
-    <marker id="arrow-ok" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#34d399" />
-    </marker>
-    <marker id="arrow-fail" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#fca5a5" />
+    <marker id="arrow-branch" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f59e0b" />
     </marker>
 
     <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#3b82f6" />
       <stop offset="100%" stop-color="#2563eb" />
     </linearGradient>
+    <linearGradient id="grad-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
     <linearGradient id="grad-amber" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b" />
       <stop offset="100%" stop-color="#d97706" />
     </linearGradient>
-    <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f97316" />
-      <stop offset="100%" stop-color="#ea580c" />
-    </linearGradient>
-    <linearGradient id="grad-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10b981" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-    <linearGradient id="grad-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1" />
-      <stop offset="100%" stop-color="#4f46e5" />
-    </linearGradient>
-    <linearGradient id="grad-violet" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8b5cf6" />
-      <stop offset="100%" stop-color="#7c3aed" />
-    </linearGradient>
   </defs>
 
-  <rect x="0" y="0" width="1200" height="1260" fill="#ffffff" rx="16" />
+  <rect x="0" y="0" width="900" height="1100" fill="#ffffff" rx="12" />
 
-  <text x="600" y="42" class="title" text-anchor="middle">Rocket Workflow</text>
-  <text x="600" y="64" class="subtitle" text-anchor="middle">Complete implementation pipeline with mandatory delegation and adaptive execution strategy</text>
+  <text x="450" y="38" class="title" text-anchor="middle">Rocket Workflow</text>
+  <text x="450" y="58" class="subtitle" text-anchor="middle">User-facing command flow with built-in quality gates</text>
 
-  <rect x="40" y="90" width="1120" height="122" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
-  <rect x="62" y="106" width="86" height="24" rx="12" fill="url(#grad-blue)" />
-  <text x="105" y="118" class="badge-text">PHASE 1</text>
-  <text x="164" y="118" class="phase-title" fill="#2563eb">Exploration (mandatory)</text>
-  <text x="375" y="118" class="phase-sub">Delegation-only context scan via explore</text>
+  <!-- Legend: Prompt vs Commands -->
+  <rect x="40" y="80" width="820" height="50" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+  <text x="60" y="105" class="legend-text" font-weight="700">Legend:</text>
+  <rect x="130" y="92" width="16" height="16" rx="3" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" />
+  <text x="154" y="105" class="legend-text">Prompt = persona / guardrails</text>
+  <rect x="340" y="92" width="16" height="16" rx="3" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" />
+  <text x="364" y="105" class="legend-text">Commands = workflow steps</text>
+  <text x="570" y="105" class="legend-text" font-weight="600" fill="#059669">Quality: 3 user gates | max 3 retries | final validation required</text>
 
-  <rect x="80" y="142" width="220" height="50" rx="10" fill="#ffffff" stroke="#dbeafe" stroke-width="1.5" />
-  <text x="102" y="162" class="card-title" fill="#2563eb">Rocket</text>
-  <text x="102" y="178" class="card-sub">Calls explore only</text>
+  <!-- Step 1: User Request -->
+  <rect x="275" y="150" width="350" height="60" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+  <text x="450" y="172" class="step-title" text-anchor="middle">1. User Request</text>
+  <text x="450" y="192" class="step-sub" text-anchor="middle">Natural language task description</text>
 
-  <rect x="360" y="142" width="220" height="50" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" />
-  <text x="382" y="162" class="card-title" fill="#2563eb">Explore</text>
-  <text x="382" y="178" class="card-sub">Stack, scripts, architecture, patterns</text>
+  <path d="M 450 210 L 450 240" class="arrow-main" />
 
-  <rect x="640" y="142" width="220" height="50" rx="10" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5" />
-  <text x="662" y="162" class="card-title" fill="#1d4ed8">Project Context</text>
-  <text x="662" y="178" class="card-sub">Concise startup summary to user</text>
+  <!-- Step 2: Exploration -->
+  <rect x="275" y="240" width="350" height="60" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+  <text x="450" y="262" class="step-title" text-anchor="middle">2. Exploration (automatic)</text>
+  <text x="450" y="282" class="step-sub" text-anchor="middle">Context scan via explore agent</text>
 
-  <path d="M 300 167 L 350 167" class="arrow" />
-  <path d="M 580 167 L 630 167" class="arrow" />
-  <path d="M 600 212 L 600 252" class="arrow-bold" />
+  <path d="M 450 300 L 450 330" class="arrow-main" />
 
-  <rect x="40" y="252" width="1120" height="152" rx="14" fill="#fffaf0" stroke="#fde68a" stroke-width="1.5" />
-  <rect x="62" y="268" width="86" height="24" rx="12" fill="url(#grad-amber)" />
-  <text x="105" y="280" class="badge-text">PHASE 2</text>
-  <text x="164" y="280" class="phase-title" fill="#b45309">Planning &amp; Success Criteria</text>
-  <text x="404" y="280" class="phase-sub">Interactive planning with mandatory design delegation</text>
+  <!-- Step 3: /clarify -->
+  <rect x="275" y="330" width="350" height="60" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+  <text x="450" y="352" class="step-title" text-anchor="middle">3. /clarify</text>
+  <text x="450" y="372" class="step-sub" text-anchor="middle">Scope refinement &amp; criteria definition</text>
 
-  <rect x="80" y="304" width="190" height="76" rx="10" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5" />
-  <text x="102" y="324" class="card-title" fill="#92400e">User + Rocket</text>
-  <text x="102" y="340" class="card-sub">Clarify scope</text>
-  <text x="102" y="356" class="card-sub">Define measurable criteria</text>
+  <path d="M 450 390 L 450 420" class="arrow-main" />
 
-  <rect x="320" y="304" width="230" height="76" rx="10" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5" />
-  <text x="342" y="324" class="card-title" fill="#92400e">Architect (mandatory)</text>
-  <text x="342" y="340" class="card-sub">Feature/enhancement design report</text>
-  <text x="342" y="356" class="card-sub">Trade-offs and execution guidance</text>
+  <!-- Step 4: Planning Decision -->
+  <rect x="275" y="420" width="350" height="70" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+  <text x="450" y="442" class="step-title" text-anchor="middle">4. Planning Decision</text>
+  <text x="450" y="462" class="step-sub" text-anchor="middle">Choose planning approach</text>
+  <text x="450" y="478" class="card-note" text-anchor="middle" font-weight="600" fill="#1d4ed8">Main path: /plan</text>
 
-  <rect x="600" y="304" width="220" height="76" rx="10" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5" />
-  <text x="622" y="324" class="card-title" fill="#92400e">Bugfinder (conditional)</text>
-  <text x="622" y="340" class="card-sub">Used for unclear root causes</text>
-  <text x="622" y="356" class="card-sub">Root-cause analysis only</text>
+  <!-- Branch to /plan-thinker -->
+  <path d="M 625 455 C 700 455, 700 420, 750 420" class="arrow-branch" />
+  <rect x="750" y="390" width="130" height="60" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" />
+  <text x="815" y="412" class="card-title" text-anchor="middle" fill="#b45309">/plan-thinker</text>
+  <text x="815" y="428" class="card-note" text-anchor="middle">Multiple reasoning paths</text>
+  <text x="815" y="442" class="card-note" text-anchor="middle">+ confidence score</text>
 
-  <rect x="870" y="322" width="250" height="40" rx="20" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" />
-  <text x="995" y="344" class="pill" fill="#92400e">Explicit user validation required</text>
+  <!-- Main path continues to /plan -->
+  <path d="M 450 490 L 450 520" class="arrow-main" />
 
-  <path d="M 270 342 L 310 342" class="arrow" />
-  <path d="M 550 342 L 590 342" class="arrow" />
-  <path d="M 820 342 L 860 342" class="arrow" />
-  <path d="M 600 404 L 600 448" class="arrow-bold" />
+  <!-- /plan box (part of step 4 visually) -->
+  <rect x="320" y="520" width="260" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+  <text x="450" y="542" class="card-title" text-anchor="middle" font-size="14px" fill="#1d4ed8">/plan</text>
+  <text x="450" y="558" class="card-note" text-anchor="middle">Structured execution plan</text>
 
-  <rect x="40" y="448" width="1120" height="130" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5" />
-  <rect x="62" y="464" width="86" height="24" rx="12" fill="url(#grad-orange)" />
-  <text x="105" y="476" class="badge-text">PHASE 3</text>
-  <text x="164" y="476" class="phase-title" fill="#c2410c">Execution Strategy Selection</text>
-  <text x="402" y="476" class="phase-sub">Automatic mode routing based on dependencies and file overlap</text>
+  <path d="M 450 570 L 450 600" class="arrow-main" />
 
-  <rect x="80" y="500" width="300" height="56" rx="10" fill="#ffffff" stroke="#fdba74" stroke-width="1.5" />
-  <text x="102" y="520" class="card-title" fill="#9a3412">Dependency analysis</text>
-  <text x="102" y="538" class="card-sub">Task dependencies force sequential mode</text>
+  <!-- Step 5: User Validates Plan -->
+  <rect x="275" y="600" width="350" height="60" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+  <text x="450" y="622" class="step-title" text-anchor="middle">5. User Validates Plan</text>
+  <text x="450" y="642" class="step-sub" text-anchor="middle">Explicit approval required</text>
 
-  <rect x="440" y="500" width="300" height="56" rx="10" fill="#ffffff" stroke="#fdba74" stroke-width="1.5" />
-  <text x="462" y="520" class="card-title" fill="#9a3412">File overlap analysis</text>
-  <text x="462" y="538" class="card-sub">Overlap triggers sequential/worktree decision</text>
+  <path d="M 450 660 L 450 690" class="arrow-main" />
 
-  <rect x="800" y="500" width="320" height="56" rx="10" fill="#fff" stroke="#fdba74" stroke-width="1.5" />
-  <text x="822" y="520" class="card-title" fill="#9a3412">Default route</text>
-  <text x="822" y="538" class="card-sub">Independent tasks without overlap go parallel</text>
+  <!-- Step 6: /execute -->
+  <rect x="275" y="690" width="350" height="60" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+  <text x="450" y="712" class="step-title" text-anchor="middle">6. /execute</text>
+  <text x="450" y="732" class="step-sub" text-anchor="middle">Trigger implementation phase</text>
 
-  <path d="M 380 528 L 430 528" class="arrow" />
-  <path d="M 740 528 L 790 528" class="arrow" />
-  <path d="M 600 578 L 600 618" class="arrow-bold" />
+  <path d="M 450 750 L 450 780" class="arrow-main" />
 
-  <rect x="40" y="618" width="1120" height="336" rx="14" fill="#fffdf8" stroke="#fcd34d" stroke-width="1.5" />
-  <text x="600" y="644" class="phase-title" fill="#a16207" text-anchor="middle">Execution Modes</text>
+  <!-- Step 7: code-only + code-smoke -->
+  <rect x="275" y="780" width="350" height="90" rx="10" fill="#f0fdf4" stroke="#10b981" stroke-width="2" />
+  <text x="450" y="802" class="step-title" text-anchor="middle">7. Execution</text>
+  <rect x="295" y="814" width="310" height="24" rx="6" fill="#ffffff" stroke="#86efac" stroke-width="1" />
+  <text x="450" y="830" class="card-note" text-anchor="middle" font-weight="600" fill="#059669">All edits via code-only</text>
+  <rect x="295" y="844" width="310" height="24" rx="6" fill="#ffffff" stroke="#86efac" stroke-width="1" />
+  <text x="450" y="860" class="card-note" text-anchor="middle" font-weight="600" fill="#059669">Validation via code-smoke (scoped checks)</text>
 
-  <rect x="70" y="662" width="340" height="272" rx="12" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5" />
-  <text x="240" y="686" class="card-title" fill="#9a3412" text-anchor="middle">Phase 4 - Sequential</text>
+  <path d="M 450 870 L 450 900" class="arrow-main" />
 
-  <rect x="90" y="704" width="140" height="46" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="108" y="723" class="card-title" fill="#3b82f6">Rocket</text>
-  <text x="108" y="739" class="card-sub">Prompt per task</text>
+  <!-- Step 8: Final Validation -->
+  <rect x="275" y="900" width="350" height="60" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2" />
+  <text x="450" y="922" class="step-title" text-anchor="middle">8. Final Validation</text>
+  <text x="450" y="942" class="step-sub" text-anchor="middle">Global QA check (mandatory)</text>
 
-  <rect x="250" y="704" width="140" height="46" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="268" y="723" class="card-title" fill="#ea580c">Code-Only</text>
-  <text x="268" y="739" class="card-sub">Implement Tn</text>
+  <path d="M 450 960 L 450 990" class="arrow-main" />
 
-  <rect x="90" y="768" width="140" height="46" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="108" y="787" class="card-title" fill="#475569">git diff --stat</text>
-  <text x="108" y="803" class="card-sub">Change evidence</text>
-
-  <rect x="250" y="768" width="140" height="46" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="268" y="787" class="card-title" fill="#059669">Code-Smoke</text>
-  <text x="268" y="803" class="card-sub">Scoped checks</text>
-
-  <rect x="250" y="832" width="140" height="30" rx="15" fill="#d1fae5" stroke="#34d399" stroke-width="1.5" />
-  <text x="320" y="850" class="label-ok">SMOKE PASSED</text>
-
-  <rect x="90" y="832" width="140" height="30" rx="15" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5" />
-  <text x="160" y="850" class="label-fail">SMOKE FAILED</text>
-
-  <text x="240" y="890" class="small" text-anchor="middle">max 3 retries then user escalation</text>
-
-  <path d="M 230 727 L 245 727" class="arrow" />
-  <path d="M 320 750 L 320 764" class="arrow" />
-  <path d="M 230 791 L 245 791" class="arrow" />
-  <path d="M 320 814 L 320 828" class="arrow-ok" />
-  <path d="M 250 847 C 230 872, 190 872, 170 862" class="arrow-fail" />
-
-  <rect x="430" y="662" width="340" height="272" rx="12" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5" />
-  <text x="600" y="686" class="card-title" fill="#1d4ed8" text-anchor="middle">Phase 5 - Parallel (default)</text>
-
-  <rect x="452" y="708" width="296" height="198" rx="12" class="loop-border" />
-  <text x="600" y="728" class="small" text-anchor="middle">Independent tasks, no overlap, same workspace</text>
-
-  <rect x="468" y="744" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="484" y="762" class="card-title" fill="#ea580c">Code-Only A</text>
-  <text x="484" y="777" class="card-sub">Task T1</text>
-
-  <rect x="608" y="744" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="624" y="762" class="card-title" fill="#ea580c">Code-Only B</text>
-  <text x="624" y="777" class="card-sub">Task T2</text>
-
-  <rect x="538" y="808" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="554" y="826" class="card-title" fill="#059669">Code-Smoke</text>
-  <text x="554" y="841" class="card-sub">Per-task checks</text>
-
-  <rect x="538" y="868" width="124" height="28" rx="14" fill="#d1fae5" stroke="#34d399" stroke-width="1.5" />
-  <text x="600" y="884" class="label-ok">All smoke passed</text>
-
-  <path d="M 530 788 L 570 804" class="arrow" />
-  <path d="M 670 788 L 630 804" class="arrow" />
-  <path d="M 600 852 L 600 864" class="arrow-ok" />
-
-  <rect x="790" y="662" width="340" height="272" rx="12" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.5" />
-  <text x="960" y="686" class="card-title" fill="#6d28d9" text-anchor="middle">Phase 5b - Worktree Parallel (opt-in)</text>
-
-  <rect x="812" y="708" width="296" height="198" rx="12" fill="#faf5ff" stroke="#ddd6fe" stroke-width="1.5" />
-  <text x="960" y="728" class="small" text-anchor="middle">When overlap exists and user still wants parallelism</text>
-
-  <rect x="828" y="744" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="844" y="762" class="card-title" fill="#7c3aed">Worktree-Mgr</text>
-  <text x="844" y="777" class="card-sub">Create worktrees</text>
-
-  <rect x="968" y="744" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="984" y="762" class="card-title" fill="#ea580c">Code-Only</text>
-  <text x="984" y="777" class="card-sub">Run in worktrees</text>
-
-  <rect x="828" y="808" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="844" y="826" class="card-title" fill="#059669">Code-Smoke</text>
-  <text x="844" y="841" class="card-sub">Validate each tree</text>
-
-  <rect x="968" y="808" width="124" height="44" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" />
-  <text x="984" y="826" class="card-title" fill="#475569">Git-Expert</text>
-  <text x="984" y="841" class="card-sub">Merge branches</text>
-
-  <rect x="898" y="868" width="124" height="28" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5" />
-  <text x="960" y="884" class="label-note">Cleanup worktrees</text>
-
-  <path d="M 952 766 L 963 766" class="arrow" />
-  <path d="M 1030 788 L 1030 804" class="arrow" />
-  <path d="M 968 830 L 956 830" class="arrow" />
-  <path d="M 960 852 L 960 864" class="arrow" />
-
-  <path d="M 600 954 L 600 1002" class="arrow-bold" />
-
-  <rect x="40" y="1002" width="1120" height="136" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" />
-  <rect x="62" y="1018" width="86" height="24" rx="12" fill="url(#grad-emerald)" />
-  <text x="105" y="1030" class="badge-text">PHASE 6</text>
-  <text x="164" y="1030" class="phase-title" fill="#15803d">Global QA (mandatory)</text>
-  <text x="338" y="1030" class="phase-sub">Always runs once all task-level smoke checks pass</text>
-
-  <rect x="80" y="1058" width="250" height="56" rx="10" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.5" />
-  <text x="102" y="1078" class="card-title" fill="#15803d">Code-Smoke</text>
-  <text x="102" y="1096" class="card-sub">Final validation mode</text>
-
-  <rect x="380" y="1058" width="220" height="56" rx="10" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.5" />
-  <text x="402" y="1078" class="card-title" fill="#ea580c">Code-Only</text>
-  <text x="402" y="1096" class="card-sub">Applies validation fixes</text>
-
-  <rect x="650" y="1058" width="210" height="56" rx="10" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.5" />
-  <text x="672" y="1078" class="card-title" fill="#475569">Bugfinder</text>
-  <text x="672" y="1096" class="card-sub">Complex failure escalation</text>
-
-  <path d="M 330 1086 L 370 1086" class="arrow" />
-  <path d="M 600 1086 L 640 1086" class="arrow" />
-  <path d="M 600 1138 L 600 1178" class="arrow-bold" />
-
-  <rect x="40" y="1178" width="1120" height="60" rx="14" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5" />
-  <rect x="62" y="1194" width="86" height="24" rx="12" fill="url(#grad-violet)" />
-  <text x="105" y="1206" class="badge-text">PHASE 7</text>
-  <text x="164" y="1206" class="phase-title" fill="#6d28d9">Closure</text>
-  <text x="244" y="1206" class="phase-sub">Final report; local changes ready; Git actions only via git-expert on explicit request</text>
+  <!-- Step 9: Closure -->
+  <rect x="275" y="990" width="350" height="60" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2" />
+  <text x="450" y="1012" class="step-title" text-anchor="middle">9. Closure</text>
+  <text x="450" y="1032" class="step-sub" text-anchor="middle">Final report; local changes ready</text>
 </svg>

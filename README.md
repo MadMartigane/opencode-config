@@ -45,38 +45,63 @@ Every design choice in these workflows serves one or more of these principles:
 
 ## rocket Workflow
 
-rocket is a command-driven Tech Lead that guides the user through a structured process using explicit commands. It never writes code itself and maintains strong user gates.
+### What Rocket is
 
-### Recommended Workflow
+**Rocket is a command-driven Tech Lead orchestrator.** The system is built on a clear separation between persona and workflow:
 
-1. **Request** — User makes a request in natural language.
-2. **Exploration** — rocket automatically calls `explore` to understand the codebase.
-3. **Clarification** — rocket iteratively reformulates the request, identifies gaps, and challenges assumptions (`/clarify`).
-4. **Planning** — User types `/plan` (classic) or `/plan-thinker` (self-consistency) to trigger `architect`.
-5. **Validation** — User reviews the plan and validates it.
-6. **Execution** — User types `/execute` to launch the full implementation pipeline.
-7. **Closure** — rocket provides a concise summary.
+- **The prompt defines how Rocket behaves** — the agent persona, tone, and guardrails are encoded in the system prompt.
+- **The commands define what workflow step happens next** — `/clarify`, `/plan`, `/execute` are explicit triggers that move the process forward.
+- **This separation keeps the workflow flexible without changing the persona** — you can add new commands or modify the flow without touching the core identity.
 
-This command-based approach (`/clarify` → `/plan` → `/execute`) ensures strong understanding before any code is modified.
+### Base workflow (main path)
 
-### Execution Details
+The default workflow follows a strict chain with mandatory gates:
 
-Once `/execute` is called:
-- **CRITICAL**: rocket NEVER modifies files directly. ALL modifications are delegated to `code-only`.
-- rocket orchestrates `code-only` + `code-smoke` (per-task) for each task in the plan
-- A final global validation is always performed (`code-smoke` in final mode)
-- On failure, up to 3 retry cycles are attempted using `bugfinder` for deep analysis
-- All changes remain local. Git operations are only performed when explicitly requested via `git-expert`.
+1. **Request** — User describes the task in natural language.
+2. **Exploration** — Rocket automatically calls `explore` to map the codebase. This step is mandatory before any clarification.
+3. **`/clarify`** — Iterative phase where Rocket reformulates the request, identifies gaps, and challenges assumptions constructively.
+4. **`/plan`** — User triggers planning. Rocket calls `architect` in classic mode to produce an implementation plan with atomic tasks.
+5. **User validation** — User reviews and explicitly validates the plan before execution proceeds.
+6. **`/execute`** — Rocket launches the full implementation workflow: delegates all coding to `code-only`, validates each task with `code-smoke`, and runs a final global validation.
+7. **Closure** — Rocket provides a concise summary of completed work.
+
+```
+Request → Exploration → /clarify → /plan → [User validates] → /execute → Closure
+```
 
 ![rocket Workflow](./assets/rocket-workflow.svg)
 
-### Why This Works
+### Why this workflow is easy to understand
 
-- **Clear user gates** — `/plan` and `/execute` create explicit validation points
-- **Strong clarification first** — the `/clarify` phase ensures high-quality requirements
-- **Delegation by construction** — `architect` plans, `code-only` implements (rocket never touches files), `code-smoke` validates
-- **Quality gates** — per-task and global smoke tests with bounded retries (max 3)
-- **Command-driven** — explicit commands make the process predictable and controllable
+| Aspect | Count | Details |
+|--------|-------|---------|
+| **Explicit user control points** | 3 | Ask in natural language → Type `/plan` → Type `/execute` |
+| **Mandatory quality gates** | 2 | Architect plan before execution → Final validation after execution |
+| **Bounded retry policy** | 1 | Max 3 retries on validation failure, then human escalation |
+
+### `/plan-thinker` as an alternative
+
+At planning time, users can choose `/plan-thinker` instead of `/plan` for ambiguous, high-risk, or architecture-heavy tasks. This alternative path:
+
+- Spawns multiple parallel reasoning paths (currently documented as 3 parallel reasoning paths in this repository)
+- Synthesizes results with confidence scoring based on consensus
+- Provides better robustness on complex reasoning tasks
+
+### Why use /plan-thinker for harder tasks?
+
+Classic `/plan` follows a single reasoning path: one analysis, one plan. `/plan-thinker` uses self-consistency decoding: multiple independent reasoning paths explore the problem in parallel, then a synthesis step identifies the consensus solution with a confidence score. Research shows this approach significantly improves accuracy on hard reasoning tasks. The self-consistency paper (Wang et al., 2022) reports gains of +17.9% on GSM8K math reasoning and +8.4% on MultiArith when using multiple paths versus greedy decoding [1]. On complex arithmetic reasoning, consistency between paths improves accuracy by up to 23.6% compared to single-path baselines [2]. The trade-off is straightforward: more compute (3× parallel calls) buys better robustness when the problem has multiple valid approaches or high ambiguity. For routine tasks, classic `/plan` is faster and sufficient. For architecture decisions, complex refactoring, or ambiguous requirements, `/plan-thinker` reduces the risk of missing critical alternatives.
+
+*[1] Wang et al., "Self-Consistency Improves Chain of Thought Reasoning in Language Models", https://arxiv.org/abs/2203.11171*
+*[2] Ibid., Table 2, MultiArith results*
+
+### Commands table
+
+| Command | Description |
+|---------|-------------|
+| `/clarify` | Clarify and challenge the request |
+| `/plan` | Default planning path |
+| `/plan-thinker` | Alternative planning path for complex cases |
+| `/execute` | Run the validated plan |
 
 ---
 
@@ -127,24 +152,4 @@ The two workflows can be chained. When `rocket-review` completes its audit, it p
 
 This brief can be passed directly to `rocket` as input for a new implementation session. rocket will treat it as the initial requirement, skip to Phase 2 (Design & Planning), and propose a task breakdown to address the findings. This creates a closed loop: **Review → Brief → Implementation → Review**.
 
----
 
-## Rocket Commands
-
-| Commande | Description |
-|----------|-------------|
-| `/clarify` | Phase itérative de reformulation, détection des ambiguïtés et challenge constructif de la demande. |
-| `/plan` | Génère un plan d’implémentation via `architect` en mode Classique (recommandé par défaut). |
-| `/plan-thinker` | Génère un plan via `architect` en mode Self-Consistency (3 chemins parallèles + synthèse). |
-| `/execute` | Valide le plan et déclenche l’exécution complète du workflow (tâches + smoke per-task + validation globale + retries si besoin). |
-
-**Workflow recommandé :**
-
-1. Faire une demande
-2. Laisser Rocket faire l’exploration automatique
-3. Itérer en clarification (`/clarify`) si nécessaire
-4. Taper `/plan` (ou `/plan-thinker` pour les cas complexes)
-5. Valider le plan proposé par l’architecte
-6. Taper `/execute` pour lancer l’implémentation complète et autonome
-
-Ce workflow assure une bonne compréhension initiale avant toute exécution.
