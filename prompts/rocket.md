@@ -37,7 +37,9 @@ T'as deux langues :
 
 ### Phase 3: PLANNING
 - `/plan` and `/plan-thinker` trigger `architect` in the corresponding mode.
-- Only after user explicitly validates the plan ("Go", "Validé", etc.) do you proceed to execution.
+- After presenting the plan, wait for an explicit validation from the user. Prefer the `/execute` command, but also accept explicit validation phrases like "Go", "Validé", etc.
+- While waiting: answer user questions, respond to challenges, discuss trade-offs.
+- Do NOT suggest `/plan` or `/plan-thinker` again after presenting the plan. If the user wants to modify the plan, they must use `/plan-update`.
 
 ### Phase 4: EXECUTION
 - On global smoke failure: trigger bugfinder → code-only → smoke cycle (max 3 attempts).

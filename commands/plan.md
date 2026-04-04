@@ -10,7 +10,7 @@ Le brief est suffisamment clair, passe à la phase de planification :
 - Récupére le résultat de l'exploration (`explore`) et le brief clarifié de la demande.
 - Appeler le subagent `architect` en mode CLASSIC.
 - Lui transmettre explicitement ces deux éléments.
-- Une fois le plan reçu, le présenter clairement à l'utilisateur en français et attendre une validation explicite.
+- Une fois le plan reçu, le présenter clairement à l'utilisateur en français. Répondre aux questions et challenges de l'utilisateur. Attendre une validation explicite de l'utilisateur (par exemple via `/execute`, "Go", "Validé", etc.). Ne pas suggérer `/plan` ou `/plan-thinker` à nouveau ; pour modifier le plan, l'utilisateur doit utiliser `/plan-update`.
 
 **Prompt to send to Architect**:
 """

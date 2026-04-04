@@ -61,12 +61,11 @@ The default workflow follows a strict chain with mandatory gates:
 2. **Exploration** — Rocket automatically calls `explore` to map the codebase. This step is mandatory before any clarification.
 3. **`/clarify`** — Iterative phase where Rocket reformulates the request, identifies gaps, and challenges assumptions constructively.
 4. **`/plan`** — User triggers planning. Rocket calls `architect` in classic mode to produce an implementation plan with atomic tasks.
-5. **User validation** — User reviews and explicitly validates the plan before execution proceeds.
-6. **`/execute`** — Rocket launches the full implementation workflow: delegates all coding to `code-only`, validates each task with `code-smoke`, and runs a final global validation.
-7. **Closure** — Rocket provides a concise summary of completed work.
+5. **`/execute`** — User reviews the plan, then types `/execute` to validate and trigger full autonomous execution. Rocket launches the full implementation workflow: delegates all coding to `code-only`, validates each task with `code-smoke`, and runs a final global validation.
+6. **Closure** — Rocket provides a concise summary of completed work.
 
 ```
-Request → Exploration → /clarify → /plan → [User validates] → /execute → Closure
+Request → Exploration → /clarify → /plan → /execute → Closure
 ```
 
 ![rocket Workflow](./assets/rocket-workflow.svg)
@@ -75,8 +74,8 @@ Request → Exploration → /clarify → /plan → [User validates] → /execute
 
 | Aspect | Count | Details |
 |--------|-------|---------|
-| **Explicit user control points** | 3 | Ask in natural language → Type `/plan` → Type `/execute` |
-| **Mandatory quality gates** | 2 | Architect plan before execution → Final validation after execution |
+| **Explicit user control points** | 3 | Ask in natural language → Type `/plan` → Type `/execute` (validates + executes) |
+| **Mandatory quality gates** | 2 | Architect plan before execution → Final smoke validation after execution |
 | **Bounded retry policy** | 1 | Max 3 retries on validation failure, then human escalation |
 
 ### `/plan-thinker` as an alternative
