@@ -1,29 +1,57 @@
 ---
 name: clarify
-description: Iterative clarification phase - reformulate request, identify gaps, challenge assumptions
+description: Clarify and challenge the user's request before proceeding
 ---
 
 $1
 
-You are currently in the **Clarification & Intention Understanding** phase.
+This is a **CLARIFICATION SESSION**. Your goal is to produce a complete, precise, and actionable understanding of the request — with minimal user input.
 
-**Your responsibilities:**
-- Reformulate the user's request in your own words to confirm understanding.
-- Identify any ambiguities, missing requirements, edge cases, or implicit assumptions.
-- Ask sharp but constructive questions to fill gaps.
-- Gently challenge the user's approach when it could be improved or when alternatives might be better.
-- Do NOT create a formal implementation plan yet. Your goal is alignment and clarity.
-- **Reference exploration findings** if available, or trigger exploration if the request requires codebase context.
+## Phase 1: Autonomous Investigation (MANDATORY FIRST STEP)
 
-**Response Style (in French):**
-- Start with a clear reformulation of the request.
-- Highlight potential gaps or risks.
-- Ask 2-4 targeted questions maximum.
-- End by saying that once the user is satisfied, they should type `/plan` or `/plan-thinker` to continue.
+Before asking ANY question, you MUST:
+1. **Search the codebase**: Use `explore` to find relevant code, patterns, dependencies, and architecture.
+2. **Search documentation**: Check README, docs, AGENTS.md, and any project-specific context files.
+3. **Search the web** (if applicable): Look up best practices, known issues, or official docs for the technologies involved.
 
-**Exploration Strategy**:
-- If exploration has NOT been completed and the request needs codebase context → Call `explore` agent first
-- If exploration HAS been completed → Reference the findings in your questions
-- For simple questions not requiring codebase knowledge → Skip exploration
+You MUST NOT ask a question that can be answered by reading code, documentation, or a quick web search.
 
-Stay in conversation with the user until they explicitly validate with a planning command.
+## Phase 2: Gap Analysis
+
+After investigation, analyze what remains unclear:
+- **Clear**: You have enough context to produce a precise specification → Skip questions, go to Phase 3.
+- **Partially clear**: Some ambiguities remain → Ask ONLY the questions you could NOT resolve yourself.
+- **Unclear**: Critical information is missing → Ask the minimum set of targeted questions.
+
+## Phase 3: Reformulation
+
+Produce a structured reformulation of the request:
+
+```markdown
+## Clarified Request
+
+### What
+[1-2 sentence summary of what needs to be done]
+
+### Context (from investigation)
+[Key findings from codebase, docs, web — concise, factual]
+
+### Scope
+- **In scope**: [list]
+- **Out of scope**: [list]
+
+### Constraints
+[Technical constraints, patterns to follow, compatibility requirements]
+
+### Open Questions (if any)
+[ONLY the questions you could NOT resolve yourself. If none, write "None — ready for planning."]
+```
+
+## Rules
+
+- **Be autonomous**: Gather as much information as possible before asking.
+- **Be concise**: No filler. Every word must add value.
+- **Be honest**: If the request is already clear, say so and produce the reformulation directly.
+- **Do NOT plan or implement**: This session is about understanding, not solving.
+- **Do NOT ask for the sake of asking**: Questions are a last resort, not a default behavior.
+- **WAIT for explicit trigger**: After presenting the clarified request, STOP. Do not proceed to planning or implementation. The user must explicitly invoke `/plan` or `/plan-thinker` to move to the next phase.
