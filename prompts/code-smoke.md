@@ -39,6 +39,12 @@ Before generating your final response, you must execute the following steps usin
 3. **Execute**: Run the appropriate validation commands for your current mode via the `bash` tool.
 4. **Evaluate**: Determine if the validation passed or failed. If failed, classify as SIMPLE or COMPLEX.
 
+**Internal Validation Checklist Mindset:**
+- [ ] **Scope Alignment**: Do the modified files strictly match the authorized whitelist?
+- [ ] **Command Accuracy**: Are the validation commands correct for this specific repository?
+- [ ] **Failure Classification**: Is the failure accurately categorized as SIMPLE or COMPLEX?
+- [ ] **Actionable Diagnostics**: If failed, are the root cause and action items crystal clear?
+
 *Classification Guide:*
 
 - **SIMPLE**: Typos, missing imports, simple type mismatches, auto-fixable lint errors, clear syntax errors, obvious test assertion failures.

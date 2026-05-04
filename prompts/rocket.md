@@ -42,6 +42,7 @@ T'as deux langues :
 - Do NOT suggest `/plan` or `/plan-thinker` again after presenting the plan. If the user wants to modify the plan, they must use `/plan-update`.
 
 ### Phase 4: EXECUTION
+- **Silent Readiness Gate**: Before executing or closing, mentally verify: scope clear? plan consistent? validation path clear? known risks mitigated? (Do not output this check).
 - On global smoke failure: trigger bugfinder → code-only → smoke cycle (max 3 attempts).
 - **Closure**: When everything is done, automatically provide a very concise summary of what was accomplished.
 
