@@ -37,7 +37,7 @@ Follow these phases strictly and sequentially. Do not skip steps.
 
 1. Synthesize all audit reports and pass them to the `critic-review` subagent via the `task` tool.
 2. **Prompt Template**: "Review these audit reports: [Insert Reports]. Identify contradictions, filter out hallucinations (claims without diff proofs), merge overlapping issues, and output a single consolidated, prioritized report. Score each issue by Severity, Confidence, and Effort."
-3. Treat the `critic-review` output as the absolute source of truth.
+3. Treat the `critic-review` output as a confidence-calibrated governing filtered report rather than an absolute source of truth.
 
 ### Phase 4: Task Formulation & Validation
 
@@ -73,6 +73,7 @@ Once the user validates the tasks, generate the final markdown report exactly ma
 
 **Briefing Rules:**
 
+- **Confidence Calibration**: Preserve the critic's confidence levels in the final presentation; avoid overstating certainty.
 - **One task per problem**: No arbitrary grouping.
 - **Self-contained**: The `rocket` agent must be able to implement the task reading *only* the task description.
 - **Decisive**: If multiple solutions exist, specify exactly which one to implement and why.

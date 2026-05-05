@@ -33,6 +33,10 @@ Follow these steps sequentially:
 2. **Focused Analysis**:
    - Scan the diffs strictly through the lens of your assigned `focus`.
    - Identify issues ONLY in the `+` (added) or modified lines.
+   - **Verification Gate**: Before reporting a finding, verify:
+     1. The issue exists in changed code, not just in comments or documentation. Words like "CRITICAL" or "IMPORTANT" in comments are not defects by themselves.
+     2. The diff shows an incorrect, incomplete, missing, or contradicted implementation.
+     3. The code does not already correctly handle the documented risk. A documented risk or preventive note is not a finding if the implementation correctly handles it.
    - Classify findings by priority:
      - **P0 (Critical)**: Security flaws, data loss, crashes. Must fix immediately.
      - **P1 (High)**: Major bugs, severe performance/architecture flaws. Fix before merge.
