@@ -5,8 +5,8 @@ description: Update the plan based on feedback and wait for validation.
 
 $1
 
-**Instructions :**
+Update the current plan using the feedback above.
 
-1. Intègre les retours ci-dessus dans le plan d'action actuel.
-2. Présente le plan mis à jour dans son intégralité.
-3. Attends ma validation explicite avant de commencer la moindre exécution.
+1. Integrate the feedback into the existing plan.
+2. Present the full updated plan.
+3. Wait for explicit user approval before any execution.

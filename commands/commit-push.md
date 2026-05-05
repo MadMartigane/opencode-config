@@ -1,23 +1,23 @@
 ---
 name: commit-push
-description: "Délègue le commit et le push à git-expert"
+description: Delegate commit and push to git-expert
 ---
 
-# Directive d'Exécution
+# Execution Directive
 
-Déléguez immédiatement l'intégralité du processus de commit et de push au sous-agent `git-expert`.
+Immediately delegate the full commit-and-push workflow to `git-expert`.
 
-## Règles de Délégation
+## Delegation Rules
 
-- **Zéro Analyse Préalable** : N'exécutez aucune commande Git (`status`, `diff`, etc.) vous-même. Laissez cette responsabilité exclusivement à `git-expert`.
-- **Action Directe** : Utilisez l'outil `task` pour invoquer `git-expert` dès la réception de cette commande.
-- **Langue de Délégation** : Rédigez le prompt destiné au sous-agent en **Anglais** (conformément à la politique linguistique).
+- **No Pre-Analysis**: Do not run any Git command yourself (`status`, `diff`, etc.). Leave all Git analysis to `git-expert`.
+- **Direct Action**: Use the `task` tool immediately.
+- **Delegation Language**: Write the subagent prompt in **English**.
 
-## Instructions à transmettre à git-expert
+## Instructions for git-expert
 
-Demandez-lui explicitement de :
+Ask it explicitly to:
 
-1. Analyser tous les changements en cours.
-2. Générer un message de commit approprié (en respectant les conventions).
-3. Commiter les changements.
-4. Pousser (push) les modifications vers le dépôt distant.
+1. Analyze all current changes.
+2. Generate an appropriate commit message following conventions.
+3. Commit the changes.
+4. Push the result to the remote repository.

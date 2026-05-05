@@ -3,4 +3,8 @@ name: resume
 description: Resume work in RESUME.md
 ---
 
-Résume ce qui vient d'être fait dans cette session dans `RESUME.md`. Si il existe écrase le sans confirmation, si il n'exsite pas crée le. Un agent de codage doit être capable de reprendre la session avec ce résumé.
+Summarize the work completed in this session in `RESUME.md`.
+
+- Overwrite the file without confirmation if it already exists.
+- Create it if it does not exist.
+- Make the summary precise enough for a coding agent to resume the session from it alone.

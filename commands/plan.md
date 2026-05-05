@@ -5,12 +5,15 @@ description: Launch architect in Classic mode after clarification
 
 $1
 
-Le brief est suffisamment clair, passe à la phase de planification :
+The request is clear enough. Move to planning.
 
-- Récupére le résultat de l'exploration (`explore`) et le brief clarifié de la demande.
-- Appeler le subagent `architect` en mode CLASSIC.
-- Lui transmettre explicitement ces deux éléments.
-- Une fois le plan reçu, le présenter clairement à l'utilisateur en français. Répondre aux questions et challenges de l'utilisateur. Attendre une validation explicite de l'utilisateur (par exemple via `/execute`, "Go", "Validé", etc.). Ne pas suggérer `/plan` ou `/plan-thinker` à nouveau ; pour modifier le plan, l'utilisateur doit utiliser `/plan-update`.
+- Gather the `explore` output and the clarified request.
+- Call the `architect` subagent in CLASSIC mode.
+- Pass both inputs explicitly.
+- When the plan returns, present it clearly to the user in French.
+- Answer questions and discuss trade-offs while waiting.
+- Wait for explicit user approval before execution (prefer `/execute`, but accept direct approvals such as "Go" or "Approved").
+- Do not suggest `/plan` or `/plan-thinker` again. If the plan must change, the user must use `/plan-update`.
 
 **Prompt to send to Architect**:
 """

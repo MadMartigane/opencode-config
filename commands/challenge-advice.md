@@ -1,25 +1,25 @@
 ---
 name: challenge-advice
-description: Challenge review advices.
+description: Challenge review comments.
 ---
 
-Analyse et évalue la pertinence des commentaires de revue de code suivants, point par point.
+Analyze the following code review comments one by one.
 
-### Instructions d'exécution
+## Execution
 
-1. **Délégation** : Utilise l'outil `task` pour invoquer le sous-agent `architect` (en anglais) afin d'analyser techniquement chaque commentaire.
-2. **Vérification** : Évalue la véracité et l'impact de chaque remarque en examinant le code source actuel.
-3. **Justification** : Appuie chaque conclusion sur des preuves concrètes (fichiers, lignes de code, principes d'architecture).
+1. Use the `task` tool to call the `architect` subagent in English for the technical analysis.
+2. Verify each comment against the current source code.
+3. Support every conclusion with concrete evidence (files, code lines, architecture principles).
 
-### Format de réponse attendu (en français)
+## Response Format (in French)
 
-Pour chaque commentaire, structure ta réponse ainsi :
+For each comment, use this structure:
 
-- **Commentaire** : [Résumé du point soulevé]
-- **Analyse technique** : [Explication brève de la validité du commentaire]
-- **Preuves** : [Références exactes au code justifiant l'analyse]
-- **Verdict & Impact** : [Pertinent / Non pertinent / À nuancer] - [Impact estimé sur le projet]
+- **Commentaire**: [Short summary of the point]
+- **Technical analysis**: [Brief explanation of whether the comment is valid]
+- **Preuves**: [Exact code references supporting the analysis]
+- **Verdict & Impact**: [Relevant / Not relevant / Needs nuance] - [Estimated impact on the project]
 
-### Commentaires à analyser
+## Comments to Analyze
 
 $1

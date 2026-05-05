@@ -3,12 +3,12 @@ name: bug-find
 description: Find bug, build plan, wait validation.
 ---
 
-**Contexte du Bug :**
+## Bug Context
 $1
 
-**Procédure d'Exécution :**
+## Execution
 
-1. **Délégation :** Invoque immédiatement le sous-agent `bugfinder` via l'outil `task`.
-2. **Instruction (en Anglais) :** Transmets le contexte du bug au sous-agent. Exige qu'il identifie la cause racine et produise un plan de correction détaillé, étape par étape.
-3. **Restitution (en Français) :** Présente clairement l'analyse et le plan d'action du sous-agent à l'utilisateur.
-4. **Point d'Arrêt :** Demande explicitement la validation de l'utilisateur. Ne modifie aucun fichier et n'écris aucun code tant que l'accord n'est pas donné.
+1. Immediately call the `bugfinder` subagent via `task`.
+2. Send the bug context in English. Require root cause analysis and a step-by-step fix plan.
+3. Present the analysis and action plan to the user in French.
+4. Stop there. Ask for explicit user approval before any code change.

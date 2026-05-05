@@ -1,65 +1,65 @@
 ---
 name: parallel-worktree
-description: Orchestre l'exécution parallèle de tâches indépendantes via des worktrees Git isolés
+description: Orchestrate parallel tasks with isolated Git worktrees
 ---
 
-# Workflow : Parallel Worktree
+# Workflow: Parallel Worktree
 
-Ce workflow définit la procédure stricte pour isoler, exécuter, valider et fusionner des tâches en parallèle.
+Use this workflow to isolate, execute, validate, and merge independent tasks in parallel.
 
-## 🎯 Prérequis et Règles
+## Prerequisites
 
-- **Indépendance** : Les tâches à exécuter ne doivent avoir aucune dépendance entre elles.
-- **Branche de base (`{base}`)** : Utilisez la première branche existante parmi : `release/next` > `develop` > `main` > `master`.
-- **Nomenclature** : Chaque tâche utilise un identifiant unique (`{task-id}`).
-  - Dossier cible : `.trees/{task-id}/`
-  - Branche cible : `task/{task-id}`
+- Tasks must be independent.
+- Use the first existing base branch from: `release/next` > `develop` > `main` > `master`.
+- Use one unique `{task-id}` per task:
+  - Worktree path: `.trees/{task-id}/`
+  - Branch name: `task/{task-id}`
 
-## 🧰 Skills Requis
+## Required Skills
 
-Chargez les skills suivants avant de démarrer :
+Load these skills before starting:
 
 - `git-worktree`
 - `git-branch-cleaner`
 - `git-commit-messages`
 
-## 🔄 Séquence d'Exécution
+## Execution Sequence
 
-### 1. Provisionnement
+### 1. Provisioning
 
-Déléguez à l'agent **`git-expert`** la création des environnements pour chaque tâche :
+Delegate environment creation for each task to **`git-expert`**:
 
 ```bash
 git worktree add -b task/{task-id} .trees/{task-id}/ {base}
 ```
 
-### 2. Implémentation (Parallèle)
+### 2. Implementation (Parallel)
 
-Lancez simultanément un agent **`code-only`** pour chaque tâche.
+Launch one **`code-only`** agent per task in parallel.
 
-- **Contrainte** : Chaque agent doit travailler **exclusivement** dans son répertoire `.trees/{task-id}/`.
+- Each agent must work **only** inside `.trees/{task-id}/`.
 
-### 3. Validation et Correction
+### 3. Validation and Repair
 
-Déléguez à l'agent **`code-smoke`** (mode `per-task`) la validation de chaque worktree.
+Delegate per-task validation of each worktree to **`code-smoke`**.
 
-- **Boucle de correction (Max 3 tentatives par tâche)** :
-  1. En cas d'échec, analysez l'erreur et relancez `code-only` dans le worktree pour corriger.
-  2. Revalidez avec `code-smoke`.
-  3. Si l'échec persiste après 3 tentatives, marquez la tâche comme "Échouée - Revue manuelle requise". **Ne fusionnez jamais une tâche en échec.**
+- **Repair loop (max 3 attempts per task):**
+  1. On failure, analyze the error and relaunch `code-only` in that worktree.
+  2. Re-run `code-smoke`.
+  3. If it still fails after 3 attempts, mark the task as failed and require manual review. **Never merge a failed task.**
 
-### 4. Fusion
+### 4. Merge
 
-Pour toutes les tâches validées avec succès, déléguez à l'agent **`git-expert`** l'intégration dans la branche de base :
+For every validated task, delegate integration into the base branch to **`git-expert`**:
 
 ```bash
 git checkout {base}
 git merge --no-ff task/{task-id}
 ```
 
-### 5. Nettoyage
+### 5. Cleanup
 
-Déléguez à l'agent **`git-expert`** la suppression des environnements temporaires :
+Delegate temporary environment cleanup to **`git-expert`**:
 
 ```bash
 git worktree remove .trees/{task-id}/
