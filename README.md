@@ -36,10 +36,26 @@ Every design choice in these workflows serves one or more of these principles:
 | **code-only** | Implements code changes from structured specs. Responds "DONE" or "ERROR". | rocket |
 | **code-smoke** | Unified validation agent: per-task (syntax+lint) and final (syntax+lint+tests+build). Reports diagnostics, never fixes. | rocket |
 | **worktree-manager** | Creates/cleans isolated Git worktrees for opt-in parallel execution with file overlap. | rocket |
-| **git-expert** | Git operations: merge, commit, push, rebase, history cleanup. Invoked only on explicit user request. | rocket (on-demand), worktree flow |
+| **git-expert** | Git operations: merge, commit, push, rebase, history cleanup. **Destructive operations (squash, rebase, reset, force-push) are strictly two-phase: PRECHECK then explicit approval.** Invoked only on explicit user request. | rocket (on-demand), worktree flow |
 | **router-review** | Triage agent. Analyzes diffs and selects relevant audit focuses. | rocket-review |
 | **code-audit** | Specialized auditor. One instance per focus (Security, Perf, Logic, etc.). | rocket-review |
 | **critic-review** | Senior auditor. Consolidates audit reports, challenges findings, filters false positives. | rocket-review |
+
+---
+
+## Git Safety Contract
+
+- `git-expert` remains the only agent authorized to mutate Git history.
+- Destructive Git operations are **strictly two-phase only**: PRECHECK then explicit approval.
+- Structural safety is enforced by prompt + skill + command entry points.
+- History rewrites never use interactive commands.
+- Forced remote update, when approved, uses `git push --force-with-lease` only.
+- Expectation mismatch causes STOP, not execution.
+
+Example flow:
+```
+Request → PRECHECK report → human/caller approval token → execution
+```
 
 ---
 
@@ -188,5 +204,16 @@ The two workflows can be chained. When `rocket-review` completes its audit, it p
 - Severity classification
 
 This brief can be passed directly to `rocket` as input for a new implementation session. `rocket` consumes the brief as structured input for planning and execution. This creates a closed loop: **Review → Brief → Implementation → Re-review**.
+
+## Policy Validation Checklist
+
+This checklist can be verified with simple `grep`-based assertions:
+
+- [ ] `prompts/git-expert.md` contains `STATUS: PRECHECK`
+- [ ] `prompts/git-expert.md` contains `APPROVED-DESTRUCTIVE-GIT`
+- [ ] `prompts/git-expert.md` contains `Never use git push --force`
+- [ ] `skills/git-branch-cleaner/SKILL.md` contains `If merge commits are present in the rewrite range, STOP`
+- [ ] `prompts/rocket.md` contains `Run PRECHECK only for destructive Git operation`
+- [ ] `commands/commit-push.md` contains `perform PRECHECK only and stop unless APPROVED-DESTRUCTIVE-GIT is present`
 
 

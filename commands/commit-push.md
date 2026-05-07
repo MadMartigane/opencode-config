@@ -13,7 +13,15 @@ Immediately delegate the full commit-and-push workflow to `git-expert`.
 - **Direct Action**: Use the `task` tool immediately.
 - **Delegation Language**: Write the subagent prompt in **English**.
 
-## Instructions for git-expert
+## Destructive Operations Exclusion
+
+This command MUST NOT be used for squash, rebase, reset, or force-push workflows.
+
+If the user asks for history rewrite or push after rewrite, delegate **PRECHECK only** first.
+- Instruct `git-expert`: "If this request implies history rewrite, perform PRECHECK only and stop unless APPROVED-DESTRUCTIVE-GIT is present."
+- Wait for the PRECHECK report and user approval before requesting execution.
+
+## Instructions for git-expert (Non-Destructive Commits)
 
 Ask it explicitly to:
 
