@@ -74,7 +74,7 @@
     },
     "explore": {
       "disable": false,
-      "model": "{file:./models/coder.txt}",
+      "model": "{file:./models/agentic.txt}",
       "prompt": "{file:./prompts/explore.md}",
       "temperature": 0.1
     },

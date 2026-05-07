@@ -10,6 +10,7 @@ This is a **CLARIFICATION SESSION**. Your goal is to produce a complete, precise
 ## Phase 1: Autonomous Investigation (MANDATORY FIRST STEP)
 
 Before asking ANY question, you MUST:
+
 1. **Search the codebase**: Use `explore` to find relevant code, patterns, dependencies, and architecture.
 2. **Search documentation**: Check README, docs, AGENTS.md, and any project-specific context files.
 3. **Search the web** (if applicable): Look up best practices, known issues, or official docs for the technologies involved.
@@ -19,6 +20,7 @@ You MUST NOT ask a question that can be answered by reading code, documentation,
 ## Phase 2: Gap Analysis
 
 After investigation, analyze what remains unclear:
+
 - **Clear**: You have enough context to produce a precise specification → Skip questions, go to Phase 3.
 - **Partially clear**: Some ambiguities remain → Ask ONLY the questions you could NOT resolve yourself.
 - **Unclear**: Critical information is missing → Ask the minimum set of targeted questions.
@@ -31,19 +33,24 @@ Produce a structured reformulation of the request:
 ## Clarified Request
 
 ### What
+
 [1-2 sentence summary of what needs to be done]
 
 ### Context (from investigation)
+
 [Key findings from codebase, docs, web — concise, factual]
 
 ### Scope
+
 - **In scope**: [list]
 - **Out of scope**: [list]
 
 ### Constraints
+
 [Technical constraints, patterns to follow, compatibility requirements]
 
 ### Open Questions (if any)
+
 [ONLY the questions you could NOT resolve yourself. If none, write "None — ready for planning."]
 ```
 

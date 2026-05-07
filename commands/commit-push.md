@@ -5,6 +5,8 @@ description: Delegate commit and push to git-expert
 
 # Execution Directive
 
+$1
+
 Immediately delegate the full commit-and-push workflow to `git-expert`.
 
 ## Delegation Rules
@@ -17,7 +19,8 @@ Immediately delegate the full commit-and-push workflow to `git-expert`.
 
 This command MUST NOT be used for squash, rebase, reset, or force-push workflows.
 
-If the user asks for history rewrite or push after rewrite, delegate **PRECHECK only** first.
+If the user asks for history rewrite or push after rewrite, delegate *PRECHECK only** first.
+
 - Instruct `git-expert`: "If this request implies history rewrite, perform PRECHECK only and stop unless APPROVED-DESTRUCTIVE-GIT is present."
 - Wait for the PRECHECK report and user approval before requesting execution.
 
