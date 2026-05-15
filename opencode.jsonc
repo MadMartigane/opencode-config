@@ -3,33 +3,34 @@
   "mcp": {
     "brave-search": {
       "type": "local",
-      "command": [
-        "bun",
-        "x",
-        "@modelcontextprotocol/server-brave-search"
-      ],
+      "command": ["bun", "x", "@modelcontextprotocol/server-brave-search"],
       "enabled": true,
       "environment": {
-        "BRAVE_API_KEY": "{file:./keys/brave_api_key.txt}"
-      }
+        "BRAVE_API_KEY": "{file:./keys/brave_api_key.txt}",
+      },
     },
     "sequential-thinking": {
       "type": "local",
       "command": [
         "bun",
         "x",
-        "@modelcontextprotocol/server-sequential-thinking"
+        "@modelcontextprotocol/server-sequential-thinking",
       ],
-      "enabled": true
+      "enabled": true,
     },
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
       "headers": {
-        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}",
       },
-      "enabled": true
-    }
+      "enabled": true,
+    },
+    "gitnexus": {
+      "type": "local",
+      "command": ["gitnexus", "mcp"],
+      "enabled": true,
+    },
   },
   "provider": {
     "ovh-ai-internal": {
@@ -37,46 +38,46 @@
       "name": "Internal OVH AI",
       "options": {
         "baseURL": "https://oai.endpoints.preprod.ai.cloud.ovh.net/v1/",
-        "apiKey": "michael.baudchon@corp.ovh.com"
+        "apiKey": "michael.baudchon@corp.ovh.com",
       },
       "models": {
         "Qwen/Qwen3.5-397B-A17B": {
           "name": "Qwen3.5-397B-A17B (internal)",
           "limit": {
             "context": 256000,
-            "output": 65536
-          }
+            "output": 65536,
+          },
         },
         "gpt-oss-20b": {
           "name": "gpt-oss-20b (internal)",
           "limit": {
             "context": 131000,
-            "output": 32768
-          }
+            "output": 32768,
+          },
         },
         "gpt-oss-120b": {
           "name": "gpt-oss-120b (internal)",
           "limit": {
             "context": 131000,
-            "output": 32768
-          }
-        }
-      }
-    }
+            "output": 32768,
+          },
+        },
+      },
+    },
   },
   "default_agent": "rocket",
   "agent": {
     "plan": {
-      "disable": true
+      "disable": true,
     },
     "build": {
-      "disable": true
+      "disable": true,
     },
     "explore": {
       "disable": false,
       "model": "{file:./models/agentic.txt}",
       "prompt": "{file:./prompts/explore.md}",
-      "temperature": 0.1
+      "temperature": 0.1,
     },
     "rocket": {
       "mode": "primary",
@@ -94,8 +95,8 @@
         "task": true,
         "todowrite": true,
         "todoread": true,
-        "sequential-thinking_sequentialthinking": true
-      }
+        "sequential-thinking_sequentialthinking": true,
+      },
     },
     "rocket-review": {
       "mode": "primary",
@@ -114,8 +115,8 @@
         "webfetch": true,
         "todowrite": true,
         "todoread": true,
-        "sequential-thinking_sequentialthinking": true
-      }
+        "sequential-thinking_sequentialthinking": true,
+      },
     },
     "chatbot": {
       "mode": "primary",
@@ -136,8 +137,8 @@
         "todoread": true,
         "brave-search_brave_web_search": true,
         "sequential-thinking_sequentialthinking": true,
-        "context7_*": true
-      }
+        "context7_*": true,
+      },
     },
     "code-audit": {
       "mode": "subagent",
@@ -154,8 +155,8 @@
         "webfetch": true,
         "brave-search_brave_web_search": true,
         "sequential-thinking_sequentialthinking": true,
-        "context7_*": true
-      }
+        "context7_*": true,
+      },
     },
     "code-only": {
       "mode": "subagent",
@@ -173,8 +174,8 @@
         "write": true,
         "task": true,
         "skills_clean-code": true,
-        "sequential-thinking_sequentialthinking": true
-      }
+        "sequential-thinking_sequentialthinking": true,
+      },
     },
     "code-smoke": {
       "mode": "subagent",
@@ -190,8 +191,8 @@
         "grep": true,
         "list": true,
         "edit": false,
-        "write": false
-      }
+        "write": false,
+      },
     },
     "git-expert": {
       "mode": "subagent",
@@ -209,8 +210,8 @@
         "skills_git-branch-cleaner": true,
         "skills_git-commit-messages": true,
         "edit": false,
-        "write": false
-      }
+        "write": false,
+      },
     },
     "router-review": {
       "mode": "subagent",
@@ -225,8 +226,8 @@
         "list": true,
         "edit": false,
         "write": false,
-        "sequential-thinking_sequentialthinking": true
-      }
+        "sequential-thinking_sequentialthinking": true,
+      },
     },
     "critic-review": {
       "mode": "subagent",
@@ -241,8 +242,8 @@
         "list": true,
         "edit": false,
         "write": false,
-        "sequential-thinking_sequentialthinking": true
-      }
+        "sequential-thinking_sequentialthinking": true,
+      },
     },
     "architect": {
       "mode": "subagent",
@@ -262,8 +263,8 @@
         "webfetch": true,
         "brave-search_brave_web_search": true,
         "sequential-thinking_sequentialthinking": true,
-        "context7_*": true
-      }
+        "context7_*": true,
+      },
     },
     "architect-thinker": {
       "mode": "subagent",
@@ -282,8 +283,8 @@
         "webfetch": true,
         "brave-search_brave_web_search": true,
         "sequential-thinking_sequentialthinking": true,
-        "context7_*": true
-      }
+        "context7_*": true,
+      },
     },
     "bugfinder": {
       "mode": "subagent",
@@ -302,8 +303,8 @@
         "webfetch": true,
         "brave-search_brave_web_search": true,
         "sequential-thinking_sequentialthinking": true,
-        "context7_*": true
-      }
-    }
-  }
+        "context7_*": true,
+      },
+    },
+  },
 }
