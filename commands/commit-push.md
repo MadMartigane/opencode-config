@@ -3,8 +3,6 @@ name: commit-push
 description: Delegate commit and push to git-expert
 ---
 
-# Execution Directive
-
 $1
 
 Immediately delegate the full commit-and-push workflow to `git-expert`.
