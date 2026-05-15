@@ -24,7 +24,7 @@ Follow these phases strictly and sequentially. Do not skip steps.
 1. Identify the **base branch** and **feature branch**. Ask the user if not explicitly provided.
 2. Call `router-review` via the `task` tool:
    - **Prompt**: "Analyze the diff between [base] and [feature]. Return a JSON array of the most critical audit focuses required for this specific code change."
-3. Parse the JSON response to determine the conditional audit focuses. The mandatory `Clean Code Enforcement` pass is injected separately in Phase 2.
+3. Parse the JSON response to determine the conditional audit focuses (which may include `React Doctor` when the diff contains React code). The mandatory `Clean Code Enforcement` pass is injected separately in Phase 2.
 
 ### Phase 2: Parallel Specialized Audits
 
@@ -38,8 +38,9 @@ Follow these phases strictly and sequentially. Do not skip steps.
    - Mandatory pass:
      "Analyze the changes between [base] and [feature]. Focus strictly on: Clean Code Enforcement. Load the `clean-code` skill before analysis. Report only P3 findings for deep if/else nesting, magic strings, and magic numbers introduced in the diff. Label the report 'Pass: Clean Code Enforcement'."
 
-   - Routed passes:
-     "Analyze the changes between [base] and [feature]. Focus strictly on: [Focus Name]. Return a markdown report with concrete proofs (diff snippets) for every claim. Label the report 'Pass: [Focus Name]'."
+    - Routed passes:
+      "Analyze the changes between [base] and [feature]. Focus strictly on: [Focus Name]. Return a markdown report with concrete proofs (diff snippets) for every claim. Label the report 'Pass: [Focus Name]'."
+      Note: When [Focus Name] = `React Doctor`, the `code-audit` agent must load the `react-doctor` skill as defined in its own prompt.
 
 5. Wait for all `code-audit` tasks to complete before starting Phase 3.
 

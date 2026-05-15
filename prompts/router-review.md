@@ -30,6 +30,13 @@ Evaluate the changes against these focuses. Select a focus ONLY if its triggers 
 6. `readability` (Readability & Idiomatic)
    - **Triggers**: Naming conventions, code style, idiomatic patterns.
    - **Rule**: ALWAYS include.
+7. `react_doctor` (React Doctor)
+   - **Triggers**:
+     - React files: `.jsx`, `.tsx`
+     - React hooks in diff: `useEffect`, `useState`, `useMemo`, `useCallback`
+     - React component definitions: `function ComponentName(`, `const ComponentName = (`, `export function ComponentName(`
+     - JSX syntax in diff: `<Tag`, fragments `<>`, `</`
+   - **Rule**: Include ONLY when React patterns are present in the diff.
 
 *(Note: `regression_check` is strictly out of scope for initial triage.)*
 

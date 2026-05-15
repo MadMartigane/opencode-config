@@ -180,13 +180,15 @@ The implemented focus taxonomy includes:
 | Architecture & Maintainability | Coupling, SOLID, DRY, modularity, testability |
 | Readability & Idiomatic | Style, code patterns, comments, naming conventions |
 | Clean Code Enforcement | LLM-generated anti-patterns: deep if/else nesting, magic strings, magic numbers |
+| React Doctor | React-specific review of changed React code across Security, Correctness, Performance, and Architecture |
 | Regression Check | Post-fix verification to ensure no new bugs or side effects were introduced |
 
 **Important notes:**
 
 - `Regression Check` is **optional** and used only for post-fix verification, not during initial triage.
-- `router-review` currently routes only the initial six review focuses and **excludes** `Regression Check` during initial triage.
+- `router-review` routes the initial six review focuses, plus `React Doctor` when React patterns are detected in the diff. `Regression Check` is **excluded** during initial triage.
 - `Clean Code Enforcement` is excluded from triage because it is always injected by `rocket-review` after the router completes.
+- `React Doctor` is conditionally routed by `router-review` only when React code (`.jsx`, `.tsx`, hooks, JSX) is present in the diff. It is never injected systematically.
 
 ### Why this workflow works
 

@@ -158,6 +158,7 @@
         "context7_*": true,
         "skill": true,
         "skills_clean-code": true,
+        "skills_react-doctor": true,
       },
     },
     "code-only": {
