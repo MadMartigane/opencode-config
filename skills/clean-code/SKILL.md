@@ -25,6 +25,9 @@ Apply these principles strictly to all code generation and modification tasks. P
 
 - **Single Responsibility**: Functions and classes must do exactly one thing and have one reason to change. Keep them small and focused.
 - **Guard Clauses**: Use early returns to handle edge cases and errors upfront. Ban deep `if/else` nesting.
+- **No Magic Values**: Ban inline domain-significant string and numeric literals. Extract them into named constants, enum members, or configuration objects before use. Only universally self-evident control-flow literals may remain inline (`0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `""`).
+  - Bad: `if (status === "ACTIVE") retry(3)`
+  - Good: `if (status === USER_STATUS.ACTIVE) retry(MAX_RETRIES)`
 - **Command-Query Separation**: Functions must either mutate state (Command) or return data (Query)—never both.
 - **Pure by Default**: Avoid side effects. Functions should rely only on their inputs and not alter external state.
 

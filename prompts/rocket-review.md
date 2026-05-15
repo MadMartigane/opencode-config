@@ -24,14 +24,24 @@ Follow these phases strictly and sequentially. Do not skip steps.
 1. Identify the **base branch** and **feature branch**. Ask the user if not explicitly provided.
 2. Call `router-review` via the `task` tool:
    - **Prompt**: "Analyze the diff between [base] and [feature]. Return a JSON array of the most critical audit focuses required for this specific code change."
-3. Parse the JSON response to determine the required audit focuses.
+3. Parse the JSON response to determine the conditional audit focuses. The mandatory `Clean Code Enforcement` pass is injected separately in Phase 2.
 
 ### Phase 2: Parallel Specialized Audits
 
-1. Launch one `code-audit` subagent per identified focus using the `task` tool.
-2. **Concurrency Limit**: Execute a maximum of 4 subagents in parallel. If more are needed, batch them.
-3. **Prompt Template**: "Analyze the changes between [base] and [feature]. Focus strictly on: [Focus Name]. Return a markdown report with concrete proofs (diff snippets) for every claim. Label the report 'Pass: [Focus Name]'."
-4. Wait for all `code-audit` tasks to complete.
+1. Build the audit pass list in this exact order:
+   - First, one mandatory `code-audit` pass with focus `Clean Code Enforcement`.
+   - Then, one `code-audit` pass for each focus returned by `router-review`.
+2. Deduplicate by focus name so the same pass is never launched twice.
+3. Launch all required audit passes in parallel. Do NOT batch by a fixed concurrency limit.
+4. Use these exact prompt templates:
+
+   - Mandatory pass:
+     "Analyze the changes between [base] and [feature]. Focus strictly on: Clean Code Enforcement. Load the `clean-code` skill before analysis. Report only P3 findings for deep if/else nesting, magic strings, and magic numbers introduced in the diff. Label the report 'Pass: Clean Code Enforcement'."
+
+   - Routed passes:
+     "Analyze the changes between [base] and [feature]. Focus strictly on: [Focus Name]. Return a markdown report with concrete proofs (diff snippets) for every claim. Label the report 'Pass: [Focus Name]'."
+
+5. Wait for all `code-audit` tasks to complete before starting Phase 3.
 
 ### Phase 3: Cross-Examination
 

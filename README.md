@@ -134,15 +134,17 @@ Classic `/plan` follows one reasoning path. `/plan-thinker` runs 3 independent r
 
 ### Base workflow (main path)
 
-The workflow follows exactly 4 stages:
+The workflow follows exactly 6 phases:
 
-1. **Triage** — `router-review` analyzes the diff and selects relevant audit focuses.
-2. **Parallel specialized audits** — Multiple `code-audit` instances run concurrently, each focused on a single aspect.
+1. **Triage** — `router-review` analyzes the diff and selects relevant conditional audit focuses.
+2. **Parallel specialized audits** — `rocket-review` always injects one mandatory `Clean Code Enforcement` pass, then launches all focus-specific `code-audit` instances concurrently.
 3. **Critic consolidation** — `critic-review` consolidates all audit reports, challenges findings, resolves contradictions, and filters false positives.
-4. **Final report / implementation brief** — A comprehensive review report or prioritized implementation brief is delivered.
+4. **Task formulation & validation** — Findings are mapped to discrete, prioritized tasks and presented to the user for explicit validation.
+5. **Implementation brief generation** — A structured `rocket Implementation Brief` is produced for handoff to the `rocket` agent.
+6. **Regression check (optional)** — If the user requests verification after fixes, a final `code-audit` focused on "Regression Check" is triggered.
 
 ```
-Diff / PR → Router triage → Parallel audits → Critic filter → Final report / Rocket brief
+Diff / PR → Router triage → Clean Code pass + routed audits → Critic cross-examination → Task validation → Rocket brief → Optional regression check
 ```
 
 ![rocket-review Workflow](./assets/rocket-review-workflow.svg)
@@ -161,8 +163,8 @@ Diff / PR → Router triage → Parallel audits → Critic filter → Final repo
 | Role | Responsibilities |
 |------|------------------|
 | `rocket-review` | Orchestrates the review flow and presents results to the user |
-| `router-review` | Analyzes the diff and selects relevant audit focuses for triage |
-| `code-audit` | Performs one focused audit per selected concern (Security, Performance, etc.) |
+| `router-review` | Analyzes diffs and selects conditional audit focuses only |
+| `code-audit` | Performs one focused audit per selected concern, plus the mandatory `Clean Code Enforcement` pass |
 | `critic-review` | Consolidates audit reports, deduplicates findings, and rejects false positives |
 
 ### Current audit focus model
@@ -177,12 +179,14 @@ The implemented focus taxonomy includes:
 | Performance & Scalability | Re-renders, loops, DB/IO efficiency, caching, bundle size |
 | Architecture & Maintainability | Coupling, SOLID, DRY, modularity, testability |
 | Readability & Idiomatic | Style, code patterns, comments, naming conventions |
+| Clean Code Enforcement | LLM-generated anti-patterns: deep if/else nesting, magic strings, magic numbers |
 | Regression Check | Post-fix verification to ensure no new bugs or side effects were introduced |
 
 **Important notes:**
 
 - `Regression Check` is **optional** and used only for post-fix verification, not during initial triage.
 - `router-review` currently routes only the initial six review focuses and **excludes** `Regression Check` during initial triage.
+- `Clean Code Enforcement` is excluded from triage because it is always injected by `rocket-review` after the router completes.
 
 ### Why this workflow works
 

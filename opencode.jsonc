@@ -156,6 +156,8 @@
         "brave-search_brave_web_search": true,
         "sequential-thinking_sequentialthinking": true,
         "context7_*": true,
+        "skill": true,
+        "skills_clean-code": true,
       },
     },
     "code-only": {
